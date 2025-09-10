@@ -1,6 +1,6 @@
 {
   "name": "perplexity_ai",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The official TypeScript library for the Perplexity API",
   "author": "Perplexity <>",
   "types": "dist/index.d.ts",
