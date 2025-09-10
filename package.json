@@ -1,5 +1,5 @@
 {
-  "name": "perplexity-node",
+  "name": "@perplexity-ai/perplexity_ai",
   "version": "0.1.0",
   "description": "The official TypeScript library for the Perplexity API",
   "author": "Perplexity <>",

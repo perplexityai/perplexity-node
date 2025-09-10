@@ -1,5 +1,9 @@
 import { inspect } from 'node:util';
-import { buildHeaders, type HeadersLike, type NullableHeaders } from 'perplexity-node/internal/headers';
+import {
+  buildHeaders,
+  type HeadersLike,
+  type NullableHeaders,
+} from '@perplexity-ai/perplexity_ai/internal/headers';
 
 function inspectNullableHeaders(headers: NullableHeaders) {
   return `NullableHeaders {${[

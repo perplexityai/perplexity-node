@@ -55,12 +55,12 @@ $ cd perplexity-node
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link perplexity-node
+$ yarn link @perplexity-ai/perplexity_ai
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global perplexity-node
+$ pnpm link -—global @perplexity-ai/perplexity_ai
 ```
 
 ## Running tests
