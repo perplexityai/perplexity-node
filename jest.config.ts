@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^perplexity_ai$': '<rootDir>/src/index.ts',
-    '^perplexity_ai/(.*)$': '<rootDir>/src/$1',
+    '^@perplexity-ai/perplexity_ai$': '<rootDir>/src/index.ts',
+    '^@perplexity-ai/perplexity_ai/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

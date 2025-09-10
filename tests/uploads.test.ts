@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'perplexity_ai/internal/to-file';
-import { toFile } from 'perplexity_ai/core/uploads';
+import type { ResponseLike } from '@perplexity-ai/perplexity_ai/internal/to-file';
+import { toFile } from '@perplexity-ai/perplexity_ai/core/uploads';
 import { File } from 'node:buffer';
 
 class MyClass {
@@ -97,7 +97,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('perplexity_ai/core/uploads');
+    const uploads = await import('@perplexity-ai/perplexity_ai/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(
