@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from 'perplexity-node/internal/utils/base64';
+import { fromBase64, toBase64 } from '@perplexity-ai/perplexity_ai/internal/utils/base64';
 
 describe.each(['Buffer', 'atob'])('with %s', (mode) => {
   let originalBuffer: BufferConstructor;

@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from 'perplexity-node/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@perplexity-ai/perplexity_ai/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 
