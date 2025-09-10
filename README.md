@@ -18,7 +18,31 @@ npm install @perplexity-ai/perplexity_ai
 
 The full API of this library can be found in [api.md](api.md).
 
-<!-- prettier-ignore -->
+### Search API
+
+Get ranked web search results with real-time information:
+
+```js
+import Perplexity from '@perplexity-ai/perplexity_ai';
+
+const client = new Perplexity({
+  apiKey: process.env['PERPLEXITY_API_KEY'], // This is the default and can be omitted
+});
+
+const search = await client.search.create({
+  query: "latest AI developments 2024",
+  maxResults: 5
+});
+
+for (const result of search.results) {
+  console.log(`${result.title}: ${result.url}`);
+}
+```
+
+### Chat Completions
+
+Get AI responses with real-time web search grounding:
+
 ```js
 import Perplexity from '@perplexity-ai/perplexity_ai';
 
@@ -31,14 +55,94 @@ const completion = await client.chat.completions.create({
   model: 'sonar',
 });
 
-console.log(completion.id);
+console.log(completion.choices[0].message.content);
+```
+
+### Advanced Search Features
+
+#### Multi-Query Search
+
+Run multiple related searches in a single request:
+
+```js
+const search = await client.search.create({
+  query: [
+    "renewable energy trends 2024",
+    "solar power innovations",
+    "wind energy developments"
+  ],
+  maxResults: 10
+});
+```
+
+#### Domain Filtering
+
+Limit search results to specific trusted domains:
+
+```js
+const search = await client.search.create({
+  query: "climate change research",
+  searchDomainFilter: [
+    "science.org",
+    "pnas.org",
+    "cell.com",
+    "nature.com"
+  ],
+  maxResults: 10
+});
+```
+
+#### Date Filtering
+
+Filter results by recency or specific date ranges:
+
+```js
+// Get results from the past week
+const recentSearch = await client.search.create({
+  query: "latest AI developments",
+  searchRecencyFilter: "week"
+});
+
+// Search within a specific date range
+const dateRangeSearch = await client.search.create({
+  query: "AI developments",
+  searchAfterDateFilter: "01/01/2024",
+  searchBeforeDateFilter: "12/31/2024"
+});
+```
+
+#### Academic Search
+
+Search academic sources for research purposes:
+
+```js
+const academicSearch = await client.search.create({
+  query: "machine learning algorithms",
+  searchMode: "academic",
+  maxResults: 10
+});
+```
+
+#### Location-Based Search
+
+Get geographically relevant results:
+
+```js
+const localSearch = await client.search.create({
+  query: "local restaurants",
+  userLocationFilter: {
+    latitude: 37.7749,
+    longitude: -122.4194,
+    radius: 10  // km
+  },
+  maxResults: 10
+});
 ```
 
 ### Request & Response types
 
 This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:
 
-<!-- prettier-ignore -->
 ```ts
 import Perplexity from '@perplexity-ai/perplexity_ai';
 
@@ -46,11 +150,26 @@ const client = new Perplexity({
   apiKey: process.env['PERPLEXITY_API_KEY'], // This is the default and can be omitted
 });
 
-const params: Perplexity.Chat.CompletionCreateParams = {
+// Search API types
+const searchParams: Perplexity.Search.SearchCreateParams = {
+  query: "artificial intelligence trends",
+  maxResults: 5,
+  searchMode: "web"
+};
+const searchResponse: Perplexity.Search.SearchCreateResponse = await client.search.create(searchParams);
+
+// Content API types
+const contentParams: Perplexity.Content.ContentCreateParams = {
+  urls: ["https://example.com/article"]
+};
+const contentResponse: Perplexity.Content.ContentCreateResponse = await client.content.create(contentParams);
+
+// Chat Completions types
+const chatParams: Perplexity.Chat.CompletionCreateParams = {
   messages: [{ role: 'user', content: 'What is the capital of France?' }],
   model: 'sonar',
 };
-const completion: Perplexity.Chat.CompletionCreateResponse = await client.chat.completions.create(params);
+const chatResponse: Perplexity.Chat.CompletionCreateResponse = await client.chat.completions.create(chatParams);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -61,8 +180,21 @@ When the library is unable to connect to the API,
 or if the API returns a non-success status code (i.e., 4xx or 5xx response),
 a subclass of `APIError` will be thrown:
 
-<!-- prettier-ignore -->
 ```ts
+// Search API error handling
+const search = await client.search
+  .create({ query: "AI developments", maxResults: 5 })
+  .catch(async (err) => {
+    if (err instanceof Perplexity.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
+
+// Chat completions error handling
 const completion = await client.chat.completions
   .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
   .catch(async (err) => {
@@ -97,7 +229,6 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 
 You can use the `maxRetries` option to configure or disable this:
 
-<!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
 const client = new Perplexity({
@@ -105,6 +236,10 @@ const client = new Perplexity({
 });
 
 // Or, configure per-request:
+await client.search.create({ query: "AI developments", maxResults: 5 }, {
+  maxRetries: 5,
+});
+
 await client.chat.completions.create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' }, {
   maxRetries: 5,
 });
@@ -114,7 +249,6 @@ await client.chat.completions.create({ messages: [{ role: 'user', content: 'What
 
 Requests time out after 1 minute by default. You can configure this with a `timeout` option:
 
-<!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
 const client = new Perplexity({
@@ -122,6 +256,10 @@ const client = new Perplexity({
 });
 
 // Override per-request:
+await client.search.create({ query: "AI developments", maxResults: 5 }, {
+  timeout: 5 * 1000,
+});
+
 await client.chat.completions.create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' }, {
   timeout: 5 * 1000,
 });
@@ -141,20 +279,33 @@ This method returns as soon as the headers for a successful response are receive
 You can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.
 Unlike `.asResponse()` this method consumes the body, returning once it is parsed.
 
-<!-- prettier-ignore -->
 ```ts
 const client = new Perplexity();
 
-const response = await client.chat.completions
+// With search API
+const searchResponse = await client.search
+  .create({ query: "AI developments", maxResults: 5 })
+  .asResponse();
+console.log(searchResponse.headers.get('X-My-Header'));
+console.log(searchResponse.statusText); // access the underlying Response object
+
+const { data: search, response: rawSearchResponse } = await client.search
+  .create({ query: "AI developments", maxResults: 5 })
+  .withResponse();
+console.log(rawSearchResponse.headers.get('X-My-Header'));
+console.log(search.results.length);
+
+// With chat completions
+const chatResponse = await client.chat.completions
   .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
   .asResponse();
-console.log(response.headers.get('X-My-Header'));
-console.log(response.statusText); // access the underlying Response object
+console.log(chatResponse.headers.get('X-My-Header'));
+console.log(chatResponse.statusText); // access the underlying Response object
 
-const { data: completion, response: raw } = await client.chat.completions
+const { data: completion, response: rawChatResponse } = await client.chat.completions
   .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
   .withResponse();
-console.log(raw.headers.get('X-My-Header'));
+console.log(rawChatResponse.headers.get('X-My-Header'));
 console.log(completion.id);
 ```
 
@@ -235,6 +386,12 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
+client.search.create({
+  // ...
+  // @ts-expect-error baz is not yet public
+  baz: 'undocumented option',
+});
+
 client.chat.completions.create({
   // ...
   // @ts-expect-error baz is not yet public
