@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^perplexity_ai(/.*)?',
+              regex: '^perplexity-node(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "perplexity_ai/*": ["src/*"],
-      "perplexity_ai": ["src/index.ts"]
+      "perplexity-node/*": ["src/*"],
+      "perplexity-node": ["src/index.ts"]
     },
     "noEmit": true,
 
