@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Perplexity from 'perplexity_ai';
+import Perplexity from 'perplexity-node';
 
 const client = new Perplexity({
   apiKey: 'My API Key',
