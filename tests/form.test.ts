@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'perplexity/internal/uploads';
-import { toFile } from 'perplexity/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'perplexity_ai/internal/uploads';
+import { toFile } from 'perplexity_ai/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {
