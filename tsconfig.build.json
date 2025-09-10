@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "perplexity/*": ["dist/src/*"],
-      "perplexity": ["dist/src/index.ts"]
+      "perplexity_ai/*": ["dist/src/*"],
+      "perplexity_ai": ["dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

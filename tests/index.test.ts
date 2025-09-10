@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'perplexity/core/api-promise';
+import { APIPromise } from 'perplexity_ai/core/api-promise';
 
 import util from 'node:util';
-import Perplexity from 'perplexity';
-import { APIUserAbortError } from 'perplexity';
+import Perplexity from 'perplexity_ai';
+import { APIUserAbortError } from 'perplexity_ai';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
