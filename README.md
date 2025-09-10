@@ -29,9 +29,12 @@ const client = new Perplexity({
   apiKey: process.env['PERPLEXITY_API_KEY'], // This is the default and can be omitted
 });
 
-const search = await client.search.create({ query: 'string' });
+const completion = await client.chat.completions.create({
+  messages: [{ role: 'user', content: 'Tell me about the latest developments in AI' }],
+  model: 'sonar',
+});
 
-console.log(search.id);
+console.log(completion.id);
 ```
 
 ### Request & Response types
@@ -46,8 +49,11 @@ const client = new Perplexity({
   apiKey: process.env['PERPLEXITY_API_KEY'], // This is the default and can be omitted
 });
 
-const params: Perplexity.SearchCreateParams = { query: 'string' };
-const search: Perplexity.SearchCreateResponse = await client.search.create(params);
+const params: Perplexity.Chat.CompletionCreateParams = {
+  messages: [{ role: 'user', content: 'What is the capital of France?' }],
+  model: 'sonar',
+};
+const completion: Perplexity.Chat.CompletionCreateResponse = await client.chat.completions.create(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -60,15 +66,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const search = await client.search.create({ query: 'string' }).catch(async (err) => {
-  if (err instanceof Perplexity.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const completion = await client.chat.completions
+  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .catch(async (err) => {
+    if (err instanceof Perplexity.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -100,7 +108,7 @@ const client = new Perplexity({
 });
 
 // Or, configure per-request:
-await client.search.create({ query: 'string' }, {
+await client.chat.completions.create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' }, {
   maxRetries: 5,
 });
 ```
@@ -117,7 +125,7 @@ const client = new Perplexity({
 });
 
 // Override per-request:
-await client.search.create({ query: 'string' }, {
+await client.chat.completions.create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -140,13 +148,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Perplexity();
 
-const response = await client.search.create({ query: 'string' }).asResponse();
+const response = await client.chat.completions
+  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: search, response: raw } = await client.search.create({ query: 'string' }).withResponse();
+const { data: completion, response: raw } = await client.chat.completions
+  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(search.id);
+console.log(completion.id);
 ```
 
 ### Logging
@@ -226,7 +238,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.search.create({
+client.chat.completions.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
