@@ -18,6 +18,8 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Content, ContentCreateParams, ContentCreateResponse } from './resources/content';
 import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
+import { Async } from './resources/async/async';
+import { Chat } from './resources/chat/chat';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -715,15 +717,23 @@ export class Perplexity {
 
   static toFile = Uploads.toFile;
 
+  chat: API.Chat = new API.Chat(this);
+  async: API.Async = new API.Async(this);
   search: API.Search = new API.Search(this);
   content: API.Content = new API.Content(this);
 }
 
+Perplexity.Chat = Chat;
+Perplexity.Async = Async;
 Perplexity.Search = Search;
 Perplexity.Content = Content;
 
 export declare namespace Perplexity {
   export type RequestOptions = Opts.RequestOptions;
+
+  export { Chat as Chat };
+
+  export { Async as Async };
 
   export {
     Search as Search,
@@ -736,4 +746,9 @@ export declare namespace Perplexity {
     type ContentCreateResponse as ContentCreateResponse,
     type ContentCreateParams as ContentCreateParams,
   };
+
+  export type ChatChoice = API.ChatChoice;
+  export type ChatMessage = API.ChatMessage;
+  export type SearchResult = API.SearchResult;
+  export type UsageInfo = API.UsageInfo;
 }
