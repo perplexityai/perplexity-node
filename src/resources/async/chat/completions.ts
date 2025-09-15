@@ -3,48 +3,71 @@
 import { APIResource } from '../../../core/resource';
 import * as Shared from '../../shared';
 import { APIPromise } from '../../../core/api-promise';
+import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 export class Completions extends APIResource {
   /**
-   * Creates an asynchronous chat completion job
+   * FastAPI wrapper around async chat completions
+   *
+   * This endpoint creates an asynchronous chat completion job and returns a job ID
+   * that can be used to poll for results.
    */
   create(body: CompletionCreateParams, options?: RequestOptions): APIPromise<CompletionCreateResponse> {
     return this._client.post('/async/chat/completions', { body, ...options });
   }
 
   /**
-   * Lists all asynchronous chat completion requests for the authenticated user
+   * list all async chat completion requests for a given user.
    */
-  list(
-    query: CompletionListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CompletionListResponse> {
-    return this._client.get('/async/chat/completions', { query, ...options });
+  list(options?: RequestOptions): APIPromise<CompletionListResponse> {
+    return this._client.get('/async/chat/completions', options);
   }
 
   /**
-   * Retrieves the status and result of a specific asynchronous chat completion job
+   * get the response for a given async chat completion request.
    */
-  get(requestID: string, options?: RequestOptions): APIPromise<CompletionGetResponse> {
-    return this._client.get(path`/async/chat/completions/${requestID}`, options);
+  get(
+    apiRequest: string,
+    params: CompletionGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CompletionGetResponse> {
+    const {
+      'x-client-env': xClientEnv,
+      'x-client-name': xClientName,
+      'x-request-time': xRequestTime,
+      'x-usage-tier': xUsageTier,
+      'x-user-id': xUserID,
+      ...query
+    } = params ?? {};
+    return this._client.get(path`/async/chat/completions/${apiRequest}`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xClientEnv != null ? { 'x-client-env': xClientEnv } : undefined),
+          ...(xClientName != null ? { 'x-client-name': xClientName } : undefined),
+          ...(xRequestTime != null ? { 'x-request-time': xRequestTime } : undefined),
+          ...(xUsageTier != null ? { 'x-usage-tier': xUsageTier } : undefined),
+          ...(xUserID != null ? { 'x-user-id': xUserID } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
 export interface CompletionCreateResponse {
-  /**
-   * Unique identifier for the async job
-   */
   id: string;
 
-  /**
-   * Unix timestamp of creation
-   */
   created_at: number;
 
   model: string;
 
+  /**
+   * Status enum for async processing.
+   */
   status: 'CREATED' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
 
   completed_at?: number | null;
@@ -53,53 +76,38 @@ export interface CompletionCreateResponse {
 
   failed_at?: number | null;
 
-  /**
-   * The completion response when status is COMPLETED
-   */
   response?: CompletionCreateResponse.Response | null;
 
   started_at?: number | null;
 }
 
 export namespace CompletionCreateResponse {
-  /**
-   * The completion response when status is COMPLETED
-   */
   export interface Response {
-    /**
-     * Unique identifier for the chat completion
-     */
     id: string;
 
-    choices: Array<Shared.ChatChoice>;
+    choices: Array<Shared.Choice>;
 
-    /**
-     * Unix timestamp of creation
-     */
     created: number;
 
-    /**
-     * The model used
-     */
     model: string;
-
-    object: string;
 
     usage: Shared.UsageInfo;
 
-    /**
-     * Search results used in generating the response
-     */
-    search_results?: Array<Shared.SearchResult> | null;
+    citations?: Array<string> | null;
+
+    object?: string;
+
+    search_results?: Array<Shared.APIPublicSearchResult> | null;
+
+    status?: 'PENDING' | 'COMPLETED' | null;
+
+    type?: 'message' | 'info' | 'end_of_stream' | null;
   }
 }
 
 export interface CompletionListResponse {
   requests: Array<CompletionListResponse.Request>;
 
-  /**
-   * Token for pagination
-   */
   next_token?: string | null;
 }
 
@@ -111,6 +119,9 @@ export namespace CompletionListResponse {
 
     model: string;
 
+    /**
+     * Status enum for async processing.
+     */
     status: 'CREATED' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
 
     completed_at?: number | null;
@@ -122,18 +133,15 @@ export namespace CompletionListResponse {
 }
 
 export interface CompletionGetResponse {
-  /**
-   * Unique identifier for the async job
-   */
   id: string;
 
-  /**
-   * Unix timestamp of creation
-   */
   created_at: number;
 
   model: string;
 
+  /**
+   * Status enum for async processing.
+   */
   status: 'CREATED' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
 
   completed_at?: number | null;
@@ -142,176 +150,291 @@ export interface CompletionGetResponse {
 
   failed_at?: number | null;
 
-  /**
-   * The completion response when status is COMPLETED
-   */
   response?: CompletionGetResponse.Response | null;
 
   started_at?: number | null;
 }
 
 export namespace CompletionGetResponse {
-  /**
-   * The completion response when status is COMPLETED
-   */
   export interface Response {
-    /**
-     * Unique identifier for the chat completion
-     */
     id: string;
 
-    choices: Array<Shared.ChatChoice>;
+    choices: Array<Shared.Choice>;
 
-    /**
-     * Unix timestamp of creation
-     */
     created: number;
 
-    /**
-     * The model used
-     */
     model: string;
-
-    object: string;
 
     usage: Shared.UsageInfo;
 
-    /**
-     * Search results used in generating the response
-     */
-    search_results?: Array<Shared.SearchResult> | null;
+    citations?: Array<string> | null;
+
+    object?: string;
+
+    search_results?: Array<Shared.APIPublicSearchResult> | null;
+
+    status?: 'PENDING' | 'COMPLETED' | null;
+
+    type?: 'message' | 'info' | 'end_of_stream' | null;
   }
 }
 
 export interface CompletionCreateParams {
   request: CompletionCreateParams.Request;
+
+  idempotency_key?: string | null;
 }
 
 export namespace CompletionCreateParams {
   export interface Request {
-    /**
-     * A list of messages comprising the conversation so far
-     */
-    messages: Array<Shared.ChatMessage>;
+    messages: Array<Shared.ChatMessageInput>;
 
-    /**
-     * The name of the model that will complete your prompt
-     */
-    model: 'sonar' | 'sonar-pro' | 'sonar-deep-research' | 'sonar-reasoning' | 'sonar-reasoning-pro';
+    model: string;
 
-    /**
-     * Disables web search completely - model uses only training data
-     */
-    disable_search?: boolean;
+    _debug_pro_search?: boolean;
 
-    /**
-     * Enables classifier that decides if web search is needed
-     */
-    enable_search_classifier?: boolean;
+    _inputs?: Array<number> | null;
 
-    /**
-     * Only include content last updated after this date (YYYY-MM-DD)
-     */
+    _is_browser_agent?: boolean | null;
+
+    _prompt_token_length?: number | null;
+
+    best_of?: number | null;
+
+    country?: string | null;
+
+    cum_logprobs?: boolean | null;
+
+    debug_params?: Request.DebugParams | null;
+
+    disable_search?: boolean | null;
+
+    diverse_first_token?: boolean | null;
+
+    enable_search_classifier?: boolean | null;
+
+    file_workspace_id?: string | null;
+
+    frequency_penalty?: number | null;
+
+    has_image_url?: boolean;
+
+    image_domain_filter?: Array<string> | null;
+
+    image_format_filter?: Array<string> | null;
+
     last_updated_after_filter?: string | null;
 
-    /**
-     * Only include content last updated before this date (YYYY-MM-DD)
-     */
     last_updated_before_filter?: string | null;
 
-    /**
-     * Controls computational effort for sonar-deep-research model. Higher effort =
-     * more thorough but more tokens
-     */
-    reasoning_effort?: 'low' | 'medium' | 'high' | null;
+    latitude?: number | null;
 
-    /**
-     * Whether to include images in search results
-     */
-    return_images?: boolean;
+    logprobs?: boolean | null;
 
-    /**
-     * Whether to return related questions
-     */
-    return_related_questions?: boolean;
+    longitude?: number | null;
 
-    /**
-     * Only include content published after this date (YYYY-MM-DD)
-     */
+    max_tokens?: number | null;
+
+    n?: number | null;
+
+    num_images?: number;
+
+    num_search_results?: number;
+
+    parallel_tool_calls?: boolean | null;
+
+    presence_penalty?: number | null;
+
+    ranking_model?: string | null;
+
+    reasoning_effort?: 'minimal' | 'low' | 'medium' | 'high' | null;
+
+    response_format?:
+      | Request.ResponseFormatText
+      | Request.ResponseFormatJsonSchema
+      | Request.ResponseFormatRegex
+      | null;
+
+    response_metadata?: { [key: string]: unknown } | null;
+
+    return_images?: boolean | null;
+
+    return_related_questions?: boolean | null;
+
+    return_videos?: boolean | null;
+
+    safe_search?: boolean | null;
+
     search_after_date_filter?: string | null;
 
-    /**
-     * Only include content published before this date (YYYY-MM-DD)
-     */
     search_before_date_filter?: string | null;
 
-    /**
-     * List of domains to limit search results to. Use '-' prefix to exclude domains
-     */
     search_domain_filter?: Array<string> | null;
 
-    /**
-     * Type of search: 'web' for general, 'academic' for scholarly, 'sec' for SEC
-     * filings
-     */
+    search_internal_properties?: { [key: string]: unknown } | null;
+
     search_mode?: 'web' | 'academic' | 'sec' | null;
 
-    /**
-     * Filter results by how recently they were published
-     */
     search_recency_filter?: 'hour' | 'day' | 'week' | 'month' | 'year' | null;
+
+    search_tenant?: string | null;
+
+    stop?: string | Array<string> | null;
+
+    stream?: boolean | null;
+
+    temperature?: number | null;
+
+    tool_choice?: 'none' | 'auto' | 'required' | null;
+
+    tools?: Array<Request.Tool> | null;
+
+    top_k?: number | null;
+
+    top_logprobs?: number | null;
+
+    top_p?: number | null;
+
+    updated_after_timestamp?: number | null;
+
+    updated_before_timestamp?: number | null;
 
     web_search_options?: Request.WebSearchOptions;
   }
 
   export namespace Request {
-    export interface WebSearchOptions {
-      /**
-       * Improves relevance of image search results
-       */
-      image_search_relevance_enhanced?: boolean;
+    export interface DebugParams {
+      summarizer_model_override?: string | null;
 
-      /**
-       * Amount of search context retrieved: low (cost-saving), medium (balanced), high
-       * (comprehensive)
-       */
+      summarizer_prompt_override?: string | null;
+    }
+
+    export interface ResponseFormatText {
+      type: 'text';
+    }
+
+    export interface ResponseFormatJsonSchema {
+      json_schema: ResponseFormatJsonSchema.JsonSchema;
+
+      type: 'json_schema';
+    }
+
+    export namespace ResponseFormatJsonSchema {
+      export interface JsonSchema {
+        schema: { [key: string]: unknown };
+
+        description?: string | null;
+
+        name?: string | null;
+
+        strict?: boolean | null;
+      }
+    }
+
+    export interface ResponseFormatRegex {
+      regex: ResponseFormatRegex.Regex;
+
+      type: 'regex';
+    }
+
+    export namespace ResponseFormatRegex {
+      export interface Regex {
+        regex: string;
+
+        description?: string | null;
+
+        name?: string | null;
+
+        strict?: boolean | null;
+      }
+    }
+
+    export interface Tool {
+      function: Tool.Function;
+
+      type: 'function';
+    }
+
+    export namespace Tool {
+      export interface Function {
+        description: string;
+
+        name: string;
+
+        parameters: Function.Parameters;
+
+        strict?: boolean | null;
+      }
+
+      export namespace Function {
+        export interface Parameters {
+          properties: { [key: string]: unknown };
+
+          type: string;
+
+          additional_properties?: boolean | null;
+
+          required?: Array<string> | null;
+        }
+      }
+    }
+
+    export interface WebSearchOptions {
+      image_results_enhanced_relevance?: boolean;
+
       search_context_size?: 'low' | 'medium' | 'high';
 
-      user_location?: WebSearchOptions.UserLocation;
+      search_type?: 'fast' | 'pro' | 'auto';
+
+      user_location?: WebSearchOptions.UserLocation | null;
     }
 
     export namespace WebSearchOptions {
       export interface UserLocation {
         city?: string | null;
 
-        /**
-         * Two-letter ISO country code
-         */
         country?: string | null;
 
         latitude?: number | null;
 
         longitude?: number | null;
 
-        /**
-         * State/province name
-         */
         region?: string | null;
       }
     }
   }
 }
 
-export interface CompletionListParams {
+export interface CompletionGetParams {
   /**
-   * Maximum number of requests to return
+   * Query param:
    */
-  limit?: number;
+  local_mode?: boolean;
 
   /**
-   * Token for fetching the next page of results
+   * Header param:
    */
-  next_token?: string;
+  'x-client-env'?: string;
+
+  /**
+   * Header param:
+   */
+  'x-client-name'?: string;
+
+  /**
+   * Header param:
+   */
+  'x-request-time'?: string;
+
+  /**
+   * Header param:
+   */
+  'x-usage-tier'?: string;
+
+  /**
+   * Header param:
+   */
+  'x-user-id'?: string;
 }
 
 export declare namespace Completions {
@@ -320,6 +443,6 @@ export declare namespace Completions {
     type CompletionListResponse as CompletionListResponse,
     type CompletionGetResponse as CompletionGetResponse,
     type CompletionCreateParams as CompletionCreateParams,
-    type CompletionListParams as CompletionListParams,
+    type CompletionGetParams as CompletionGetParams,
   };
 }

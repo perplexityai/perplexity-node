@@ -747,8 +747,9 @@ export declare namespace Perplexity {
     type ContentCreateParams as ContentCreateParams,
   };
 
-  export type ChatChoice = API.ChatChoice;
-  export type ChatMessage = API.ChatMessage;
-  export type SearchResult = API.SearchResult;
+  export type APIPublicSearchResult = API.APIPublicSearchResult;
+  export type ChatMessageInput = API.ChatMessageInput;
+  export type ChatMessageOutput = API.ChatMessageOutput;
+  export type Choice = API.Choice;
   export type UsageInfo = API.UsageInfo;
 }
