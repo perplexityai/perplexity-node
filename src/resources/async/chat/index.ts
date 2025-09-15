@@ -7,5 +7,5 @@ export {
   type CompletionListResponse,
   type CompletionGetResponse,
   type CompletionCreateParams,
-  type CompletionListParams,
+  type CompletionGetParams,
 } from './completions';
