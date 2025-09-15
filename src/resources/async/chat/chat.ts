@@ -5,8 +5,8 @@ import * as CompletionsAPI from './completions';
 import {
   CompletionCreateParams,
   CompletionCreateResponse,
+  CompletionGetParams,
   CompletionGetResponse,
-  CompletionListParams,
   CompletionListResponse,
   Completions,
 } from './completions';
@@ -24,6 +24,6 @@ export declare namespace Chat {
     type CompletionListResponse as CompletionListResponse,
     type CompletionGetResponse as CompletionGetResponse,
     type CompletionCreateParams as CompletionCreateParams,
-    type CompletionListParams as CompletionListParams,
+    type CompletionGetParams as CompletionGetParams,
   };
 }

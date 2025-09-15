@@ -2,9 +2,10 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">ChatChoice</a></code>
-- <code><a href="./src/resources/shared.ts">ChatMessage</a></code>
-- <code><a href="./src/resources/shared.ts">SearchResult</a></code>
+- <code><a href="./src/resources/shared.ts">APIPublicSearchResult</a></code>
+- <code><a href="./src/resources/shared.ts">ChatMessageInput</a></code>
+- <code><a href="./src/resources/shared.ts">ChatMessageOutput</a></code>
+- <code><a href="./src/resources/shared.ts">Choice</a></code>
 - <code><a href="./src/resources/shared.ts">UsageInfo</a></code>
 
 # Chat
@@ -34,8 +35,8 @@ Types:
 Methods:
 
 - <code title="post /async/chat/completions">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">create</a>({ ...params }) -> CompletionCreateResponse</code>
-- <code title="get /async/chat/completions">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">list</a>({ ...params }) -> CompletionListResponse</code>
-- <code title="get /async/chat/completions/{request_id}">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">get</a>(requestID) -> CompletionGetResponse</code>
+- <code title="get /async/chat/completions">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">list</a>() -> CompletionListResponse</code>
+- <code title="get /async/chat/completions/{api_request}">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">get</a>(apiRequest, { ...params }) -> CompletionGetResponse</code>
 
 # Search
 
