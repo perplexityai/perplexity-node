@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 (2025-09-17)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/ppl-ai/perplexity-node/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* **api:** manual updates ([bb7ef97](https://github.com/ppl-ai/perplexity-node/commit/bb7ef972fd3846806ca5e989621fff963249fe9a))
+
 ## 0.3.0 (2025-09-15)
 
 Full Changelog: [v0.2.1...v0.3.0](https://github.com/ppl-ai/perplexity-node/compare/v0.2.1...v0.3.0)
