@@ -261,8 +261,6 @@ export namespace CompletionCreateParams {
 
     return_related_questions?: boolean | null;
 
-    return_videos?: boolean | null;
-
     safe_search?: boolean | null;
 
     search_after_date_filter?: string | null;

@@ -104,7 +104,6 @@ describe('resource completions', () => {
         response_metadata: { foo: 'bar' },
         return_images: true,
         return_related_questions: true,
-        return_videos: true,
         safe_search: true,
         search_after_date_filter: 'search_after_date_filter',
         search_before_date_filter: 'search_before_date_filter',
