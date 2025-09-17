@@ -16,7 +16,6 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Content, ContentCreateParams, ContentCreateResponse } from './resources/content';
 import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
 import { Async } from './resources/async/async';
 import { Chat } from './resources/chat/chat';
@@ -720,13 +719,11 @@ export class Perplexity {
   chat: API.Chat = new API.Chat(this);
   async: API.Async = new API.Async(this);
   search: API.Search = new API.Search(this);
-  content: API.Content = new API.Content(this);
 }
 
 Perplexity.Chat = Chat;
 Perplexity.Async = Async;
 Perplexity.Search = Search;
-Perplexity.Content = Content;
 
 export declare namespace Perplexity {
   export type RequestOptions = Opts.RequestOptions;
@@ -739,12 +736,6 @@ export declare namespace Perplexity {
     Search as Search,
     type SearchCreateResponse as SearchCreateResponse,
     type SearchCreateParams as SearchCreateParams,
-  };
-
-  export {
-    Content as Content,
-    type ContentCreateResponse as ContentCreateResponse,
-    type ContentCreateParams as ContentCreateParams,
   };
 
   export type APIPublicSearchResult = API.APIPublicSearchResult;
