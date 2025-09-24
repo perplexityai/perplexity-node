@@ -36,6 +36,8 @@ export namespace SearchCreateResponse {
 export interface SearchCreateParams {
   query: string | Array<string>;
 
+  country?: string | null;
+
   max_results?: number;
 
   max_tokens?: number;
