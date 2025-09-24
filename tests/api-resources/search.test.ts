@@ -24,6 +24,7 @@ describe('resource search', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.search.create({
       query: 'string',
+      country: 'country',
       max_results: 0,
       max_tokens: 0,
       max_tokens_per_page: 0,

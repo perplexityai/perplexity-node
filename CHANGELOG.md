@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 (2025-09-24)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/ppl-ai/perplexity-node/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** manual updates ([778bb2e](https://github.com/ppl-ai/perplexity-node/commit/778bb2ee170a8985e1fab3a6882318f7a402e8bb))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([489e0d9](https://github.com/ppl-ai/perplexity-node/commit/489e0d9f189b10fc5772840bc5f9510778723286))
+
 ## 0.5.0 (2025-09-19)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/ppl-ai/perplexity-node/compare/v0.4.0...v0.5.0)
