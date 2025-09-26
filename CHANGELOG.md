@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.7.0 (2025-09-26)
+
+Full Changelog: [v0.6.0...v0.7.0](https://github.com/perplexityai/perplexity-node/compare/v0.6.0...v0.7.0)
+
+### Features
+
+* **api:** add /chat/completions and /async/chat/completions ([4f75e0e](https://github.com/perplexityai/perplexity-node/commit/4f75e0e8d924a2042752cc8c3f456f6798417561))
+* **api:** manual updates ([778bb2e](https://github.com/perplexityai/perplexity-node/commit/778bb2ee170a8985e1fab3a6882318f7a402e8bb))
+* **api:** manual updates ([1abd01a](https://github.com/perplexityai/perplexity-node/commit/1abd01a085300544dd07a5d3417dab4c919ade25))
+* **api:** manual updates ([bb7ef97](https://github.com/perplexityai/perplexity-node/commit/bb7ef972fd3846806ca5e989621fff963249fe9a))
+* **api:** manual updates ([1fcdcec](https://github.com/perplexityai/perplexity-node/commit/1fcdcec07820ebc44e1ce658a0a0013224d9a8f3))
+* **api:** manual updates ([80c06a6](https://github.com/perplexityai/perplexity-node/commit/80c06a65cdb5673fc4c580bcb30c4b701e5d3ab7))
+
+
+### Performance Improvements
+
+* faster formatting ([2fd84b1](https://github.com/perplexityai/perplexity-node/commit/2fd84b1e97b71d37fdf155caed28e4da8eed5e99))
+
+
+### Chores
+
+* configure new SDK language ([55f1c33](https://github.com/perplexityai/perplexity-node/commit/55f1c33744bd229f460080ad9d966340a35e4151))
+* do not install brew dependencies in ./scripts/bootstrap by default ([489e0d9](https://github.com/perplexityai/perplexity-node/commit/489e0d9f189b10fc5772840bc5f9510778723286))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([0e69d4d](https://github.com/perplexityai/perplexity-node/commit/0e69d4d11f059b97f8f90a0be95527e287f1e024))
+* update SDK settings ([3666f51](https://github.com/perplexityai/perplexity-node/commit/3666f5158d408e3098c2ce94637d463c71fd2764))
+* update SDK settings ([f48e28e](https://github.com/perplexityai/perplexity-node/commit/f48e28e7fc749be9ebe30c64ac9dd92ba6e9a411))
+* update SDK settings ([c9ed579](https://github.com/perplexityai/perplexity-node/commit/c9ed5797ec1d16980bd83965c1f660505665f113))
+* update SDK settings ([7f42873](https://github.com/perplexityai/perplexity-node/commit/7f4287392cefc4b9dbc068dd1af1aa80ef08a410))
+
 ## 0.6.0 (2025-09-24)
 
 Full Changelog: [v0.5.0...v0.6.0](https://github.com/ppl-ai/perplexity-node/compare/v0.5.0...v0.6.0)
