@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "@perplexity-ai/perplexity_ai/*": ["src/*"],
-      "@perplexity-ai/perplexity_ai": ["src/index.ts"]
+      "@perplexity-ai/perplexity_ai/*": ["./src/*"],
+      "@perplexity-ai/perplexity_ai": ["./src/index.ts"]
     },
     "noEmit": true,
 
