@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.1 (2025-09-27)
+
+Full Changelog: [v0.7.0...v0.7.1](https://github.com/perplexityai/perplexity-node/compare/v0.7.0...v0.7.1)
+
+### Chores
+
+* **internal:** fix incremental formatting in some cases ([34f38af](https://github.com/perplexityai/perplexity-node/commit/34f38af0de3c0597399de874717f495a999bd171))
+* update SDK settings ([96b6465](https://github.com/perplexityai/perplexity-node/commit/96b6465aafe76ecca7b025a1dc1d4aa8a830f002))
+
 ## 0.7.0 (2025-09-26)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/perplexityai/perplexity-node/compare/v0.6.0...v0.7.0)

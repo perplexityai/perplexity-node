@@ -1,12 +1,12 @@
 {
   "name": "@perplexity-ai/perplexity_ai",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "The official TypeScript library for the Perplexity API",
   "author": "Perplexity <>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:ppl-ai/perplexity-node",
+  "repository": "github:perplexityai/perplexity-node",
   "license": "Apache-2.0",
   "packageManager": "yarn@1.22.22",
   "files": [
