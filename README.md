@@ -50,12 +50,12 @@ const client = new Perplexity({
   apiKey: process.env['PERPLEXITY_API_KEY'], // This is the default and can be omitted
 });
 
-const completion = await client.chat.completions.create({
+const streamChunk = await client.chat.completions.create({
   messages: [{ role: 'user', content: 'Tell me about the latest developments in AI' }],
   model: 'sonar',
 });
 
-console.log(completion.choices[0].message.content);
+console.log(streamChunk.content);
 ```
 
 ### Advanced Search Features
@@ -139,6 +139,28 @@ const localSearch = await client.search.create({
 });
 ```
 
+## Streaming responses
+
+We provide support for streaming responses using Server Sent Events (SSE).
+
+```ts
+import Perplexity from '@perplexity-ai/perplexity_ai';
+
+const client = new Perplexity();
+
+const stream = await client.chat.completions.create({
+  messages: [{ role: 'user', content: 'What is the capital of France?' }],
+  model: 'sonar',
+  stream: true,
+});
+for await (const streamChunk of stream) {
+  console.log(streamChunk.id);
+}
+```
+
+If you need to cancel a stream, you can `break` from the loop
+or call `stream.controller.abort()`.
+
 ### Request & Response types
 
 This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:
@@ -169,7 +191,7 @@ const chatParams: Perplexity.Chat.CompletionCreateParams = {
   messages: [{ role: 'user', content: 'What is the capital of France?' }],
   model: 'sonar',
 };
-const chatResponse: Perplexity.Chat.CompletionCreateResponse = await client.chat.completions.create(chatParams);
+const streamChunk: Perplexity.StreamChunk = await client.chat.completions.create(chatParams);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -195,7 +217,7 @@ const search = await client.search
   });
 
 // Chat completions error handling
-const completion = await client.chat.completions
+const streamChunk = await client.chat.completions
   .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
   .catch(async (err) => {
     if (err instanceof Perplexity.APIError) {
@@ -302,11 +324,11 @@ const chatResponse = await client.chat.completions
 console.log(chatResponse.headers.get('X-My-Header'));
 console.log(chatResponse.statusText); // access the underlying Response object
 
-const { data: completion, response: rawChatResponse } = await client.chat.completions
+const { data: streamChunk, response: rawChatResponse } = await client.chat.completions
   .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
   .withResponse();
 console.log(rawChatResponse.headers.get('X-My-Header'));
-console.log(completion.id);
+console.log(streamChunk.id);
 ```
 
 ### Logging
