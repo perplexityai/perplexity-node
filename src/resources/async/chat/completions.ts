@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as Shared from '../../shared';
+import * as ChatAPI from '../../chat/chat';
 import { APIPromise } from '../../../core/api-promise';
 import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
@@ -76,33 +77,9 @@ export interface CompletionCreateResponse {
 
   failed_at?: number | null;
 
-  response?: CompletionCreateResponse.Response | null;
+  response?: ChatAPI.StreamChunk | null;
 
   started_at?: number | null;
-}
-
-export namespace CompletionCreateResponse {
-  export interface Response {
-    id: string;
-
-    choices: Array<Shared.Choice>;
-
-    created: number;
-
-    model: string;
-
-    usage: Shared.UsageInfo;
-
-    citations?: Array<string> | null;
-
-    object?: string;
-
-    search_results?: Array<Shared.APIPublicSearchResult> | null;
-
-    status?: 'PENDING' | 'COMPLETED' | null;
-
-    type?: 'message' | 'info' | 'end_of_stream' | null;
-  }
 }
 
 export interface CompletionListResponse {
@@ -150,33 +127,9 @@ export interface CompletionGetResponse {
 
   failed_at?: number | null;
 
-  response?: CompletionGetResponse.Response | null;
+  response?: ChatAPI.StreamChunk | null;
 
   started_at?: number | null;
-}
-
-export namespace CompletionGetResponse {
-  export interface Response {
-    id: string;
-
-    choices: Array<Shared.Choice>;
-
-    created: number;
-
-    model: string;
-
-    usage: Shared.UsageInfo;
-
-    citations?: Array<string> | null;
-
-    object?: string;
-
-    search_results?: Array<Shared.APIPublicSearchResult> | null;
-
-    status?: 'PENDING' | 'COMPLETED' | null;
-
-    type?: 'message' | 'info' | 'end_of_stream' | null;
-  }
 }
 
 export interface CompletionCreateParams {

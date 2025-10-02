@@ -1,42 +1,39 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CompletionsAPI from './completions';
 import * as Shared from '../shared';
+import * as ChatAPI from './chat';
 import { APIPromise } from '../../core/api-promise';
+import { Stream } from '../../core/streaming';
 import { RequestOptions } from '../../internal/request-options';
 
 export class Completions extends APIResource {
   /**
    * FastAPI wrapper around chat completions
    */
-  create(body: CompletionCreateParams, options?: RequestOptions): APIPromise<CompletionCreateResponse> {
-    return this._client.post('/chat/completions', { body, ...options });
+  create(body: CompletionCreateParamsNonStreaming, options?: RequestOptions): APIPromise<ChatAPI.StreamChunk>;
+  create(
+    body: CompletionCreateParamsStreaming,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ChatAPI.StreamChunk>>;
+  create(
+    body: CompletionCreateParamsBase,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ChatAPI.StreamChunk> | ChatAPI.StreamChunk>;
+  create(
+    body: CompletionCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<ChatAPI.StreamChunk> | APIPromise<Stream<ChatAPI.StreamChunk>> {
+    return this._client.post('/chat/completions', { body, ...options, stream: body.stream ?? false }) as
+      | APIPromise<ChatAPI.StreamChunk>
+      | APIPromise<Stream<ChatAPI.StreamChunk>>;
   }
 }
 
-export interface CompletionCreateResponse {
-  id: string;
+export type CompletionCreateParams = CompletionCreateParamsNonStreaming | CompletionCreateParamsStreaming;
 
-  choices: Array<Shared.Choice>;
-
-  created: number;
-
-  model: string;
-
-  usage: Shared.UsageInfo;
-
-  citations?: Array<string> | null;
-
-  object?: string;
-
-  search_results?: Array<Shared.APIPublicSearchResult> | null;
-
-  status?: 'PENDING' | 'COMPLETED' | null;
-
-  type?: 'message' | 'info' | 'end_of_stream' | null;
-}
-
-export interface CompletionCreateParams {
+export interface CompletionCreateParamsBase {
   messages: Array<Shared.ChatMessageInput>;
 
   model: string;
@@ -250,11 +247,23 @@ export namespace CompletionCreateParams {
       region?: string | null;
     }
   }
+
+  export type CompletionCreateParamsNonStreaming = CompletionsAPI.CompletionCreateParamsNonStreaming;
+  export type CompletionCreateParamsStreaming = CompletionsAPI.CompletionCreateParamsStreaming;
+}
+
+export interface CompletionCreateParamsNonStreaming extends CompletionCreateParamsBase {
+  stream?: false | null;
+}
+
+export interface CompletionCreateParamsStreaming extends CompletionCreateParamsBase {
+  stream: true;
 }
 
 export declare namespace Completions {
   export {
-    type CompletionCreateResponse as CompletionCreateResponse,
     type CompletionCreateParams as CompletionCreateParams,
+    type CompletionCreateParamsNonStreaming as CompletionCreateParamsNonStreaming,
+    type CompletionCreateParamsStreaming as CompletionCreateParamsStreaming,
   };
 }

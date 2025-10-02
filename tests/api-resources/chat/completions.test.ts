@@ -113,7 +113,7 @@ describe('resource completions', () => {
       search_recency_filter: 'hour',
       search_tenant: 'search_tenant',
       stop: 'string',
-      stream: true,
+      stream: false,
       temperature: 0,
       tool_choice: 'none',
       tools: [
