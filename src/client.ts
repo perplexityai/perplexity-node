@@ -18,7 +18,7 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
 import { Async } from './resources/async/async';
-import { Chat } from './resources/chat/chat';
+import { Chat, StreamChunk } from './resources/chat/chat';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -728,7 +728,7 @@ Perplexity.Search = Search;
 export declare namespace Perplexity {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Chat as Chat };
+  export { Chat as Chat, type StreamChunk as StreamChunk };
 
   export { Async as Async };
 
