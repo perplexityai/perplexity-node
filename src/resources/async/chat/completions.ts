@@ -10,24 +10,21 @@ import { path } from '../../../internal/utils/path';
 
 export class Completions extends APIResource {
   /**
-   * FastAPI wrapper around async chat completions
-   *
-   * This endpoint creates an asynchronous chat completion job and returns a job ID
-   * that can be used to poll for results.
+   * Submit an asynchronous chat completion request.
    */
   create(body: CompletionCreateParams, options?: RequestOptions): APIPromise<CompletionCreateResponse> {
     return this._client.post('/async/chat/completions', { body, ...options });
   }
 
   /**
-   * list all async chat completion requests for a given user.
+   * Retrieve a list of all asynchronous chat completion requests for a given user.
    */
   list(options?: RequestOptions): APIPromise<CompletionListResponse> {
     return this._client.get('/async/chat/completions', options);
   }
 
   /**
-   * get the response for a given async chat completion request.
+   * Retrieve the response for a given asynchronous chat completion request.
    */
   get(
     apiRequest: string,
@@ -37,6 +34,7 @@ export class Completions extends APIResource {
     const {
       'x-client-env': xClientEnv,
       'x-client-name': xClientName,
+      'x-created-at-epoch-seconds': xCreatedAtEpochSeconds,
       'x-request-time': xRequestTime,
       'x-usage-tier': xUsageTier,
       'x-user-id': xUserID,
@@ -49,6 +47,9 @@ export class Completions extends APIResource {
         {
           ...(xClientEnv != null ? { 'x-client-env': xClientEnv } : undefined),
           ...(xClientName != null ? { 'x-client-name': xClientName } : undefined),
+          ...(xCreatedAtEpochSeconds != null ?
+            { 'x-created-at-epoch-seconds': xCreatedAtEpochSeconds }
+          : undefined),
           ...(xRequestTime != null ? { 'x-request-time': xRequestTime } : undefined),
           ...(xUsageTier != null ? { 'x-usage-tier': xUsageTier } : undefined),
           ...(xUserID != null ? { 'x-user-id': xUserID } : undefined),
@@ -176,6 +177,8 @@ export namespace CompletionCreateParams {
 
     image_format_filter?: Array<string> | null;
 
+    language_preference?: string | null;
+
     last_updated_after_filter?: string | null;
 
     last_updated_before_filter?: string | null;
@@ -234,7 +237,11 @@ export namespace CompletionCreateParams {
 
     stream?: boolean | null;
 
+    stream_mode?: 'full' | 'concise';
+
     temperature?: number | null;
+
+    thread_id?: string | null;
 
     tool_choice?: 'none' | 'auto' | 'required' | null;
 
@@ -249,6 +256,8 @@ export namespace CompletionCreateParams {
     updated_after_timestamp?: number | null;
 
     updated_before_timestamp?: number | null;
+
+    use_threads?: boolean | null;
 
     web_search_options?: Request.WebSearchOptions;
   }
@@ -335,7 +344,7 @@ export namespace CompletionCreateParams {
 
       search_context_size?: 'low' | 'medium' | 'high';
 
-      search_type?: 'fast' | 'pro' | 'auto';
+      search_type?: 'fast' | 'pro' | 'auto' | null;
 
       user_location?: WebSearchOptions.UserLocation | null;
     }
@@ -371,6 +380,11 @@ export interface CompletionGetParams {
    * Header param:
    */
   'x-client-name'?: string;
+
+  /**
+   * Header param:
+   */
+  'x-created-at-epoch-seconds'?: string;
 
   /**
    * Header param:
