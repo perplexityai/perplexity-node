@@ -6,7 +6,7 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Search extends APIResource {
   /**
-   * Search
+   * Search the web and retrieve relevant web page contents.
    */
   create(body: SearchCreateParams, options?: RequestOptions): APIPromise<SearchCreateResponse> {
     return this._client.post('/search', { body, ...options });
@@ -17,6 +17,8 @@ export interface SearchCreateResponse {
   id: string;
 
   results: Array<SearchCreateResponse.Result>;
+
+  server_time?: string | null;
 }
 
 export namespace SearchCreateResponse {
@@ -36,7 +38,7 @@ export namespace SearchCreateResponse {
 export interface SearchCreateParams {
   query: string | Array<string>;
 
-  country?: string | null;
+  display_server_time?: boolean;
 
   max_results?: number;
 

@@ -12,6 +12,8 @@ export interface APIPublicSearchResult {
   last_updated?: string | null;
 
   snippet?: string;
+
+  source?: 'web' | 'attachment';
 }
 
 export interface ChatMessageInput {
