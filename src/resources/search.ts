@@ -46,6 +46,8 @@ export interface SearchCreateParams {
 
   max_tokens_per_page?: number;
 
+  search_domain_filter?: Array<string> | null;
+
   search_mode?: 'web' | 'academic' | 'sec' | null;
 }
 
