@@ -46,6 +46,7 @@ describe('resource completions', () => {
                     date: 'date',
                     last_updated: 'last_updated',
                     snippet: 'snippet',
+                    source: 'web',
                   },
                 ],
               },
@@ -59,6 +60,7 @@ describe('resource completions', () => {
                     date: 'date',
                     last_updated: 'last_updated',
                     snippet: 'snippet',
+                    source: 'web',
                   },
                 ],
               },
@@ -87,6 +89,7 @@ describe('resource completions', () => {
       has_image_url: true,
       image_domain_filter: ['string'],
       image_format_filter: ['string'],
+      language_preference: 'language_preference',
       last_updated_after_filter: 'last_updated_after_filter',
       last_updated_before_filter: 'last_updated_before_filter',
       latitude: 0,
@@ -114,7 +117,9 @@ describe('resource completions', () => {
       search_tenant: 'search_tenant',
       stop: 'string',
       stream: false,
+      stream_mode: 'full',
       temperature: 0,
+      thread_id: 'thread_id',
       tool_choice: 'none',
       tools: [
         {
@@ -137,6 +142,7 @@ describe('resource completions', () => {
       top_p: 0,
       updated_after_timestamp: 0,
       updated_before_timestamp: 0,
+      use_threads: true,
       web_search_options: {
         image_results_enhanced_relevance: true,
         search_context_size: 'low',

@@ -23,8 +23,6 @@ export interface StreamChunk {
 
   model: string;
 
-  usage: Shared.UsageInfo;
-
   citations?: Array<string> | null;
 
   object?: string;
@@ -34,6 +32,8 @@ export interface StreamChunk {
   status?: 'PENDING' | 'COMPLETED' | null;
 
   type?: 'message' | 'info' | 'end_of_stream' | null;
+
+  usage?: Shared.UsageInfo | null;
 }
 
 Chat.Completions = Completions;

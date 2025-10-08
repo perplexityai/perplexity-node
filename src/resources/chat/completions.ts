@@ -10,7 +10,7 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Completions extends APIResource {
   /**
-   * FastAPI wrapper around chat completions
+   * Generate a chat completion response for the given conversation.
    */
   create(body: CompletionCreateParamsNonStreaming, options?: RequestOptions): APIPromise<ChatAPI.StreamChunk>;
   create(
@@ -70,6 +70,8 @@ export interface CompletionCreateParamsBase {
 
   image_format_filter?: Array<string> | null;
 
+  language_preference?: string | null;
+
   last_updated_after_filter?: string | null;
 
   last_updated_before_filter?: string | null;
@@ -128,7 +130,11 @@ export interface CompletionCreateParamsBase {
 
   stream?: boolean | null;
 
+  stream_mode?: 'full' | 'concise';
+
   temperature?: number | null;
+
+  thread_id?: string | null;
 
   tool_choice?: 'none' | 'auto' | 'required' | null;
 
@@ -143,6 +149,8 @@ export interface CompletionCreateParamsBase {
   updated_after_timestamp?: number | null;
 
   updated_before_timestamp?: number | null;
+
+  use_threads?: boolean | null;
 
   web_search_options?: CompletionCreateParams.WebSearchOptions;
 }
@@ -229,7 +237,7 @@ export namespace CompletionCreateParams {
 
     search_context_size?: 'low' | 'medium' | 'high';
 
-    search_type?: 'fast' | 'pro' | 'auto';
+    search_type?: 'fast' | 'pro' | 'auto' | null;
 
     user_location?: WebSearchOptions.UserLocation | null;
   }
