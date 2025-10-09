@@ -1,5 +1,5 @@
 {
-  "name": "@perplexity-ai/perplexity_ai-mcp",
+  "name": "@perplexity-ai/mcp-server",
   "version": "0.10.0",
   "description": "The official MCP Server for the Perplexity API",
   "author": "Perplexity <>",
@@ -68,8 +68,8 @@
     "typescript": "5.8.3"
   },
   "imports": {
-    "@perplexity-ai/perplexity_ai-mcp": ".",
-    "@perplexity-ai/perplexity_ai-mcp/*": "./src/*"
+    "@perplexity-ai/mcp-server": ".",
+    "@perplexity-ai/mcp-server/*": "./src/*"
   },
   "exports": {
     ".": {

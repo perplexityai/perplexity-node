@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^@perplexity-ai/perplexity_ai-mcp$': '<rootDir>/src/index.ts',
-    '^@perplexity-ai/perplexity_ai-mcp/(.*)$': '<rootDir>/src/$1',
+    '^@perplexity-ai/mcp-server$': '<rootDir>/src/index.ts',
+    '^@perplexity-ai/mcp-server/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],

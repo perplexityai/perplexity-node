@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "@perplexity-ai/perplexity_ai-mcp/*": ["./src/*"],
-      "@perplexity-ai/perplexity_ai-mcp": ["./src/index.ts"]
+      "@perplexity-ai/mcp-server/*": ["./src/*"],
+      "@perplexity-ai/mcp-server": ["./src/index.ts"]
     },
     "noEmit": true,
 

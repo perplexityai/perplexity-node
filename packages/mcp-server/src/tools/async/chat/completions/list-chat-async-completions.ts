@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { maybeFilter } from '@perplexity-ai/perplexity_ai-mcp/filtering';
-import { Metadata, asTextContentResult } from '@perplexity-ai/perplexity_ai-mcp/tools/types';
+import { maybeFilter } from '@perplexity-ai/mcp-server/filtering';
+import { Metadata, asTextContentResult } from '@perplexity-ai/mcp-server/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import Perplexity from '@perplexity-ai/perplexity_ai';
