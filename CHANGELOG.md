@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.11.0 (2025-10-10)
+
+Full Changelog: [v0.10.0...v0.11.0](https://github.com/perplexityai/perplexity-node/compare/v0.10.0...v0.11.0)
+
+### Features
+
+* **api:** manual updates ([b40eeef](https://github.com/perplexityai/perplexity-node/commit/b40eeef3d741e44af2bffa39791c81e2d8f11c57))
+* **api:** manual updates ([1daecd2](https://github.com/perplexityai/perplexity-node/commit/1daecd20ddb15e6fdbce81d6dab7e887ab1e032a))
+
+
+### Chores
+
+* configure new SDK language ([18bb933](https://github.com/perplexityai/perplexity-node/commit/18bb9330e449ec1f609b86ae4904e57c8206d97e))
+* extract some types in mcp docs ([236c14e](https://github.com/perplexityai/perplexity-node/commit/236c14e4bb31f701a57f6476d20366686f99297d))
+
 ## 0.10.0 (2025-10-08)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/perplexityai/perplexity-node/compare/v0.9.0...v0.10.0)
