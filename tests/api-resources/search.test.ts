@@ -28,8 +28,11 @@ describe('resource search', () => {
       max_results: 0,
       max_tokens: 0,
       max_tokens_per_page: 0,
+      search_after_date_filter: 'search_after_date_filter',
+      search_before_date_filter: 'search_before_date_filter',
       search_domain_filter: ['string'],
       search_mode: 'web',
+      search_recency_filter: 'hour',
     });
   });
 });
