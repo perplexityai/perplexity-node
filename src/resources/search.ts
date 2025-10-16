@@ -46,9 +46,15 @@ export interface SearchCreateParams {
 
   max_tokens_per_page?: number;
 
+  search_after_date_filter?: string | null;
+
+  search_before_date_filter?: string | null;
+
   search_domain_filter?: Array<string> | null;
 
   search_mode?: 'web' | 'academic' | 'sec' | null;
+
+  search_recency_filter?: 'hour' | 'day' | 'week' | 'month' | 'year' | null;
 }
 
 export declare namespace Search {
