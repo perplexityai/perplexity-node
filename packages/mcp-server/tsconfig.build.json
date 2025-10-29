@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "@perplexity-ai/perplexity_ai-mcp/*": ["./dist/src/*"],
-      "@perplexity-ai/perplexity_ai-mcp": ["./dist/src/index.ts"]
+      "@perplexity-ai/mcp-server/*": ["./dist/src/*"],
+      "@perplexity-ai/mcp-server": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

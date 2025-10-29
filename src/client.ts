@@ -130,7 +130,7 @@ export class Perplexity {
    *
    * @param {string | undefined} [opts.apiKey=process.env['PERPLEXITY_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['PERPLEXITY_BASE_URL'] ?? https://api.perplexity.ai] - Override the default base URL for the API.
-   * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {number} [opts.timeout=15 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
    * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
@@ -155,7 +155,7 @@ export class Perplexity {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Perplexity.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Perplexity.DEFAULT_TIMEOUT /* 15 minutes */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -698,7 +698,7 @@ export class Perplexity {
   }
 
   static Perplexity = this;
-  static DEFAULT_TIMEOUT = 60000; // 1 minute
+  static DEFAULT_TIMEOUT = 900000; // 15 minutes
 
   static PerplexityError = Errors.PerplexityError;
   static APIError = Errors.APIError;
@@ -717,26 +717,26 @@ export class Perplexity {
   static toFile = Uploads.toFile;
 
   chat: API.Chat = new API.Chat(this);
-  async: API.Async = new API.Async(this);
   search: API.Search = new API.Search(this);
+  async: API.Async = new API.Async(this);
 }
 
 Perplexity.Chat = Chat;
-Perplexity.Async = Async;
 Perplexity.Search = Search;
+Perplexity.Async = Async;
 
 export declare namespace Perplexity {
   export type RequestOptions = Opts.RequestOptions;
 
   export { Chat as Chat, type StreamChunk as StreamChunk };
 
-  export { Async as Async };
-
   export {
     Search as Search,
     type SearchCreateResponse as SearchCreateResponse,
     type SearchCreateParams as SearchCreateParams,
   };
+
+  export { Async as Async };
 
   export type APIPublicSearchResult = API.APIPublicSearchResult;
   export type ChatMessageInput = API.ChatMessageInput;

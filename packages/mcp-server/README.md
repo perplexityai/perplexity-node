@@ -10,7 +10,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export PERPLEXITY_API_KEY="My API Key"
-npx -y @perplexity-ai/perplexity_ai-mcp@latest
+npx -y @perplexity-ai/mcp-server@latest
 ```
 
 ### Via MCP Client
@@ -25,7 +25,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "perplexity_ai_perplexity_ai_api": {
       "command": "npx",
-      "args": ["-y", "@perplexity-ai/perplexity_ai-mcp", "--client=claude", "--tools=all"],
+      "args": ["-y", "@perplexity-ai/mcp-server", "--client=claude", "--tools=all"],
       "env": {
         "PERPLEXITY_API_KEY": "My API Key"
       }
@@ -169,10 +169,10 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 
 ```js
 // Import the server, generated endpoints, or the init function
-import { server, endpoints, init } from "@perplexity-ai/perplexity_ai-mcp/server";
+import { server, endpoints, init } from "@perplexity-ai/mcp-server/server";
 
 // import a specific tool
-import createChatCompletions from "@perplexity-ai/perplexity_ai-mcp/tools/chat/completions/create-chat-completions";
+import createChatCompletions from "@perplexity-ai/mcp-server/tools/chat/completions/create-chat-completions";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -207,12 +207,6 @@ The following tools are available in this MCP server.
 ### Resource `chat.completions`:
 
 - `create_chat_completions` (`write`): Generate a chat completion response for the given conversation.
-
-### Resource `async.chat.completions`:
-
-- `create_chat_async_completions` (`write`): Submit an asynchronous chat completion request.
-- `list_chat_async_completions` (`read`): Retrieve a list of all asynchronous chat completion requests for a given user.
-- `get_chat_async_completions` (`read`): Retrieve the response for a given asynchronous chat completion request.
 
 ### Resource `search`:
 
