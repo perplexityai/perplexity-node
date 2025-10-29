@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.13.0 (2025-10-29)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/perplexityai/perplexity-node/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* **api:** manual updates ([ab3c07b](https://github.com/perplexityai/perplexity-node/commit/ab3c07b646009f43ac4d0001e6d61e8562073aba))
+
+
+### Chores
+
+* configure new SDK language ([3cbc5a5](https://github.com/perplexityai/perplexity-node/commit/3cbc5a5e922e5fe0b2092b0088145bc1103f87d5))
+
 ## 0.12.0 (2025-10-16)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/perplexityai/perplexity-node/compare/v0.11.0...v0.12.0)
