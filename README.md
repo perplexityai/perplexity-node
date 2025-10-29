@@ -269,12 +269,12 @@ await client.chat.completions.create({ messages: [{ role: 'user', content: 'What
 
 ### Timeouts
 
-Requests time out after 1 minute by default. You can configure this with a `timeout` option:
+Requests time out after 15 minutes by default. You can configure this with a `timeout` option:
 
 ```ts
 // Configure the default for all requests:
 const client = new Perplexity({
-  timeout: 20 * 1000, // 20 seconds (default is 1 minute)
+  timeout: 20 * 1000, // 20 seconds (default is 15 minutes)
 });
 
 // Override per-request:

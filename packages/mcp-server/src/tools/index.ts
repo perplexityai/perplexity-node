@@ -5,9 +5,6 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 export { Metadata, Endpoint, HandlerFunction };
 
 import create_chat_completions from './chat/completions/create-chat-completions';
-import create_chat_async_completions from './async/chat/completions/create-chat-async-completions';
-import list_chat_async_completions from './async/chat/completions/list-chat-async-completions';
-import get_chat_async_completions from './async/chat/completions/get-chat-async-completions';
 import create_search from './search/create-search';
 
 export const endpoints: Endpoint[] = [];
@@ -17,9 +14,6 @@ function addEndpoint(endpoint: Endpoint) {
 }
 
 addEndpoint(create_chat_completions);
-addEndpoint(create_chat_async_completions);
-addEndpoint(list_chat_async_completions);
-addEndpoint(get_chat_async_completions);
 addEndpoint(create_search);
 
 export type Filter = {
