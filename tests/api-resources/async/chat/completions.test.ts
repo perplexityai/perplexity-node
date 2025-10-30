@@ -33,7 +33,6 @@ describe('resource completions', () => {
             reasoning_steps: [
               {
                 thought: 'thought',
-                type: 'web_search',
                 agent_progress: { action: 'action', screenshot: 'screenshot', url: 'url' },
                 browser_agent: { result: 'result', url: 'url' },
                 browser_tool_execution: { tool: { foo: 'bar' } },
@@ -51,6 +50,7 @@ describe('resource completions', () => {
                   ],
                 },
                 file_attachment_search: { attachment_urls: ['string'] },
+                type: 'type',
                 web_search: {
                   search_keywords: ['string'],
                   search_results: [
@@ -77,10 +77,6 @@ describe('resource completions', () => {
         best_of: 0,
         country: 'country',
         cum_logprobs: true,
-        debug_params: {
-          summarizer_model_override: 'summarizer_model_override',
-          summarizer_prompt_override: 'summarizer_prompt_override',
-        },
         disable_search: true,
         diverse_first_token: true,
         enable_search_classifier: true,
