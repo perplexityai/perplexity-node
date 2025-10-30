@@ -159,8 +159,6 @@ export namespace CompletionCreateParams {
 
     cum_logprobs?: boolean | null;
 
-    debug_params?: Request.DebugParams | null;
-
     disable_search?: boolean | null;
 
     diverse_first_token?: boolean | null;
@@ -263,12 +261,6 @@ export namespace CompletionCreateParams {
   }
 
   export namespace Request {
-    export interface DebugParams {
-      summarizer_model_override?: string | null;
-
-      summarizer_prompt_override?: string | null;
-    }
-
     export interface ResponseFormatText {
       type: 'text';
     }
