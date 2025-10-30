@@ -102,15 +102,6 @@ export namespace ChatMessageInput {
   export interface ReasoningStep {
     thought: string;
 
-    type:
-      | 'web_search'
-      | 'fetch_url_content'
-      | 'execute_python'
-      | 'agent_progress'
-      | 'browser_agent'
-      | 'browser_tool_execution'
-      | 'file_attachment_search';
-
     /**
      * Agent progress class for live-browsing updates
      */
@@ -140,6 +131,8 @@ export namespace ChatMessageInput {
      * File attachment search step details wrapper class
      */
     file_attachment_search?: ReasoningStep.FileAttachmentSearch | null;
+
+    type?: string | null;
 
     /**
      * Web search step details wrapper class
@@ -311,15 +304,6 @@ export namespace ChatMessageOutput {
   export interface ReasoningStep {
     thought: string;
 
-    type:
-      | 'web_search'
-      | 'fetch_url_content'
-      | 'execute_python'
-      | 'agent_progress'
-      | 'browser_agent'
-      | 'browser_tool_execution'
-      | 'file_attachment_search';
-
     /**
      * Agent progress class for live-browsing updates
      */
@@ -349,6 +333,8 @@ export namespace ChatMessageOutput {
      * File attachment search step details wrapper class
      */
     file_attachment_search?: ReasoningStep.FileAttachmentSearch | null;
+
+    type?: string | null;
 
     /**
      * Web search step details wrapper class

@@ -65,20 +65,6 @@ export const tool: Tool = {
             type: 'boolean',
             title: 'Cum Logprobs',
           },
-          debug_params: {
-            type: 'object',
-            title: 'DebugParams',
-            properties: {
-              summarizer_model_override: {
-                type: 'string',
-                title: 'Summarizer Model Override',
-              },
-              summarizer_prompt_override: {
-                type: 'string',
-                title: 'Summarizer Prompt Override',
-              },
-            },
-          },
           disable_search: {
             type: 'boolean',
             title: 'Disable Search',
@@ -534,20 +520,6 @@ export const tool: Tool = {
           cum_logprobs: {
             type: 'boolean',
             title: 'Cum Logprobs',
-          },
-          debug_params: {
-            type: 'object',
-            title: 'DebugParams',
-            properties: {
-              summarizer_model_override: {
-                type: 'string',
-                title: 'Summarizer Model Override',
-              },
-              summarizer_prompt_override: {
-                type: 'string',
-                title: 'Summarizer Prompt Override',
-              },
-            },
           },
           disable_search: {
             type: 'boolean',
@@ -1145,19 +1117,6 @@ export const tool: Tool = {
                   type: 'string',
                   title: 'Thought',
                 },
-                type: {
-                  type: 'string',
-                  title: 'Type',
-                  enum: [
-                    'web_search',
-                    'fetch_url_content',
-                    'execute_python',
-                    'agent_progress',
-                    'browser_agent',
-                    'browser_tool_execution',
-                    'file_attachment_search',
-                  ],
-                },
                 agent_progress: {
                   type: 'object',
                   title: 'AgentProgressStepDetails',
@@ -1253,6 +1212,10 @@ export const tool: Tool = {
                   },
                   required: ['attachment_urls'],
                 },
+                type: {
+                  type: 'string',
+                  title: 'Type',
+                },
                 web_search: {
                   type: 'object',
                   title: 'WebSearchStepDetails',
@@ -1276,7 +1239,7 @@ export const tool: Tool = {
                   required: ['search_keywords', 'search_results'],
                 },
               },
-              required: ['thought', 'type'],
+              required: ['thought'],
             },
           },
           tool_calls: {
