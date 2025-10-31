@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.15.0 (2025-10-31)
+
+Full Changelog: [v0.14.0...v0.15.0](https://github.com/perplexityai/perplexity-node/compare/v0.14.0...v0.15.0)
+
+### Features
+
+* **api:** remove mcp config ([f8654a1](https://github.com/perplexityai/perplexity-node/commit/f8654a19a4227e1877ebad58f542dd24e40c36bd))
+
+
+### Bug Fixes
+
+* **mcpb:** pin @anthropic-ai/mcpb version ([476ee83](https://github.com/perplexityai/perplexity-node/commit/476ee835f5a4d528090ac6436a66e60c65be9c18))
+
 ## 0.14.0 (2025-10-30)
 
 Full Changelog: [v0.13.0...v0.14.0](https://github.com/perplexityai/perplexity-node/compare/v0.13.0...v0.14.0)
