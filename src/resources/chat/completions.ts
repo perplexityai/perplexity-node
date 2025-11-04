@@ -118,6 +118,8 @@ export interface CompletionCreateParamsBase {
 
   search_internal_properties?: { [key: string]: unknown } | null;
 
+  search_language_filter?: Array<string> | null;
+
   search_mode?: 'web' | 'academic' | 'sec' | null;
 
   search_recency_filter?: 'hour' | 'day' | 'week' | 'month' | 'year' | null;

@@ -38,6 +38,8 @@ export namespace SearchCreateResponse {
 export interface SearchCreateParams {
   query: string | Array<string>;
 
+  country?: string | null;
+
   display_server_time?: boolean;
 
   max_results?: number;
@@ -51,6 +53,8 @@ export interface SearchCreateParams {
   search_before_date_filter?: string | null;
 
   search_domain_filter?: Array<string> | null;
+
+  search_language_filter?: Array<string> | null;
 
   search_mode?: 'web' | 'academic' | 'sec' | null;
 
