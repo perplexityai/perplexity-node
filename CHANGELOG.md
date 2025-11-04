@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.0 (2025-11-04)
+
+Full Changelog: [v0.15.0...v0.16.0](https://github.com/perplexityai/perplexity-node/compare/v0.15.0...v0.16.0)
+
+### Features
+
+* **api:** add country param ([8782141](https://github.com/perplexityai/perplexity-node/commit/8782141ab736df4e79e068020ff3539d70b114ce))
+
 ## 0.15.0 (2025-10-31)
 
 Full Changelog: [v0.14.0...v0.15.0](https://github.com/perplexityai/perplexity-node/compare/v0.14.0...v0.15.0)
