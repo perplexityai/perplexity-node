@@ -108,6 +108,7 @@ describe('resource completions', () => {
         search_before_date_filter: 'search_before_date_filter',
         search_domain_filter: ['string'],
         search_internal_properties: { foo: 'bar' },
+        search_language_filter: ['string'],
         search_mode: 'web',
         search_recency_filter: 'hour',
         search_tenant: 'search_tenant',
