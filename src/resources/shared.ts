@@ -25,7 +25,8 @@ export interface ChatMessageInput {
         | ChatMessageInput.ChatMessageContentFileChunk
         | ChatMessageInput.ChatMessageContentPdfChunk
         | ChatMessageInput.ChatMessageContentVideoChunk
-      >;
+      >
+    | null;
 
   /**
    * Chat roles enum
@@ -33,6 +34,8 @@ export interface ChatMessageInput {
   role: 'system' | 'user' | 'assistant' | 'tool';
 
   reasoning_steps?: Array<ChatMessageInput.ReasoningStep> | null;
+
+  tool_call_id?: string | null;
 
   tool_calls?: Array<ChatMessageInput.ToolCall> | null;
 }
@@ -103,21 +106,6 @@ export namespace ChatMessageInput {
     thought: string;
 
     /**
-     * Agent progress class for live-browsing updates
-     */
-    agent_progress?: ReasoningStep.AgentProgress | null;
-
-    /**
-     * Browser agent step summary class
-     */
-    browser_agent?: ReasoningStep.BrowserAgent | null;
-
-    /**
-     * Tool input for kicking off browser tool automation
-     */
-    browser_tool_execution?: ReasoningStep.BrowserToolExecution | null;
-
-    /**
      * Code generation step details wrapper class
      */
     execute_python?: ReasoningStep.ExecutePython | null;
@@ -126,11 +114,6 @@ export namespace ChatMessageInput {
      * Fetch url content step details wrapper class
      */
     fetch_url_content?: ReasoningStep.FetchURLContent | null;
-
-    /**
-     * File attachment search step details wrapper class
-     */
-    file_attachment_search?: ReasoningStep.FileAttachmentSearch | null;
 
     type?: string | null;
 
@@ -141,33 +124,6 @@ export namespace ChatMessageInput {
   }
 
   export namespace ReasoningStep {
-    /**
-     * Agent progress class for live-browsing updates
-     */
-    export interface AgentProgress {
-      action: string | null;
-
-      screenshot: string | null;
-
-      url: string | null;
-    }
-
-    /**
-     * Browser agent step summary class
-     */
-    export interface BrowserAgent {
-      result: string;
-
-      url: string;
-    }
-
-    /**
-     * Tool input for kicking off browser tool automation
-     */
-    export interface BrowserToolExecution {
-      tool: { [key: string]: unknown };
-    }
-
     /**
      * Code generation step details wrapper class
      */
@@ -182,13 +138,6 @@ export namespace ChatMessageInput {
      */
     export interface FetchURLContent {
       contents: Array<Shared.APIPublicSearchResult>;
-    }
-
-    /**
-     * File attachment search step details wrapper class
-     */
-    export interface FileAttachmentSearch {
-      attachment_urls: Array<string>;
     }
 
     /**
@@ -227,7 +176,8 @@ export interface ChatMessageOutput {
         | ChatMessageOutput.ChatMessageContentFileChunk
         | ChatMessageOutput.ChatMessageContentPdfChunk
         | ChatMessageOutput.ChatMessageContentVideoChunk
-      >;
+      >
+    | null;
 
   /**
    * Chat roles enum
@@ -235,6 +185,8 @@ export interface ChatMessageOutput {
   role: 'system' | 'user' | 'assistant' | 'tool';
 
   reasoning_steps?: Array<ChatMessageOutput.ReasoningStep> | null;
+
+  tool_call_id?: string | null;
 
   tool_calls?: Array<ChatMessageOutput.ToolCall> | null;
 }
@@ -305,21 +257,6 @@ export namespace ChatMessageOutput {
     thought: string;
 
     /**
-     * Agent progress class for live-browsing updates
-     */
-    agent_progress?: ReasoningStep.AgentProgress | null;
-
-    /**
-     * Browser agent step summary class
-     */
-    browser_agent?: ReasoningStep.BrowserAgent | null;
-
-    /**
-     * Tool input for kicking off browser tool automation
-     */
-    browser_tool_execution?: ReasoningStep.BrowserToolExecution | null;
-
-    /**
      * Code generation step details wrapper class
      */
     execute_python?: ReasoningStep.ExecutePython | null;
@@ -328,11 +265,6 @@ export namespace ChatMessageOutput {
      * Fetch url content step details wrapper class
      */
     fetch_url_content?: ReasoningStep.FetchURLContent | null;
-
-    /**
-     * File attachment search step details wrapper class
-     */
-    file_attachment_search?: ReasoningStep.FileAttachmentSearch | null;
 
     type?: string | null;
 
@@ -343,33 +275,6 @@ export namespace ChatMessageOutput {
   }
 
   export namespace ReasoningStep {
-    /**
-     * Agent progress class for live-browsing updates
-     */
-    export interface AgentProgress {
-      action: string | null;
-
-      screenshot: string | null;
-
-      url: string | null;
-    }
-
-    /**
-     * Browser agent step summary class
-     */
-    export interface BrowserAgent {
-      result: string;
-
-      url: string;
-    }
-
-    /**
-     * Tool input for kicking off browser tool automation
-     */
-    export interface BrowserToolExecution {
-      tool: { [key: string]: unknown };
-    }
-
     /**
      * Code generation step details wrapper class
      */
@@ -384,13 +289,6 @@ export namespace ChatMessageOutput {
      */
     export interface FetchURLContent {
       contents: Array<Shared.APIPublicSearchResult>;
-    }
-
-    /**
-     * File attachment search step details wrapper class
-     */
-    export interface FileAttachmentSearch {
-      attachment_urls: Array<string>;
     }
 
     /**

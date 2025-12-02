@@ -33,9 +33,6 @@ describe('resource completions', () => {
             reasoning_steps: [
               {
                 thought: 'thought',
-                agent_progress: { action: 'action', screenshot: 'screenshot', url: 'url' },
-                browser_agent: { result: 'result', url: 'url' },
-                browser_tool_execution: { tool: { foo: 'bar' } },
                 execute_python: { code: 'code', result: 'result' },
                 fetch_url_content: {
                   contents: [
@@ -49,7 +46,6 @@ describe('resource completions', () => {
                     },
                   ],
                 },
-                file_attachment_search: { attachment_urls: ['string'] },
                 type: 'type',
                 web_search: {
                   search_keywords: ['string'],
@@ -66,13 +62,14 @@ describe('resource completions', () => {
                 },
               },
             ],
+            tool_call_id: 'tool_call_id',
             tool_calls: [{ id: 'id', function: { arguments: 'arguments', name: 'name' }, type: 'function' }],
           },
         ],
         model: 'model',
         _debug_pro_search: true,
+        _force_new_agent: true,
         _inputs: [0],
-        _is_browser_agent: true,
         _prompt_token_length: 0,
         best_of: 0,
         country: 'country',
@@ -140,6 +137,7 @@ describe('resource completions', () => {
         updated_after_timestamp: 0,
         updated_before_timestamp: 0,
         use_threads: true,
+        user_original_query: 'user_original_query',
         web_search_options: {
           image_results_enhanced_relevance: true,
           search_context_size: 'low',
