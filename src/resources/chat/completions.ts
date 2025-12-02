@@ -40,9 +40,9 @@ export interface CompletionCreateParamsBase {
 
   _debug_pro_search?: boolean;
 
-  _inputs?: Array<number> | null;
+  _force_new_agent?: boolean | null;
 
-  _is_browser_agent?: boolean | null;
+  _inputs?: Array<number> | null;
 
   _prompt_token_length?: number | null;
 
@@ -151,6 +151,8 @@ export interface CompletionCreateParamsBase {
   updated_before_timestamp?: number | null;
 
   use_threads?: boolean | null;
+
+  user_original_query?: string | null;
 
   web_search_options?: CompletionCreateParams.WebSearchOptions;
 }
