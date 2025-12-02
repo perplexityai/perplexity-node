@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.17.0 (2025-12-02)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/perplexityai/perplexity-node/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* **api:** manual updates ([c49ea25](https://github.com/perplexityai/perplexity-node/commit/c49ea25a0919c5fb25c22fc6a8fad4d81758bafd))
+
+
+### Chores
+
+* **client:** fix logger property type ([9eddcf7](https://github.com/perplexityai/perplexity-node/commit/9eddcf7aeaee285ea765ce2b3f6e473dcb931b06))
+* **internal:** upgrade eslint ([a645373](https://github.com/perplexityai/perplexity-node/commit/a6453738c2adff41a33fd59e8f7bcf2a30e625ec))
+
 ## 0.16.0 (2025-11-04)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/perplexityai/perplexity-node/compare/v0.15.0...v0.16.0)
