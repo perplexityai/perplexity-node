@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.18.0 (2025-12-05)
+
+Full Changelog: [v0.17.0...v0.18.0](https://github.com/perplexityai/perplexity-node/compare/v0.17.0...v0.18.0)
+
+### Features
+
+* **api:** manual updates ([fc07d79](https://github.com/perplexityai/perplexity-node/commit/fc07d79363e3bbe103595139270ddfa9cdc9af4d))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([d7be1ad](https://github.com/perplexityai/perplexity-node/commit/d7be1ad64f691f68b9fd626ff657ff58056bb0a1))
+* **mcp:** return correct lines on typescript errors ([2719b53](https://github.com/perplexityai/perplexity-node/commit/2719b530e2560713cdba9a407ad74a5bf8cd0f32))
+
+
+### Chores
+
+* **internal:** codegen related update ([6ac26a8](https://github.com/perplexityai/perplexity-node/commit/6ac26a8aeebf04d7d1f2f0e4e9241d2327a3eb70))
+
 ## 0.17.0 (2025-12-02)
 
 Full Changelog: [v0.16.0...v0.17.0](https://github.com/perplexityai/perplexity-node/compare/v0.16.0...v0.17.0)

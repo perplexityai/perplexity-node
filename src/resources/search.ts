@@ -42,6 +42,10 @@ export interface SearchCreateParams {
 
   display_server_time?: boolean;
 
+  last_updated_after_filter?: string | null;
+
+  last_updated_before_filter?: string | null;
+
   max_results?: number;
 
   max_tokens?: number;

@@ -26,6 +26,8 @@ describe('resource search', () => {
       query: 'string',
       country: 'country',
       display_server_time: true,
+      last_updated_after_filter: 'last_updated_after_filter',
+      last_updated_before_filter: 'last_updated_before_filter',
       max_results: 0,
       max_tokens: 0,
       max_tokens_per_page: 0,
