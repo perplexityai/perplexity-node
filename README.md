@@ -44,7 +44,7 @@ import Perplexity from '@perplexity-ai/perplexity_ai';
 const client = new Perplexity();
 
 const stream = await client.chat.completions.create({
-  messages: [{ role: 'user', content: 'What is the capital of France?' }],
+  messages: [{ role: 'user', content: 'Tell me about the latest developments in AI' }],
   model: 'sonar',
   stream: true,
 });
