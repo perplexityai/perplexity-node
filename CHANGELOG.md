@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.18.2 (2025-12-19)
+
+Full Changelog: [v0.18.1...v0.18.2](https://github.com/perplexityai/perplexity-node/compare/v0.18.1...v0.18.2)
+
+### Documentation
+
+* add more examples ([23b89c4](https://github.com/perplexityai/perplexity-node/commit/23b89c4a7ba987715699edc8abfe65dac7ec0a21))
+
 ## 0.18.1 (2025-12-05)
 
 Full Changelog: [v0.18.0...v0.18.1](https://github.com/perplexityai/perplexity-node/compare/v0.18.0...v0.18.1)
