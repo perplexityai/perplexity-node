@@ -86,7 +86,10 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const streamChunk = await client.chat.completions
-  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .create({
+    messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    model: 'sonar',
+  })
   .catch(async (err) => {
     if (err instanceof Perplexity.APIError) {
       console.log(err.status); // 400
@@ -168,13 +171,19 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 const client = new Perplexity();
 
 const response = await client.chat.completions
-  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .create({
+    messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    model: 'sonar',
+  })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: streamChunk, response: raw } = await client.chat.completions
-  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .create({
+    messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    model: 'sonar',
+  })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(streamChunk.id);
