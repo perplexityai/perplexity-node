@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.18.3 (2026-01-05)
+
+Full Changelog: [v0.18.2...v0.18.3](https://github.com/perplexityai/perplexity-node/compare/v0.18.2...v0.18.3)
+
+### Chores
+
+* **internal:** codegen related update ([1bd1a99](https://github.com/perplexityai/perplexity-node/commit/1bd1a99cd9c442e45c2614c6b775bf87aa244e8f))
+
 ## 0.18.2 (2025-12-19)
 
 Full Changelog: [v0.18.1...v0.18.2](https://github.com/perplexityai/perplexity-node/compare/v0.18.1...v0.18.2)
