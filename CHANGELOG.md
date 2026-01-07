@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.18.4 (2026-01-07)
+
+Full Changelog: [v0.18.3...v0.18.4](https://github.com/perplexityai/perplexity-node/compare/v0.18.3...v0.18.4)
+
+### Chores
+
+* break long lines in snippets into multiline ([659cf62](https://github.com/perplexityai/perplexity-node/commit/659cf62198caebd226509583cec3e0adb729c23d))
+
 ## 0.18.3 (2026-01-05)
 
 Full Changelog: [v0.18.2...v0.18.3](https://github.com/perplexityai/perplexity-node/compare/v0.18.2...v0.18.3)
