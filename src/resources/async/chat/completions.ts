@@ -363,37 +363,37 @@ export namespace CompletionCreateParams {
 
 export interface CompletionGetParams {
   /**
-   * Query param:
+   * Query param
    */
   local_mode?: boolean;
 
   /**
-   * Header param:
+   * Header param
    */
   'x-client-env'?: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'x-client-name'?: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'x-created-at-epoch-seconds'?: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'x-request-time'?: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'x-usage-tier'?: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'x-user-id'?: string;
 }
