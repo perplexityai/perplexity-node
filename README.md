@@ -218,7 +218,10 @@ const search = await client.search
 
 // Chat completions error handling
 const streamChunk = await client.chat.completions
-  .create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' })
+  .create({
+    messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    model: 'sonar',
+  })
   .catch(async (err) => {
     if (err instanceof Perplexity.APIError) {
       console.log(err.status); // 400

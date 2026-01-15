@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.18.4 (2026-01-15)
+
+Full Changelog: [v0.18.3...v0.18.4](https://github.com/perplexityai/perplexity-node/compare/v0.18.3...v0.18.4)
+
+### Chores
+
+* break long lines in snippets into multiline ([659cf62](https://github.com/perplexityai/perplexity-node/commit/659cf62198caebd226509583cec3e0adb729c23d))
+* fix typo in descriptions ([9b3231f](https://github.com/perplexityai/perplexity-node/commit/9b3231fda472fca273e7777ae6204f8ca8260b38))
+* **internal:** upgrade babel, qs, js-yaml ([837eae4](https://github.com/perplexityai/perplexity-node/commit/837eae4116e93c285e45cd8db078917f02441804))
+
 ## 0.18.3 (2026-01-05)
 
 Full Changelog: [v0.18.2...v0.18.3](https://github.com/perplexityai/perplexity-node/compare/v0.18.2...v0.18.3)
