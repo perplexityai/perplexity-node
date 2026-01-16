@@ -55,7 +55,7 @@ const streamChunk = await client.chat.completions.create({
   model: 'sonar',
 });
 
-console.log(streamChunk.content);
+console.log(streamChunk.choices[0].message.content);
 ```
 
 ### Advanced Search Features
