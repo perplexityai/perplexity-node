@@ -50,7 +50,7 @@ Types:
 
 Methods:
 
-- <code title="post /v2/responses">client.responses.<a href="./src/resources/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
+- <code title="post /v1/responses">client.responses.<a href="./src/resources/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
 
 # Async
 

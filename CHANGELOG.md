@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.20.0 (2026-01-23)
+
+Full Changelog: [v0.19.0...v0.20.0](https://github.com/perplexityai/perplexity-node/compare/v0.19.0...v0.20.0)
+
+### Features
+
+* **api:** manual updates ([a61d97a](https://github.com/perplexityai/perplexity-node/commit/a61d97aceda3e4751cf689a6b07bca71d69d8f23))
+* **api:** manual updates ([1e550bc](https://github.com/perplexityai/perplexity-node/commit/1e550bc1a1d30cb319ecdafb12ef3afed4776534))
+
 ## 0.19.0 (2026-01-23)
 
 Full Changelog: [v0.18.4...v0.19.0](https://github.com/perplexityai/perplexity-node/compare/v0.18.4...v0.19.0)

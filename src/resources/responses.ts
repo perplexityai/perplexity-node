@@ -28,7 +28,7 @@ export class Responses extends APIResource {
     body: ResponseCreateParams,
     options?: RequestOptions,
   ): APIPromise<ResponseCreateResponse> | APIPromise<Stream<ResponseStreamChunk>> {
-    return this._client.post('/v2/responses', { body, ...options, stream: body.stream ?? false }) as
+    return this._client.post('/v1/responses', { body, ...options, stream: body.stream ?? false }) as
       | APIPromise<ResponseCreateResponse>
       | APIPromise<Stream<ResponseStreamChunk>>;
   }
