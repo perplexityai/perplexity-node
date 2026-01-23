@@ -12,9 +12,5 @@ export {
   type ResponseStreamChunk,
   type ResponsesCreateParams,
   type ResponsesUsage,
-  type ResponseCreateResponse,
-  type ResponseCreateParams,
-  type ResponseCreateParamsNonStreaming,
-  type ResponseCreateParamsStreaming,
 } from './responses';
 export { Search, type SearchCreateResponse, type SearchCreateParams } from './search';

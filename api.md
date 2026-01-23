@@ -46,11 +46,6 @@ Types:
 - <code><a href="./src/resources/responses.ts">ResponseStreamChunk</a></code>
 - <code><a href="./src/resources/responses.ts">ResponsesCreateParams</a></code>
 - <code><a href="./src/resources/responses.ts">ResponsesUsage</a></code>
-- <code><a href="./src/resources/responses.ts">ResponseCreateResponse</a></code>
-
-Methods:
-
-- <code title="post /v2/responses">client.responses.<a href="./src/resources/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
 
 # Async
 
