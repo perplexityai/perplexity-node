@@ -328,6 +328,68 @@ export interface Choice {
   finish_reason?: 'stop' | 'length' | null;
 }
 
+/**
+ * Defines a JSON schema for structured output validation
+ */
+export interface JsonSchemaFormat {
+  /**
+   * Name of the schema (1-64 alphanumeric chars)
+   */
+  name: string;
+
+  /**
+   * The JSON schema object
+   */
+  schema: { [key: string]: unknown };
+
+  /**
+   * Optional description of the schema
+   */
+  description?: string;
+
+  /**
+   * Whether to enforce strict schema validation
+   */
+  strict?: boolean;
+}
+
+/**
+ * Specifies the desired output format for the model response
+ */
+export interface ResponseFormat {
+  /**
+   * The type of response format
+   */
+  type: 'json_schema';
+
+  /**
+   * Defines a JSON schema for structured output validation
+   */
+  json_schema?: JsonSchemaFormat;
+}
+
+/**
+ * A single search result used in LLM responses
+ */
+export interface SearchResult {
+  id: number;
+
+  snippet: string;
+
+  title: string;
+
+  url: string;
+
+  date?: string;
+
+  last_updated?: string;
+
+  /**
+   * Source of search results
+   */
+  source?: 'web';
+}
+
 export interface UsageInfo {
   completion_tokens: number;
 
@@ -362,4 +424,26 @@ export namespace UsageInfo {
 
     search_queries_cost?: number | null;
   }
+}
+
+export interface UserLocation {
+  city?: string | null;
+
+  country?: string | null;
+
+  latitude?: number | null;
+
+  longitude?: number | null;
+
+  region?: string | null;
+}
+
+export interface WebSearchOptions {
+  image_results_enhanced_relevance?: boolean;
+
+  search_context_size?: 'low' | 'medium' | 'high';
+
+  search_type?: 'fast' | 'pro' | 'auto' | null;
+
+  user_location?: UserLocation | null;
 }

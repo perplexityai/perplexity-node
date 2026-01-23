@@ -16,6 +16,20 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import {
+  Annotation,
+  ContentPart,
+  ErrorInfo,
+  OutputItem,
+  ResponseCreateParams,
+  ResponseCreateParamsNonStreaming,
+  ResponseCreateParamsStreaming,
+  ResponseCreateResponse,
+  ResponseStreamChunk,
+  Responses,
+  ResponsesCreateParams,
+  ResponsesUsage,
+} from './resources/responses';
 import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
 import { Async } from './resources/async/async';
 import { Chat, StreamChunk } from './resources/chat/chat';
@@ -718,11 +732,13 @@ export class Perplexity {
 
   chat: API.Chat = new API.Chat(this);
   search: API.Search = new API.Search(this);
+  responses: API.Responses = new API.Responses(this);
   async: API.Async = new API.Async(this);
 }
 
 Perplexity.Chat = Chat;
 Perplexity.Search = Search;
+Perplexity.Responses = Responses;
 Perplexity.Async = Async;
 
 export declare namespace Perplexity {
@@ -736,11 +752,31 @@ export declare namespace Perplexity {
     type SearchCreateParams as SearchCreateParams,
   };
 
+  export {
+    Responses as Responses,
+    type Annotation as Annotation,
+    type ContentPart as ContentPart,
+    type ErrorInfo as ErrorInfo,
+    type OutputItem as OutputItem,
+    type ResponseStreamChunk as ResponseStreamChunk,
+    type ResponsesCreateParams as ResponsesCreateParams,
+    type ResponsesUsage as ResponsesUsage,
+    type ResponseCreateResponse as ResponseCreateResponse,
+    type ResponseCreateParams as ResponseCreateParams,
+    type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
+    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
+  };
+
   export { Async as Async };
 
   export type APIPublicSearchResult = API.APIPublicSearchResult;
   export type ChatMessageInput = API.ChatMessageInput;
   export type ChatMessageOutput = API.ChatMessageOutput;
   export type Choice = API.Choice;
+  export type JsonSchemaFormat = API.JsonSchemaFormat;
+  export type ResponseFormat = API.ResponseFormat;
+  export type SearchResult = API.SearchResult;
   export type UsageInfo = API.UsageInfo;
+  export type UserLocation = API.UserLocation;
+  export type WebSearchOptions = API.WebSearchOptions;
 }
