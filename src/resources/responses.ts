@@ -3,8 +3,36 @@
 import { APIResource } from '../core/resource';
 import * as ResponsesAPI from './responses';
 import * as Shared from './shared';
+import { APIPromise } from '../core/api-promise';
+import { Stream } from '../core/streaming';
+import { RequestOptions } from '../internal/request-options';
 
-export class Responses extends APIResource {}
+export class Responses extends APIResource {
+  /**
+   * Generate a response for the provided input with optional web search and
+   * reasoning.
+   */
+  create(
+    body: ResponseCreateParamsNonStreaming,
+    options?: RequestOptions,
+  ): APIPromise<ResponseCreateResponse>;
+  create(
+    body: ResponseCreateParamsStreaming,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ResponseStreamChunk>>;
+  create(
+    body: ResponseCreateParamsBase,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ResponseStreamChunk> | ResponseCreateResponse>;
+  create(
+    body: ResponseCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<ResponseCreateResponse> | APIPromise<Stream<ResponseStreamChunk>> {
+    return this._client.post('/v1/responses', { body, ...options, stream: body.stream ?? false }) as
+      | APIPromise<ResponseCreateResponse>
+      | APIPromise<Stream<ResponseStreamChunk>>;
+  }
+}
 
 /**
  * Text annotation (e.g., URL citation)
@@ -943,6 +971,219 @@ export namespace ResponsesUsage {
   }
 }
 
+/**
+ * Non-streaming response returned when stream is false
+ */
+export interface ResponseCreateResponse {
+  id: string;
+
+  created_at: number;
+
+  model: string;
+
+  /**
+   * Object type in API responses
+   */
+  object: 'response';
+
+  output: Array<OutputItem>;
+
+  /**
+   * Status of a response or output item
+   */
+  status: 'completed' | 'failed' | 'in_progress';
+
+  error?: ErrorInfo;
+
+  usage?: ResponsesUsage;
+}
+
+export type ResponseCreateParams = ResponseCreateParamsNonStreaming | ResponseCreateParamsStreaming;
+
+export interface ResponseCreateParamsBase {
+  /**
+   * Input content - either a string or array of input messages
+   */
+  input: string | Array<ResponseCreateParams.InputMessageArray>;
+
+  /**
+   * System instructions for the model
+   */
+  instructions?: string;
+
+  /**
+   * ISO 639-1 language code for response language
+   */
+  language_preference?: string;
+
+  /**
+   * Maximum tokens to generate
+   */
+  max_output_tokens?: number;
+
+  /**
+   * Maximum number of research loop steps. If provided, overrides the preset's
+   * max_steps value. Must be >= 1 if specified. Maximum allowed is 10.
+   */
+  max_steps?: number;
+
+  /**
+   * Model ID in provider/model format (e.g., "xai/grok-4-1", "openai/gpt-4o"). If
+   * models is also provided, models takes precedence. Required if neither models nor
+   * preset is provided.
+   */
+  model?: string;
+
+  /**
+   * Model fallback chain. Each model is in provider/model format. Models are tried
+   * in order until one succeeds. Max 5 models allowed. If set, takes precedence over
+   * single model field. The response.model will reflect the model that actually
+   * succeeded.
+   */
+  models?: Array<string>;
+
+  /**
+   * Preset configuration name (e.g., "sonar-pro", "sonar-reasoning"). Pre-configured
+   * model with system prompt and search parameters. Required if model is not
+   * provided.
+   */
+  preset?: string;
+
+  reasoning?: ResponseCreateParams.Reasoning;
+
+  /**
+   * Specifies the desired output format for the model response
+   */
+  response_format?: Shared.ResponseFormat;
+
+  /**
+   * If true, returns SSE stream instead of JSON
+   */
+  stream?: boolean;
+
+  /**
+   * Tools available to the model
+   */
+  tools?: Array<ResponseCreateParams.WebSearchTool | ResponseCreateParams.FetchURLTool>;
+}
+
+export namespace ResponseCreateParams {
+  export interface InputMessageArray {
+    /**
+     * Message content - either a string or array of content parts
+     */
+    content: string | Array<InputMessageArray.ContentPartArray>;
+
+    role: 'user' | 'assistant' | 'system' | 'developer';
+
+    type?: 'message';
+  }
+
+  export namespace InputMessageArray {
+    export interface ContentPartArray {
+      type: 'input_text' | 'input_image';
+
+      image_url?: string;
+
+      text?: string;
+    }
+  }
+
+  export interface Reasoning {
+    /**
+     * How much effort the model should spend on reasoning
+     */
+    effort?: 'low' | 'medium' | 'high';
+  }
+
+  export interface WebSearchTool {
+    type: 'web_search';
+
+    filters?: WebSearchTool.Filters;
+
+    max_tokens?: number;
+
+    max_tokens_per_page?: number;
+
+    /**
+     * User's geographic location for search personalization
+     */
+    user_location?: WebSearchTool.UserLocation;
+  }
+
+  export namespace WebSearchTool {
+    export interface Filters {
+      /**
+       * Input: MM/DD/YYYY, Output: YYYY-MM-DD
+       */
+      last_updated_after_filter?: string;
+
+      /**
+       * Input: MM/DD/YYYY, Output: YYYY-MM-DD
+       */
+      last_updated_before_filter?: string;
+
+      /**
+       * Input: MM/DD/YYYY, Output: YYYY-MM-DD
+       */
+      search_after_date_filter?: string;
+
+      /**
+       * Input: MM/DD/YYYY, Output: YYYY-MM-DD
+       */
+      search_before_date_filter?: string;
+
+      search_domain_filter?: Array<string>;
+
+      search_recency_filter?: 'hour' | 'day' | 'week' | 'month' | 'year';
+    }
+
+    /**
+     * User's geographic location for search personalization
+     */
+    export interface UserLocation {
+      city?: string;
+
+      /**
+       * ISO 3166-1 alpha-2 country code
+       */
+      country?: string;
+
+      latitude?: number;
+
+      longitude?: number;
+
+      region?: string;
+    }
+  }
+
+  export interface FetchURLTool {
+    type: 'fetch_url';
+
+    /**
+     * Maximum number of URLs to fetch per tool call
+     */
+    max_urls?: number;
+  }
+
+  export type ResponseCreateParamsNonStreaming = ResponsesAPI.ResponseCreateParamsNonStreaming;
+  export type ResponseCreateParamsStreaming = ResponsesAPI.ResponseCreateParamsStreaming;
+}
+
+export interface ResponseCreateParamsNonStreaming extends ResponseCreateParamsBase {
+  /**
+   * If true, returns SSE stream instead of JSON
+   */
+  stream?: false;
+}
+
+export interface ResponseCreateParamsStreaming extends ResponseCreateParamsBase {
+  /**
+   * If true, returns SSE stream instead of JSON
+   */
+  stream: true;
+}
+
 export declare namespace Responses {
   export {
     type Annotation as Annotation,
@@ -952,5 +1193,9 @@ export declare namespace Responses {
     type ResponseStreamChunk as ResponseStreamChunk,
     type ResponsesCreateParams as ResponsesCreateParams,
     type ResponsesUsage as ResponsesUsage,
+    type ResponseCreateResponse as ResponseCreateResponse,
+    type ResponseCreateParams as ResponseCreateParams,
+    type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
+    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
   };
 }
