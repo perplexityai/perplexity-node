@@ -21,10 +21,6 @@ import {
   ContentPart,
   ErrorInfo,
   OutputItem,
-  ResponseCreateParams,
-  ResponseCreateParamsNonStreaming,
-  ResponseCreateParamsStreaming,
-  ResponseCreateResponse,
   ResponseStreamChunk,
   Responses,
   ResponsesCreateParams,
@@ -761,10 +757,6 @@ export declare namespace Perplexity {
     type ResponseStreamChunk as ResponseStreamChunk,
     type ResponsesCreateParams as ResponsesCreateParams,
     type ResponsesUsage as ResponsesUsage,
-    type ResponseCreateResponse as ResponseCreateResponse,
-    type ResponseCreateParams as ResponseCreateParams,
-    type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
-    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
   };
 
   export { Async as Async };
