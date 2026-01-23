@@ -154,7 +154,7 @@ export interface CompletionCreateParamsBase {
 
   user_original_query?: string | null;
 
-  web_search_options?: CompletionCreateParams.WebSearchOptions;
+  web_search_options?: Shared.WebSearchOptions;
 }
 
 export namespace CompletionCreateParams {
@@ -225,30 +225,6 @@ export namespace CompletionCreateParams {
 
         required?: Array<string> | null;
       }
-    }
-  }
-
-  export interface WebSearchOptions {
-    image_results_enhanced_relevance?: boolean;
-
-    search_context_size?: 'low' | 'medium' | 'high';
-
-    search_type?: 'fast' | 'pro' | 'auto' | null;
-
-    user_location?: WebSearchOptions.UserLocation | null;
-  }
-
-  export namespace WebSearchOptions {
-    export interface UserLocation {
-      city?: string | null;
-
-      country?: string | null;
-
-      latitude?: number | null;
-
-      longitude?: number | null;
-
-      region?: string | null;
     }
   }
 
