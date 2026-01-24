@@ -6,6 +6,7 @@ import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { Stream } from '../core/streaming';
 import { RequestOptions } from '../internal/request-options';
+import { addOutputText } from '../lib/add-output-text';
 
 export class Responses extends APIResource {
   /**
@@ -28,9 +29,19 @@ export class Responses extends APIResource {
     body: ResponseCreateParams,
     options?: RequestOptions,
   ): APIPromise<ResponseCreateResponse> | APIPromise<Stream<ResponseStreamChunk>> {
-    return this._client.post('/v1/responses', { body, ...options, stream: body.stream ?? false }) as
-      | APIPromise<ResponseCreateResponse>
-      | APIPromise<Stream<ResponseStreamChunk>>;
+    const promise = this._client.post('/v1/responses', { body, ...options, stream: body.stream ?? false });
+
+    // For non-streaming responses, automatically add output_text property
+    if (!body.stream) {
+      return (promise as APIPromise<ResponseCreateResponse>)._thenUnwrap((rsp) => {
+        if ('object' in rsp && rsp.object === 'response') {
+          addOutputText(rsp as ResponseCreateResponse);
+        }
+        return rsp;
+      }) as APIPromise<ResponseCreateResponse>;
+    }
+
+    return promise as APIPromise<Stream<ResponseStreamChunk>>;
   }
 }
 
@@ -996,6 +1007,12 @@ export interface ResponseCreateResponse {
   error?: ErrorInfo;
 
   usage?: ResponsesUsage;
+
+  /**
+   * Convenience property that aggregates all `output_text` items from the `output` list.
+   * If no `output_text` content blocks exist, then an empty string is returned.
+   */
+  output_text?: string;
 }
 
 export type ResponseCreateParams = ResponseCreateParamsNonStreaming | ResponseCreateParamsStreaming;

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.22.0 (2026-01-24)
+
+Full Changelog: [v0.21.0...v0.22.0](https://github.com/perplexityai/perplexity-node/compare/v0.21.0...v0.22.0)
+
+### Features
+
+* **client:** integrate output_text automatically in responses.create() ([2b8b60a](https://github.com/perplexityai/perplexity-node/commit/2b8b60afe9e4cbb28dc6fbe66201c29d53bb60bc))
+
+
+### Bug Fixes
+
+* remove trailing whitespace in responses.ts ([9808062](https://github.com/perplexityai/perplexity-node/commit/9808062dc0acd80dd4b30280ac36ebc81402f5b7))
+
 ## 0.21.0 (2026-01-24)
 
 Full Changelog: [v0.20.0...v0.21.0](https://github.com/perplexityai/perplexity-node/compare/v0.20.0...v0.21.0)
