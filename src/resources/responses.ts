@@ -30,7 +30,7 @@ export class Responses extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ResponseCreateResponse> | APIPromise<Stream<ResponseStreamChunk>> {
     const promise = this._client.post('/v1/responses', { body, ...options, stream: body.stream ?? false });
-    
+
     // For non-streaming responses, automatically add output_text property
     if (!body.stream) {
       return (promise as APIPromise<ResponseCreateResponse>)._thenUnwrap((rsp) => {
@@ -40,7 +40,7 @@ export class Responses extends APIResource {
         return rsp;
       }) as APIPromise<ResponseCreateResponse>;
     }
-    
+
     return promise as APIPromise<Stream<ResponseStreamChunk>>;
   }
 }
