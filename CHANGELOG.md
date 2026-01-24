@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.21.0 (2026-01-24)
+
+Full Changelog: [v0.20.0...v0.21.0](https://github.com/perplexityai/perplexity-node/compare/v0.20.0...v0.21.0)
+
+### Features
+
+* **client:** add output_text helper function for responses ([c0d707f](https://github.com/perplexityai/perplexity-node/commit/c0d707fdf492964fd45721f171387b1528040028))
+
 ## 0.20.0 (2026-01-23)
 
 Full Changelog: [v0.19.0...v0.20.0](https://github.com/perplexityai/perplexity-node/compare/v0.19.0...v0.20.0)
