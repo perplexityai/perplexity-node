@@ -68,10 +68,139 @@ export interface ErrorInfo {
   type?: string;
 }
 
+export interface FunctionCallOutputItem {
+  id: string;
+
+  /**
+   * JSON string of arguments
+   */
+  arguments: string;
+
+  /**
+   * Correlates with function_call_output input
+   */
+  call_id: string;
+
+  name: string;
+
+  /**
+   * Status of a response or output item
+   */
+  status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+
+  type: 'function_call';
+
+  /**
+   * Base64-encoded opaque signature for thinking models
+   */
+  thought_signature?: string;
+}
+
+export interface FunctionTool {
+  /**
+   * The name of the function
+   */
+  name: string;
+
+  type: 'function';
+
+  /**
+   * A description of what the function does
+   */
+  description?: string;
+
+  /**
+   * JSON Schema defining the function's parameters
+   */
+  parameters?: { [key: string]: unknown };
+
+  /**
+   * Whether to enable strict schema validation
+   */
+  strict?: boolean;
+}
+
+export type InputItem =
+  | InputItem.InputMessage
+  | InputItem.FunctionCallOutputInput
+  | InputItem.FunctionCallInput;
+
+export namespace InputItem {
+  export interface InputMessage {
+    /**
+     * Message content - either a string or array of content parts
+     */
+    content: string | Array<InputMessage.ContentPartArray>;
+
+    role: 'user' | 'assistant' | 'system' | 'developer';
+
+    type: 'message';
+  }
+
+  export namespace InputMessage {
+    export interface ContentPartArray {
+      type: 'input_text' | 'input_image';
+
+      image_url?: string;
+
+      text?: string;
+    }
+  }
+
+  export interface FunctionCallOutputInput {
+    /**
+     * The call_id from function_call output
+     */
+    call_id: string;
+
+    /**
+     * Function result (JSON string)
+     */
+    output: string;
+
+    type: 'function_call_output';
+
+    /**
+     * Function name (required by some providers)
+     */
+    name?: string;
+
+    /**
+     * Base64-encoded signature from function_call
+     */
+    thought_signature?: string;
+  }
+
+  export interface FunctionCallInput {
+    /**
+     * Function arguments (JSON string)
+     */
+    arguments: string;
+
+    /**
+     * The call_id that correlates with function_call_output
+     */
+    call_id: string;
+
+    /**
+     * The function name
+     */
+    name: string;
+
+    type: 'function_call';
+
+    /**
+     * Base64-encoded signature for thinking models
+     */
+    thought_signature?: string;
+  }
+}
+
 export type OutputItem =
   | OutputItem.MessageOutputItem
   | OutputItem.SearchResultsOutputItem
-  | OutputItem.FetchURLResultsOutputItem;
+  | OutputItem.FetchURLResultsOutputItem
+  | FunctionCallOutputItem;
 
 export namespace OutputItem {
   export interface MessageOutputItem {
@@ -87,7 +216,7 @@ export namespace OutputItem {
     /**
      * Status of a response or output item
      */
-    status: 'completed' | 'failed' | 'in_progress';
+    status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
 
     type: 'message';
   }
@@ -220,7 +349,7 @@ export namespace ResponseStreamChunk {
       /**
        * Status of a response or output item
        */
-      status: 'completed' | 'failed' | 'in_progress';
+      status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
 
       error?: ResponsesAPI.ErrorInfo;
 
@@ -284,7 +413,7 @@ export namespace ResponseStreamChunk {
       /**
        * Status of a response or output item
        */
-      status: 'completed' | 'failed' | 'in_progress';
+      status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
 
       error?: ResponsesAPI.ErrorInfo;
 
@@ -347,7 +476,7 @@ export namespace ResponseStreamChunk {
       /**
        * Status of a response or output item
        */
-      status: 'completed' | 'failed' | 'in_progress';
+      status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
 
       error?: ResponsesAPI.ErrorInfo;
 
@@ -758,9 +887,9 @@ export namespace ResponseStreamChunk {
 
 export interface ResponsesCreateParams {
   /**
-   * Input content - either a string or array of input messages
+   * Input content - either a string or array of input items
    */
-  input: string | Array<ResponsesCreateParams.InputMessageArray>;
+  input: string | Array<InputItem>;
 
   /**
    * System instructions for the model
@@ -820,31 +949,10 @@ export interface ResponsesCreateParams {
   /**
    * Tools available to the model
    */
-  tools?: Array<ResponsesCreateParams.WebSearchTool | ResponsesCreateParams.FetchURLTool>;
+  tools?: Array<ResponsesCreateParams.WebSearchTool | ResponsesCreateParams.FetchURLTool | FunctionTool>;
 }
 
 export namespace ResponsesCreateParams {
-  export interface InputMessageArray {
-    /**
-     * Message content - either a string or array of content parts
-     */
-    content: string | Array<InputMessageArray.ContentPartArray>;
-
-    role: 'user' | 'assistant' | 'system' | 'developer';
-
-    type?: 'message';
-  }
-
-  export namespace InputMessageArray {
-    export interface ContentPartArray {
-      type: 'input_text' | 'input_image';
-
-      image_url?: string;
-
-      text?: string;
-    }
-  }
-
   export interface Reasoning {
     /**
      * How much effort the model should spend on reasoning
@@ -991,7 +1099,7 @@ export interface ResponseCreateResponse {
   /**
    * Status of a response or output item
    */
-  status: 'completed' | 'failed' | 'in_progress';
+  status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
 
   error?: ErrorInfo;
 
@@ -1002,9 +1110,9 @@ export type ResponseCreateParams = ResponseCreateParamsNonStreaming | ResponseCr
 
 export interface ResponseCreateParamsBase {
   /**
-   * Input content - either a string or array of input messages
+   * Input content - either a string or array of input items
    */
-  input: string | Array<ResponseCreateParams.InputMessageArray>;
+  input: string | Array<InputItem>;
 
   /**
    * System instructions for the model
@@ -1064,31 +1172,10 @@ export interface ResponseCreateParamsBase {
   /**
    * Tools available to the model
    */
-  tools?: Array<ResponseCreateParams.WebSearchTool | ResponseCreateParams.FetchURLTool>;
+  tools?: Array<ResponseCreateParams.WebSearchTool | ResponseCreateParams.FetchURLTool | FunctionTool>;
 }
 
 export namespace ResponseCreateParams {
-  export interface InputMessageArray {
-    /**
-     * Message content - either a string or array of content parts
-     */
-    content: string | Array<InputMessageArray.ContentPartArray>;
-
-    role: 'user' | 'assistant' | 'system' | 'developer';
-
-    type?: 'message';
-  }
-
-  export namespace InputMessageArray {
-    export interface ContentPartArray {
-      type: 'input_text' | 'input_image';
-
-      image_url?: string;
-
-      text?: string;
-    }
-  }
-
   export interface Reasoning {
     /**
      * How much effort the model should spend on reasoning
@@ -1189,6 +1276,9 @@ export declare namespace Responses {
     type Annotation as Annotation,
     type ContentPart as ContentPart,
     type ErrorInfo as ErrorInfo,
+    type FunctionCallOutputItem as FunctionCallOutputItem,
+    type FunctionTool as FunctionTool,
+    type InputItem as InputItem,
     type OutputItem as OutputItem,
     type ResponseStreamChunk as ResponseStreamChunk,
     type ResponsesCreateParams as ResponsesCreateParams,

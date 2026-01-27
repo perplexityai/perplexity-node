@@ -42,6 +42,9 @@ Types:
 - <code><a href="./src/resources/responses.ts">Annotation</a></code>
 - <code><a href="./src/resources/responses.ts">ContentPart</a></code>
 - <code><a href="./src/resources/responses.ts">ErrorInfo</a></code>
+- <code><a href="./src/resources/responses.ts">FunctionCallOutputItem</a></code>
+- <code><a href="./src/resources/responses.ts">FunctionTool</a></code>
+- <code><a href="./src/resources/responses.ts">InputItem</a></code>
 - <code><a href="./src/resources/responses.ts">OutputItem</a></code>
 - <code><a href="./src/resources/responses.ts">ResponseStreamChunk</a></code>
 - <code><a href="./src/resources/responses.ts">ResponsesCreateParams</a></code>
