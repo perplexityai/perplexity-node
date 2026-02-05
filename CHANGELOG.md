@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.23.1 (2026-02-05)
+
+Full Changelog: [v0.23.0...v0.23.1](https://github.com/perplexityai/perplexity-node/compare/v0.23.0...v0.23.1)
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([ec22b56](https://github.com/perplexityai/perplexity-node/commit/ec22b560c4a668a49dc5c8e2bf0fa69a155ccb93))
+* **client:** avoid removing abort listener too early ([12e45f7](https://github.com/perplexityai/perplexity-node/commit/12e45f70f41991f4c0385886a9dc407173c8bc7c))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([31c81b4](https://github.com/perplexityai/perplexity-node/commit/31c81b49e1bad9d4e287eeb455b202398f4ec8ef))
+* **client:** restructure abort controller binding ([c93217d](https://github.com/perplexityai/perplexity-node/commit/c93217db4a28bea06115b20cd21557fdf989ddd1))
+
 ## 0.23.0 (2026-01-27)
 
 Full Changelog: [v0.22.0...v0.23.0](https://github.com/perplexityai/perplexity-node/compare/v0.22.0...v0.23.0)
