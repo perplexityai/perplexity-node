@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.23.2 (2026-02-11)
+
+Full Changelog: [v0.23.1...v0.23.2](https://github.com/perplexityai/perplexity-node/compare/v0.23.1...v0.23.2)
+
+### Chores
+
+* **internal:** avoid type checking errors with ts-reset ([0887d77](https://github.com/perplexityai/perplexity-node/commit/0887d7792c285e1f42b2d158359aaacd6bdd5415))
+
 ## 0.23.1 (2026-02-05)
 
 Full Changelog: [v0.23.0...v0.23.1](https://github.com/perplexityai/perplexity-node/compare/v0.23.0...v0.23.1)
