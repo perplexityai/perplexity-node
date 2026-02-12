@@ -2,6 +2,7 @@
 
 export * from './shared';
 export { Async } from './async/async';
+export { Browser } from './browser/browser';
 export { Chat, type StreamChunk } from './chat/chat';
 export {
   ContextualizedEmbeddings,
@@ -26,4 +27,5 @@ export {
   type ResponseCreateParamsNonStreaming,
   type ResponseCreateParamsStreaming,
 } from './responses';
+export { Sandbox } from './sandbox/sandbox';
 export { Search, type SearchCreateResponse, type SearchCreateParams } from './search';
