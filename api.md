@@ -6,6 +6,9 @@ Types:
 - <code><a href="./src/resources/shared.ts">ChatMessageInput</a></code>
 - <code><a href="./src/resources/shared.ts">ChatMessageOutput</a></code>
 - <code><a href="./src/resources/shared.ts">Choice</a></code>
+- <code><a href="./src/resources/shared.ts">ContextualizedEmbeddingObject</a></code>
+- <code><a href="./src/resources/shared.ts">EmbeddingObject</a></code>
+- <code><a href="./src/resources/shared.ts">EmbeddingsUsage</a></code>
 - <code><a href="./src/resources/shared.ts">JsonSchemaFormat</a></code>
 - <code><a href="./src/resources/shared.ts">ResponseFormat</a></code>
 - <code><a href="./src/resources/shared.ts">SearchResult</a></code>
@@ -54,6 +57,26 @@ Types:
 Methods:
 
 - <code title="post /v1/responses">client.responses.<a href="./src/resources/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
+
+# Embeddings
+
+Types:
+
+- <code><a href="./src/resources/embeddings.ts">EmbeddingCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/embeddings">client.embeddings.<a href="./src/resources/embeddings.ts">create</a>({ ...params }) -> EmbeddingCreateResponse</code>
+
+# ContextualizedEmbeddings
+
+Types:
+
+- <code><a href="./src/resources/contextualized-embeddings.ts">ContextualizedEmbeddingCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/contextualizedembeddings">client.contextualizedEmbeddings.<a href="./src/resources/contextualized-embeddings.ts">create</a>({ ...params }) -> ContextualizedEmbeddingCreateResponse</code>
 
 # Async
 

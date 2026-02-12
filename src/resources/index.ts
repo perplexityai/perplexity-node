@@ -4,6 +4,12 @@ export * from './shared';
 export { Async } from './async/async';
 export { Chat, type StreamChunk } from './chat/chat';
 export {
+  ContextualizedEmbeddings,
+  type ContextualizedEmbeddingCreateResponse,
+  type ContextualizedEmbeddingCreateParams,
+} from './contextualized-embeddings';
+export { Embeddings, type EmbeddingCreateResponse, type EmbeddingCreateParams } from './embeddings';
+export {
   Responses,
   type Annotation,
   type ContentPart,
