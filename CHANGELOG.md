@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.24.0 (2026-02-12)
+
+Full Changelog: [v0.23.2...v0.24.0](https://github.com/perplexityai/perplexity-node/compare/v0.23.2...v0.24.0)
+
+### Features
+
+* **api:** Add Embeddings API ([393ccb6](https://github.com/perplexityai/perplexity-node/commit/393ccb6f22165349a70c873f6c260dc756276c1c))
+
 ## 0.23.2 (2026-02-11)
 
 Full Changelog: [v0.23.1...v0.23.2](https://github.com/perplexityai/perplexity-node/compare/v0.23.1...v0.23.2)
