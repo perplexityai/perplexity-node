@@ -17,6 +17,12 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  ContextualizedEmbeddingCreateParams,
+  ContextualizedEmbeddingCreateResponse,
+  ContextualizedEmbeddings,
+} from './resources/contextualized-embeddings';
+import { EmbeddingCreateParams, EmbeddingCreateResponse, Embeddings } from './resources/embeddings';
+import {
   Annotation,
   ContentPart,
   ErrorInfo,
@@ -743,12 +749,16 @@ export class Perplexity {
   chat: API.Chat = new API.Chat(this);
   search: API.Search = new API.Search(this);
   responses: API.Responses = new API.Responses(this);
+  embeddings: API.Embeddings = new API.Embeddings(this);
+  contextualizedEmbeddings: API.ContextualizedEmbeddings = new API.ContextualizedEmbeddings(this);
   async: API.Async = new API.Async(this);
 }
 
 Perplexity.Chat = Chat;
 Perplexity.Search = Search;
 Perplexity.Responses = Responses;
+Perplexity.Embeddings = Embeddings;
+Perplexity.ContextualizedEmbeddings = ContextualizedEmbeddings;
 Perplexity.Async = Async;
 
 export declare namespace Perplexity {
@@ -780,12 +790,27 @@ export declare namespace Perplexity {
     type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
   };
 
+  export {
+    Embeddings as Embeddings,
+    type EmbeddingCreateResponse as EmbeddingCreateResponse,
+    type EmbeddingCreateParams as EmbeddingCreateParams,
+  };
+
+  export {
+    ContextualizedEmbeddings as ContextualizedEmbeddings,
+    type ContextualizedEmbeddingCreateResponse as ContextualizedEmbeddingCreateResponse,
+    type ContextualizedEmbeddingCreateParams as ContextualizedEmbeddingCreateParams,
+  };
+
   export { Async as Async };
 
   export type APIPublicSearchResult = API.APIPublicSearchResult;
   export type ChatMessageInput = API.ChatMessageInput;
   export type ChatMessageOutput = API.ChatMessageOutput;
   export type Choice = API.Choice;
+  export type ContextualizedEmbeddingObject = API.ContextualizedEmbeddingObject;
+  export type EmbeddingObject = API.EmbeddingObject;
+  export type EmbeddingsUsage = API.EmbeddingsUsage;
   export type JsonSchemaFormat = API.JsonSchemaFormat;
   export type ResponseFormat = API.ResponseFormat;
   export type SearchResult = API.SearchResult;

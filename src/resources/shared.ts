@@ -329,6 +329,90 @@ export interface Choice {
 }
 
 /**
+ * A single contextualized embedding result
+ */
+export interface ContextualizedEmbeddingObject {
+  /**
+   * List of embedding objects for chunks in this document
+   */
+  data?: Array<EmbeddingObject>;
+
+  /**
+   * The index of the document this chunk belongs to
+   */
+  index?: number;
+
+  /**
+   * The object type
+   */
+  object?: string;
+}
+
+/**
+ * A single embedding result
+ */
+export interface EmbeddingObject {
+  /**
+   * Base64-encoded embedding vector. For base64_int8: decode to signed int8 array
+   * (length = dimensions). For base64_binary: decode to packed bits (length =
+   * dimensions / 8 bytes).
+   */
+  embedding?: string;
+
+  /**
+   * The index of the input text this embedding corresponds to
+   */
+  index?: number;
+
+  /**
+   * The object type
+   */
+  object?: string;
+}
+
+/**
+ * Token usage for the embeddings request
+ */
+export interface EmbeddingsUsage {
+  /**
+   * Cost breakdown for the request
+   */
+  cost?: EmbeddingsUsage.Cost;
+
+  /**
+   * Number of tokens in the input texts
+   */
+  prompt_tokens?: number;
+
+  /**
+   * Total number of tokens processed
+   */
+  total_tokens?: number;
+}
+
+export namespace EmbeddingsUsage {
+  /**
+   * Cost breakdown for the request
+   */
+  export interface Cost {
+    /**
+     * Currency of the cost values
+     */
+    currency?: 'USD';
+
+    /**
+     * Cost for input tokens in USD
+     */
+    input_cost?: number;
+
+    /**
+     * Total cost for the request in USD
+     */
+    total_cost?: number;
+  }
+}
+
+/**
  * Defines a JSON schema for structured output validation
  */
 export interface JsonSchemaFormat {
