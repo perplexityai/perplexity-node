@@ -8,7 +8,7 @@ const client = new Perplexity({
 });
 
 describe('resource processes', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.sandbox.sessions.processes.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource processes', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.sandbox.sessions.processes.delete(0, {
       session_id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -34,14 +34,14 @@ describe('resource processes', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.sandbox.sessions.processes.delete(0, {
       session_id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get: only required params', async () => {
     const responsePromise = client.sandbox.sessions.processes.get(0, {
       session_id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -55,7 +55,7 @@ describe('resource processes', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get: required and optional params', async () => {
     const response = await client.sandbox.sessions.processes.get(0, {
       session_id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',

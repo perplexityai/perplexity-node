@@ -8,7 +8,7 @@ const client = new Perplexity({
 });
 
 describe('resource contextualizedEmbeddings', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.contextualizedEmbeddings.create({
       input: [['x']],
@@ -23,7 +23,7 @@ describe('resource contextualizedEmbeddings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.contextualizedEmbeddings.create({
       input: [['x']],
