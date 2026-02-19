@@ -8,7 +8,7 @@ const client = new Perplexity({
 });
 
 describe('resource files', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.sandbox.sessions.files.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource files', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -32,7 +32,7 @@ describe('resource files', () => {
     ).rejects.toThrow(Perplexity.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('modified', async () => {
     const responsePromise = client.sandbox.sessions.files.modified('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -44,7 +44,7 @@ describe('resource files', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('read: only required params', async () => {
     const responsePromise = client.sandbox.sessions.files.read('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       path: 'path',
@@ -58,14 +58,14 @@ describe('resource files', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('read: required and optional params', async () => {
     const response = await client.sandbox.sessions.files.read('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       path: 'path',
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('write: only required params', async () => {
     const responsePromise = client.sandbox.sessions.files.write('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       content: 'content',
@@ -80,7 +80,7 @@ describe('resource files', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('write: required and optional params', async () => {
     const response = await client.sandbox.sessions.files.write('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       content: 'content',

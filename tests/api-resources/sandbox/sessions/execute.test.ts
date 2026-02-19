@@ -8,7 +8,7 @@ const client = new Perplexity({
 });
 
 describe('resource execute', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.sandbox.sessions.execute.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       code: 'code',
@@ -23,7 +23,7 @@ describe('resource execute', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.sandbox.sessions.execute.create('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       code: 'code',
