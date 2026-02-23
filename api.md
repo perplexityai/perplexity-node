@@ -3,6 +3,7 @@
 Types:
 
 - <code><a href="./src/resources/shared.ts">APIPublicSearchResult</a></code>
+- <code><a href="./src/resources/shared.ts">BrowserSessionResponse</a></code>
 - <code><a href="./src/resources/shared.ts">ChatMessageInput</a></code>
 - <code><a href="./src/resources/shared.ts">ChatMessageOutput</a></code>
 - <code><a href="./src/resources/shared.ts">Choice</a></code>
@@ -77,6 +78,15 @@ Types:
 Methods:
 
 - <code title="post /v1/contextualizedembeddings">client.contextualizedEmbeddings.<a href="./src/resources/contextualized-embeddings.ts">create</a>({ ...params }) -> ContextualizedEmbeddingCreateResponse</code>
+
+# Browser
+
+## Sessions
+
+Methods:
+
+- <code title="post /v1/browser/sessions">client.browser.sessions.<a href="./src/resources/browser/sessions.ts">create</a>() -> BrowserSessionResponse</code>
+- <code title="delete /v1/browser/sessions/{session_id}">client.browser.sessions.<a href="./src/resources/browser/sessions.ts">delete</a>(sessionID) -> void</code>
 
 # Async
 

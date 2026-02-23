@@ -16,6 +16,21 @@ export interface APIPublicSearchResult {
   source?: 'web' | 'attachment';
 }
 
+/**
+ * Response containing browser session details
+ */
+export interface BrowserSessionResponse {
+  /**
+   * Unique identifier for the browser session
+   */
+  session_id?: string;
+
+  /**
+   * Current status of the session
+   */
+  status?: 'running' | 'stopped';
+}
+
 export interface ChatMessageInput {
   content:
     | string

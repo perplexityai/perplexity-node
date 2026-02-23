@@ -2,6 +2,7 @@
 
 export * from './shared';
 export { Async } from './async/async';
+export { Browser } from './browser/browser';
 export { Chat, type StreamChunk } from './chat/chat';
 export {
   ContextualizedEmbeddings,

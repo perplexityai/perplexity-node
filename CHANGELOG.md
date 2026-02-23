@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.26.0 (2026-02-23)
+
+Full Changelog: [v0.25.0...v0.26.0](https://github.com/perplexityai/perplexity-node/compare/v0.25.0...v0.26.0)
+
+### Features
+
+* **api:** Add browser and sandbox API endpoints ([a35f39c](https://github.com/perplexityai/perplexity-node/commit/a35f39c37eddf661d131c9f07a7b4ea25d95ab5d))
+* **api:** manual updates ([bb5e5a8](https://github.com/perplexityai/perplexity-node/commit/bb5e5a8e815f9d3ef3419e5b841ce40430e5df95))
+
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([2976eab](https://github.com/perplexityai/perplexity-node/commit/2976eab295ea08f4743af92a36d96c659ec90e3c))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([36bfdb4](https://github.com/perplexityai/perplexity-node/commit/36bfdb4f151bc3d20e946f5658679edfe78d7f73))
+* **internal:** remove mock server code ([4ea1e20](https://github.com/perplexityai/perplexity-node/commit/4ea1e202b3d5c6fa7bb993c5e4e62b690bdb48f6))
+* update mock server docs ([73990f1](https://github.com/perplexityai/perplexity-node/commit/73990f1119a8240fa06d0985b06ecf7066cc1caf))
+
 ## 0.25.0 (2026-02-12)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/perplexityai/perplexity-node/compare/v0.24.0...v0.25.0)

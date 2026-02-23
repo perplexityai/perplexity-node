@@ -8,7 +8,7 @@ const client = new Perplexity({
 });
 
 describe('resource embeddings', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.embeddings.create({ input: 'x', model: 'pplx-embed-v1-0.6b' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource embeddings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.embeddings.create({
       input: 'x',

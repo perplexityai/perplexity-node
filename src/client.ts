@@ -41,6 +41,7 @@ import {
 } from './resources/responses';
 import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
 import { Async } from './resources/async/async';
+import { Browser } from './resources/browser/browser';
 import { Chat, StreamChunk } from './resources/chat/chat';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -722,6 +723,14 @@ export class Perplexity {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body as Record<string, unknown>),
+      };
     } else {
       return this.#encoder({ body, headers });
     }
@@ -751,6 +760,7 @@ export class Perplexity {
   responses: API.Responses = new API.Responses(this);
   embeddings: API.Embeddings = new API.Embeddings(this);
   contextualizedEmbeddings: API.ContextualizedEmbeddings = new API.ContextualizedEmbeddings(this);
+  browser: API.Browser = new API.Browser(this);
   async: API.Async = new API.Async(this);
 }
 
@@ -759,6 +769,7 @@ Perplexity.Search = Search;
 Perplexity.Responses = Responses;
 Perplexity.Embeddings = Embeddings;
 Perplexity.ContextualizedEmbeddings = ContextualizedEmbeddings;
+Perplexity.Browser = Browser;
 Perplexity.Async = Async;
 
 export declare namespace Perplexity {
@@ -802,9 +813,12 @@ export declare namespace Perplexity {
     type ContextualizedEmbeddingCreateParams as ContextualizedEmbeddingCreateParams,
   };
 
+  export { Browser as Browser };
+
   export { Async as Async };
 
   export type APIPublicSearchResult = API.APIPublicSearchResult;
+  export type BrowserSessionResponse = API.BrowserSessionResponse;
   export type ChatMessageInput = API.ChatMessageInput;
   export type ChatMessageOutput = API.ChatMessageOutput;
   export type Choice = API.Choice;
