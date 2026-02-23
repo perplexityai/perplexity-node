@@ -60,7 +60,7 @@ $ yarn link @perplexity-ai/perplexity_ai
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @perplexity-ai/perplexity_ai
+$ pnpm link --global @perplexity-ai/perplexity_ai
 ```
 
 ## Running tests
