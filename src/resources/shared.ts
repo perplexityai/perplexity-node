@@ -428,90 +428,6 @@ export namespace EmbeddingsUsage {
 }
 
 /**
- * Response from code execution
- */
-export interface ExecuteCodeResponse {
-  /**
-   * Error message if execution failed
-   */
-  error?: string;
-
-  /**
-   * Time taken to execute the code in milliseconds
-   */
-  execution_time_ms?: number;
-
-  /**
-   * Process exit code (0 for success)
-   */
-  exit_code?: number;
-
-  /**
-   * Whether this was a background execution
-   */
-  is_background?: boolean;
-
-  /**
-   * Structured output from the execution
-   */
-  output?: Array<ExecuteCodeResponse.Output>;
-
-  /**
-   * PID of the background process (only for background execution)
-   */
-  process_id?: number;
-
-  /**
-   * Standard error from the execution
-   */
-  stderr?: string;
-
-  /**
-   * Standard output from the execution
-   */
-  stdout?: string;
-
-  /**
-   * Whether the execution completed successfully
-   */
-  success?: boolean;
-}
-
-export namespace ExecuteCodeResponse {
-  export interface Output {
-    /**
-     * Output content
-     */
-    content?: string;
-
-    /**
-     * Output type (stdout, stderr)
-     */
-    type?: string;
-  }
-}
-
-/**
- * A file or directory entry
- */
-export interface FileEntry {
-  /**
-   * Absolute path of the entry
-   */
-  path?: string;
-
-  /**
-   * Size in bytes (0 for directories)
-   */
-  size?: number;
-
-  /**
-   * Entry type
-   */
-  type?: 'file' | 'directory';
-}
-
-/**
  * Defines a JSON schema for structured output validation
  */
 export interface JsonSchemaFormat {
@@ -537,116 +453,6 @@ export interface JsonSchemaFormat {
 }
 
 /**
- * Response containing directory listing
- */
-export interface ListFilesResponse {
-  /**
-   * List of file and directory entries
-   */
-  entries?: Array<FileEntry>;
-}
-
-/**
- * Response containing list of running processes
- */
-export interface ListProcessesResponse {
-  /**
-   * List of running processes
-   */
-  processes?: Array<ProcessInfo>;
-}
-
-/**
- * Response containing list of modified files since session start
- */
-export interface ModifiedFilesResponse {
-  /**
-   * List of modified file paths
-   */
-  files?: Array<string>;
-}
-
-/**
- * Response from pausing a sandbox session
- */
-export interface PauseSandboxResponse {
-  /**
-   * Number of files in the snapshot
-   */
-  file_count?: number;
-
-  /**
-   * List of files included in the snapshot
-   */
-  file_list?: Array<string>;
-
-  /**
-   * S3 bucket containing the snapshot
-   */
-  s3_bucket?: string;
-
-  /**
-   * S3 object key for the snapshot
-   */
-  s3_key?: string;
-
-  /**
-   * Whether the snapshot was uploaded to S3
-   */
-  s3_uploaded?: boolean;
-
-  /**
-   * Whether the pause was successful
-   */
-  success?: boolean;
-
-  /**
-   * Size of the snapshot in bytes
-   */
-  tarball_size?: number;
-}
-
-/**
- * Information about a running process
- */
-export interface ProcessInfo {
-  /**
-   * Command that started the process
-   */
-  command?: string;
-
-  /**
-   * Process ID
-   */
-  pid?: number;
-
-  /**
-   * Current status of the process
-   */
-  status?: string;
-}
-
-/**
- * Response containing file content
- */
-export interface ReadFileResponse {
-  /**
-   * Base64 encoded file content
-   */
-  content?: string;
-
-  /**
-   * Path of the file
-   */
-  path?: string;
-
-  /**
-   * File size in bytes
-   */
-  size?: number;
-}
-
-/**
  * Specifies the desired output format for the model response
  */
 export interface ResponseFormat {
@@ -659,31 +465,6 @@ export interface ResponseFormat {
    * Defines a JSON schema for structured output validation
    */
   json_schema?: JsonSchemaFormat;
-}
-
-/**
- * Response containing sandbox session details
- */
-export interface SandboxSessionResponse {
-  /**
-   * URL endpoint for executing code in this session
-   */
-  execute_url?: string;
-
-  /**
-   * Whether network access is enabled
-   */
-  network_enabled?: boolean;
-
-  /**
-   * Unique identifier for the sandbox session
-   */
-  session_id?: string;
-
-  /**
-   * Current status of the session
-   */
-  status?: 'running' | 'pending' | 'failed' | 'succeeded' | 'unknown' | 'paused';
 }
 
 /**
@@ -764,19 +545,4 @@ export interface WebSearchOptions {
   search_type?: 'fast' | 'pro' | 'auto' | null;
 
   user_location?: UserLocation | null;
-}
-
-/**
- * Response from writing a file
- */
-export interface WriteFileResponse {
-  /**
-   * Path where the file was written
-   */
-  path?: string;
-
-  /**
-   * Whether the file was written successfully
-   */
-  success?: boolean;
 }

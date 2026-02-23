@@ -10,22 +10,12 @@ Types:
 - <code><a href="./src/resources/shared.ts">ContextualizedEmbeddingObject</a></code>
 - <code><a href="./src/resources/shared.ts">EmbeddingObject</a></code>
 - <code><a href="./src/resources/shared.ts">EmbeddingsUsage</a></code>
-- <code><a href="./src/resources/shared.ts">ExecuteCodeResponse</a></code>
-- <code><a href="./src/resources/shared.ts">FileEntry</a></code>
 - <code><a href="./src/resources/shared.ts">JsonSchemaFormat</a></code>
-- <code><a href="./src/resources/shared.ts">ListFilesResponse</a></code>
-- <code><a href="./src/resources/shared.ts">ListProcessesResponse</a></code>
-- <code><a href="./src/resources/shared.ts">ModifiedFilesResponse</a></code>
-- <code><a href="./src/resources/shared.ts">PauseSandboxResponse</a></code>
-- <code><a href="./src/resources/shared.ts">ProcessInfo</a></code>
-- <code><a href="./src/resources/shared.ts">ReadFileResponse</a></code>
 - <code><a href="./src/resources/shared.ts">ResponseFormat</a></code>
-- <code><a href="./src/resources/shared.ts">SandboxSessionResponse</a></code>
 - <code><a href="./src/resources/shared.ts">SearchResult</a></code>
 - <code><a href="./src/resources/shared.ts">UsageInfo</a></code>
 - <code><a href="./src/resources/shared.ts">UserLocation</a></code>
 - <code><a href="./src/resources/shared.ts">WebSearchOptions</a></code>
-- <code><a href="./src/resources/shared.ts">WriteFileResponse</a></code>
 
 # Chat
 
@@ -97,51 +87,6 @@ Methods:
 
 - <code title="post /v1/browser/sessions">client.browser.sessions.<a href="./src/resources/browser/sessions.ts">create</a>() -> BrowserSessionResponse</code>
 - <code title="delete /v1/browser/sessions/{session_id}">client.browser.sessions.<a href="./src/resources/browser/sessions.ts">delete</a>(sessionID) -> void</code>
-
-# Sandbox
-
-## Sessions
-
-Methods:
-
-- <code title="post /v1/sandbox/sessions">client.sandbox.sessions.<a href="./src/resources/sandbox/sessions/sessions.ts">create</a>({ ...params }) -> SandboxSessionResponse</code>
-- <code title="delete /v1/sandbox/sessions/{session_id}">client.sandbox.sessions.<a href="./src/resources/sandbox/sessions/sessions.ts">delete</a>(sessionID) -> void</code>
-- <code title="get /v1/sandbox/sessions/{session_id}">client.sandbox.sessions.<a href="./src/resources/sandbox/sessions/sessions.ts">get</a>(sessionID) -> SandboxSessionResponse</code>
-
-### Execute
-
-Methods:
-
-- <code title="post /v1/sandbox/sessions/{session_id}/execute">client.sandbox.sessions.execute.<a href="./src/resources/sandbox/sessions/execute.ts">create</a>(sessionID, { ...params }) -> ExecuteCodeResponse</code>
-
-### Pause
-
-Methods:
-
-- <code title="post /v1/sandbox/sessions/{session_id}/pause">client.sandbox.sessions.pause.<a href="./src/resources/sandbox/sessions/pause.ts">create</a>(sessionID) -> PauseSandboxResponse</code>
-
-### Resume
-
-Methods:
-
-- <code title="post /v1/sandbox/sessions/{session_id}/resume">client.sandbox.sessions.resume.<a href="./src/resources/sandbox/sessions/resume.ts">create</a>(sessionID, { ...params }) -> SandboxSessionResponse</code>
-
-### Files
-
-Methods:
-
-- <code title="get /v1/sandbox/sessions/{session_id}/files/list">client.sandbox.sessions.files.<a href="./src/resources/sandbox/sessions/files.ts">list</a>(sessionID, { ...params }) -> ListFilesResponse</code>
-- <code title="get /v1/sandbox/sessions/{session_id}/files/modified">client.sandbox.sessions.files.<a href="./src/resources/sandbox/sessions/files.ts">modified</a>(sessionID) -> ModifiedFilesResponse</code>
-- <code title="get /v1/sandbox/sessions/{session_id}/files">client.sandbox.sessions.files.<a href="./src/resources/sandbox/sessions/files.ts">read</a>(sessionID, { ...params }) -> ReadFileResponse</code>
-- <code title="post /v1/sandbox/sessions/{session_id}/files">client.sandbox.sessions.files.<a href="./src/resources/sandbox/sessions/files.ts">write</a>(sessionID, { ...params }) -> WriteFileResponse</code>
-
-### Processes
-
-Methods:
-
-- <code title="get /v1/sandbox/sessions/{session_id}/processes">client.sandbox.sessions.processes.<a href="./src/resources/sandbox/sessions/processes.ts">list</a>(sessionID) -> ListProcessesResponse</code>
-- <code title="delete /v1/sandbox/sessions/{session_id}/processes/{pid}">client.sandbox.sessions.processes.<a href="./src/resources/sandbox/sessions/processes.ts">delete</a>(pid, { ...params }) -> void</code>
-- <code title="get /v1/sandbox/sessions/{session_id}/processes/{pid}">client.sandbox.sessions.processes.<a href="./src/resources/sandbox/sessions/processes.ts">get</a>(pid, { ...params }) -> ProcessInfo</code>
 
 # Async
 
