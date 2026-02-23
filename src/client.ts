@@ -43,7 +43,6 @@ import { Search, SearchCreateParams, SearchCreateResponse } from './resources/se
 import { Async } from './resources/async/async';
 import { Browser } from './resources/browser/browser';
 import { Chat, StreamChunk } from './resources/chat/chat';
-import { Sandbox } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -762,7 +761,6 @@ export class Perplexity {
   embeddings: API.Embeddings = new API.Embeddings(this);
   contextualizedEmbeddings: API.ContextualizedEmbeddings = new API.ContextualizedEmbeddings(this);
   browser: API.Browser = new API.Browser(this);
-  sandbox: API.Sandbox = new API.Sandbox(this);
   async: API.Async = new API.Async(this);
 }
 
@@ -772,7 +770,6 @@ Perplexity.Responses = Responses;
 Perplexity.Embeddings = Embeddings;
 Perplexity.ContextualizedEmbeddings = ContextualizedEmbeddings;
 Perplexity.Browser = Browser;
-Perplexity.Sandbox = Sandbox;
 Perplexity.Async = Async;
 
 export declare namespace Perplexity {
@@ -818,8 +815,6 @@ export declare namespace Perplexity {
 
   export { Browser as Browser };
 
-  export { Sandbox as Sandbox };
-
   export { Async as Async };
 
   export type APIPublicSearchResult = API.APIPublicSearchResult;
@@ -830,20 +825,10 @@ export declare namespace Perplexity {
   export type ContextualizedEmbeddingObject = API.ContextualizedEmbeddingObject;
   export type EmbeddingObject = API.EmbeddingObject;
   export type EmbeddingsUsage = API.EmbeddingsUsage;
-  export type ExecuteCodeResponse = API.ExecuteCodeResponse;
-  export type FileEntry = API.FileEntry;
   export type JsonSchemaFormat = API.JsonSchemaFormat;
-  export type ListFilesResponse = API.ListFilesResponse;
-  export type ListProcessesResponse = API.ListProcessesResponse;
-  export type ModifiedFilesResponse = API.ModifiedFilesResponse;
-  export type PauseSandboxResponse = API.PauseSandboxResponse;
-  export type ProcessInfo = API.ProcessInfo;
-  export type ReadFileResponse = API.ReadFileResponse;
   export type ResponseFormat = API.ResponseFormat;
-  export type SandboxSessionResponse = API.SandboxSessionResponse;
   export type SearchResult = API.SearchResult;
   export type UsageInfo = API.UsageInfo;
   export type UserLocation = API.UserLocation;
   export type WebSearchOptions = API.WebSearchOptions;
-  export type WriteFileResponse = API.WriteFileResponse;
 }

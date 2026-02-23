@@ -27,5 +27,4 @@ export {
   type ResponseCreateParamsNonStreaming,
   type ResponseCreateParamsStreaming,
 } from './responses';
-export { Sandbox } from './sandbox/sandbox';
 export { Search, type SearchCreateResponse, type SearchCreateParams } from './search';
