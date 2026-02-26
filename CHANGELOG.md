@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.26.1 (2026-02-26)
+
+Full Changelog: [v0.26.0...v0.26.1](https://github.com/perplexityai/perplexity-node/compare/v0.26.0...v0.26.1)
+
+### Chores
+
+* **internal:** move stringifyQuery implementation to internal function ([139530e](https://github.com/perplexityai/perplexity-node/commit/139530e506aa393f4513dcbc93f16b7270f920f2))
+
 ## 0.26.0 (2026-02-23)
 
 Full Changelog: [v0.25.0...v0.26.0](https://github.com/perplexityai/perplexity-node/compare/v0.25.0...v0.26.0)
