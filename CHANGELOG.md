@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.26.2 (2026-03-09)
+
+Full Changelog: [v0.26.1...v0.26.2](https://github.com/perplexityai/perplexity-node/compare/v0.26.1...v0.26.2)
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([98b1ab9](https://github.com/perplexityai/perplexity-node/commit/98b1ab99afad9e0d23a96c9c15881a4fa9de42f8))
+* fix request delays for retrying to be more respectful of high requested delays ([5399979](https://github.com/perplexityai/perplexity-node/commit/539997927605b5c46fb990555b11119854bd96ea))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([3d2b6b3](https://github.com/perplexityai/perplexity-node/commit/3d2b6b3abcc61ba4284b0c7382d8d53a5b0c167b))
+* **internal:** update dependencies to address dependabot vulnerabilities ([b494823](https://github.com/perplexityai/perplexity-node/commit/b494823152750452f7eaee967274904e30076615))
+
 ## 0.26.1 (2026-02-26)
 
 Full Changelog: [v0.26.0...v0.26.1](https://github.com/perplexityai/perplexity-node/compare/v0.26.0...v0.26.1)
