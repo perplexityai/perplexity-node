@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.26.3 (2026-03-16)
+
+Full Changelog: [v0.26.2...v0.26.3](https://github.com/perplexityai/perplexity-node/compare/v0.26.2...v0.26.3)
+
+### Chores
+
+* **internal:** tweak CI branches ([b9f8712](https://github.com/perplexityai/perplexity-node/commit/b9f871274b6c65d3a27d4695e35451d428451111))
+
 ## 0.26.2 (2026-03-09)
 
 Full Changelog: [v0.26.1...v0.26.2](https://github.com/perplexityai/perplexity-node/compare/v0.26.1...v0.26.2)
