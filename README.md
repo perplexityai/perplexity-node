@@ -31,7 +31,7 @@ const client = new Perplexity({
 
 const search = await client.search.create({
   query: "latest AI developments 2024",
-  maxResults: 5
+  max_results: 5
 });
 
 for (const result of search.results) {
@@ -71,7 +71,7 @@ const search = await client.search.create({
     "solar power innovations",
     "wind energy developments"
   ],
-  maxResults: 10
+  max_results: 10
 });
 ```
 
@@ -82,13 +82,13 @@ Limit search results to specific trusted domains:
 ```js
 const search = await client.search.create({
   query: "climate change research",
-  searchDomainFilter: [
+  search_domain_filter: [
     "science.org",
     "pnas.org",
     "cell.com",
     "nature.com"
   ],
-  maxResults: 10
+  max_results: 10
 });
 ```
 
@@ -100,14 +100,14 @@ Filter results by recency or specific date ranges:
 // Get results from the past week
 const recentSearch = await client.search.create({
   query: "latest AI developments",
-  searchRecencyFilter: "week"
+  search_recency_filter: "week"
 });
 
 // Search within a specific date range
 const dateRangeSearch = await client.search.create({
   query: "AI developments",
-  searchAfterDateFilter: "01/01/2024",
-  searchBeforeDateFilter: "12/31/2024"
+  search_after_date_filter: "01/01/2024",
+  search_before_date_filter: "12/31/2024"
 });
 ```
 
@@ -118,24 +118,8 @@ Search academic sources for research purposes:
 ```js
 const academicSearch = await client.search.create({
   query: "machine learning algorithms",
-  searchMode: "academic",
-  maxResults: 10
-});
-```
-
-#### Location-Based Search
-
-Get geographically relevant results:
-
-```js
-const localSearch = await client.search.create({
-  query: "local restaurants",
-  userLocationFilter: {
-    latitude: 37.7749,
-    longitude: -122.4194,
-    radius: 10  // km
-  },
-  maxResults: 10
+  search_mode: "academic",
+  max_results: 10
 });
 ```
 
@@ -175,16 +159,17 @@ const client = new Perplexity({
 // Search API types
 const searchParams: Perplexity.Search.SearchCreateParams = {
   query: "artificial intelligence trends",
-  maxResults: 5,
-  searchMode: "web"
+  max_results: 5,
+  search_mode: "web"
 };
 const searchResponse: Perplexity.Search.SearchCreateResponse = await client.search.create(searchParams);
 
-// Content API types
-const contentParams: Perplexity.Content.ContentCreateParams = {
-  urls: ["https://example.com/article"]
+// Responses API types
+const responseParams: Perplexity.ResponseCreateParams = {
+  input: "What is the capital of France?",
+  model: "sonar",
 };
-const contentResponse: Perplexity.Content.ContentCreateResponse = await client.content.create(contentParams);
+const response: Perplexity.ResponseCreateResponse = await client.responses.create(responseParams);
 
 // Chat Completions types
 const chatParams: Perplexity.Chat.CompletionCreateParams = {
@@ -205,7 +190,7 @@ a subclass of `APIError` will be thrown:
 ```ts
 // Search API error handling
 const search = await client.search
-  .create({ query: "AI developments", maxResults: 5 })
+  .create({ query: "AI developments", max_results: 5 })
   .catch(async (err) => {
     if (err instanceof Perplexity.APIError) {
       console.log(err.status); // 400
@@ -261,7 +246,7 @@ const client = new Perplexity({
 });
 
 // Or, configure per-request:
-await client.search.create({ query: "AI developments", maxResults: 5 }, {
+await client.search.create({ query: "AI developments", max_results: 5 }, {
   maxRetries: 5,
 });
 
@@ -281,7 +266,7 @@ const client = new Perplexity({
 });
 
 // Override per-request:
-await client.search.create({ query: "AI developments", maxResults: 5 }, {
+await client.search.create({ query: "AI developments", max_results: 5 }, {
   timeout: 5 * 1000,
 });
 
@@ -309,13 +294,13 @@ const client = new Perplexity();
 
 // With search API
 const searchResponse = await client.search
-  .create({ query: "AI developments", maxResults: 5 })
+  .create({ query: "AI developments", max_results: 5 })
   .asResponse();
 console.log(searchResponse.headers.get('X-My-Header'));
 console.log(searchResponse.statusText); // access the underlying Response object
 
 const { data: search, response: rawSearchResponse } = await client.search
-  .create({ query: "AI developments", maxResults: 5 })
+  .create({ query: "AI developments", max_results: 5 })
   .withResponse();
 console.log(rawSearchResponse.headers.get('X-My-Header'));
 console.log(search.results.length);
