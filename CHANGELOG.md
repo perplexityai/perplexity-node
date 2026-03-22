@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.26.4 (2026-03-22)
+
+Full Changelog: [v0.26.3...v0.26.4](https://github.com/perplexityai/perplexity-node/compare/v0.26.3...v0.26.4)
+
 ## 0.26.3 (2026-03-16)
 
 Full Changelog: [v0.26.2...v0.26.3](https://github.com/perplexityai/perplexity-node/compare/v0.26.2...v0.26.3)
