@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.26.5 (2026-03-24)
+
+Full Changelog: [v0.26.4...v0.26.5](https://github.com/perplexityai/perplexity-node/compare/v0.26.4...v0.26.5)
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([75bb43c](https://github.com/perplexityai/perplexity-node/commit/75bb43c9794991dcd3b6e497e84a12ef217341ad))
+* **internal:** update gitignore ([b0c4a8b](https://github.com/perplexityai/perplexity-node/commit/b0c4a8bc9de2af3ff8c2c073828c9b8bd1898733))
+
 ## 0.26.4 (2026-03-22)
 
 Full Changelog: [v0.26.3...v0.26.4](https://github.com/perplexityai/perplexity-node/compare/v0.26.3...v0.26.4)
