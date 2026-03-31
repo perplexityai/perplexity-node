@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.26.6 (2026-03-31)
+
+Full Changelog: [v0.26.5...v0.26.6](https://github.com/perplexityai/perplexity-node/compare/v0.26.5...v0.26.6)
+
+### Bug Fixes
+
+* **internal:** gitignore generated `oidc` dir ([b92ff78](https://github.com/perplexityai/perplexity-node/commit/b92ff78ef1d6786d3ba664be8368c1e55af01e0f))
+
+
+### Chores
+
+* **internal:** codegen related update ([2af2538](https://github.com/perplexityai/perplexity-node/commit/2af2538a3d7a7f948109febcdd9a4ff2b7b26ce4))
+
 ## 0.26.5 (2026-03-24)
 
 Full Changelog: [v0.26.4...v0.26.5](https://github.com/perplexityai/perplexity-node/compare/v0.26.4...v0.26.5)
