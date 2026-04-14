@@ -662,6 +662,8 @@ export class Perplexity {
         'X-Stainless-Retry-Count': String(retryCount),
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
+        'X-Source': 'perplexity-node',
+        'X-Title': 'Perplexity Node SDK',
       },
       await this.authHeaders(options),
       this._options.defaultHeaders,
