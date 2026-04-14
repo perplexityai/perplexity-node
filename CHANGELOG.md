@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.27.0 (2026-04-14)
+
+Full Changelog: [v0.26.6...v0.27.0](https://github.com/perplexityai/perplexity-node/compare/v0.26.6...v0.27.0)
+
+### Features
+
+* send X-Source and X-Title headers ([26d3659](https://github.com/perplexityai/perplexity-node/commit/26d3659b62dd2219eb6e01af3b10382713fbb0b6))
+
 ## 0.26.6 (2026-04-12)
 
 Full Changelog: [v0.26.5...v0.26.6](https://github.com/perplexityai/perplexity-node/compare/v0.26.5...v0.26.6)
