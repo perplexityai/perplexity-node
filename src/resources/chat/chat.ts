@@ -3,12 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as CompletionsAPI from './completions';
-import {
-  CompletionCreateParams,
-  CompletionCreateParamsNonStreaming,
-  CompletionCreateParamsStreaming,
-  Completions,
-} from './completions';
+import { CompletionCreateParams, CompletionCreateParamsNonStreaming, CompletionCreateParamsStreaming, Completions } from './completions';
 
 export class Chat extends APIResource {
   completions: CompletionsAPI.Completions = new CompletionsAPI.Completions(this._client);
@@ -39,12 +34,14 @@ export interface StreamChunk {
 Chat.Completions = Completions;
 
 export declare namespace Chat {
-  export { type StreamChunk as StreamChunk };
+  export {
+    type StreamChunk as StreamChunk
+  };
 
   export {
     Completions as Completions,
     type CompletionCreateParams as CompletionCreateParams,
     type CompletionCreateParamsNonStreaming as CompletionCreateParamsNonStreaming,
-    type CompletionCreateParamsStreaming as CompletionCreateParamsStreaming,
+    type CompletionCreateParamsStreaming as CompletionCreateParamsStreaming
   };
 }

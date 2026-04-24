@@ -32,16 +32,7 @@ export interface BrowserSessionResponse {
 }
 
 export interface ChatMessageInput {
-  content:
-    | string
-    | Array<
-        | ChatMessageInput.ChatMessageContentTextChunk
-        | ChatMessageInput.ChatMessageContentImageChunk
-        | ChatMessageInput.ChatMessageContentFileChunk
-        | ChatMessageInput.ChatMessageContentPdfChunk
-        | ChatMessageInput.ChatMessageContentVideoChunk
-      >
-    | null;
+  content: string | Array<ChatMessageInput.ChatMessageContentTextChunk | ChatMessageInput.ChatMessageContentImageChunk | ChatMessageInput.ChatMessageContentFileChunk | ChatMessageInput.ChatMessageContentPdfChunk | ChatMessageInput.ChatMessageContentVideoChunk> | null;
 
   /**
    * Chat roles enum
@@ -183,16 +174,7 @@ export namespace ChatMessageInput {
 }
 
 export interface ChatMessageOutput {
-  content:
-    | string
-    | Array<
-        | ChatMessageOutput.ChatMessageContentTextChunk
-        | ChatMessageOutput.ChatMessageContentImageChunk
-        | ChatMessageOutput.ChatMessageContentFileChunk
-        | ChatMessageOutput.ChatMessageContentPdfChunk
-        | ChatMessageOutput.ChatMessageContentVideoChunk
-      >
-    | null;
+  content: string | Array<ChatMessageOutput.ChatMessageContentTextChunk | ChatMessageOutput.ChatMessageContentImageChunk | ChatMessageOutput.ChatMessageContentFileChunk | ChatMessageOutput.ChatMessageContentPdfChunk | ChatMessageOutput.ChatMessageContentVideoChunk> | null;
 
   /**
    * Chat roles enum
