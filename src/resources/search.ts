@@ -66,5 +66,8 @@ export interface SearchCreateParams {
 }
 
 export declare namespace Search {
-  export { type SearchCreateResponse as SearchCreateResponse, type SearchCreateParams as SearchCreateParams };
+  export {
+    type SearchCreateResponse as SearchCreateResponse,
+    type SearchCreateParams as SearchCreateParams
+  };
 }

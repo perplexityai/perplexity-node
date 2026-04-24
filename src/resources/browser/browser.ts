@@ -11,5 +11,8 @@ export class Browser extends APIResource {
 Browser.Sessions = Sessions;
 
 export declare namespace Browser {
-  export { Sessions as Sessions, type SessionCreateParams as SessionCreateParams };
+  export {
+    Sessions as Sessions,
+    type SessionCreateParams as SessionCreateParams
+  };
 }

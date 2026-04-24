@@ -11,10 +11,7 @@ export class ContextualizedEmbeddings extends APIResource {
    * document share context awareness, improving retrieval quality for document-based
    * applications.
    */
-  create(
-    body: ContextualizedEmbeddingCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<ContextualizedEmbeddingCreateResponse> {
+  create(body: ContextualizedEmbeddingCreateParams, options?: RequestOptions): APIPromise<ContextualizedEmbeddingCreateResponse> {
     return this._client.post('/v1/contextualizedembeddings', { body, ...options });
   }
 }
@@ -78,6 +75,6 @@ export interface ContextualizedEmbeddingCreateParams {
 export declare namespace ContextualizedEmbeddings {
   export {
     type ContextualizedEmbeddingCreateResponse as ContextualizedEmbeddingCreateResponse,
-    type ContextualizedEmbeddingCreateParams as ContextualizedEmbeddingCreateParams,
+    type ContextualizedEmbeddingCreateParams as ContextualizedEmbeddingCreateParams
   };
 }

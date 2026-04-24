@@ -71,6 +71,6 @@ export interface EmbeddingCreateParams {
 export declare namespace Embeddings {
   export {
     type EmbeddingCreateResponse as EmbeddingCreateResponse,
-    type EmbeddingCreateParams as EmbeddingCreateParams,
+    type EmbeddingCreateParams as EmbeddingCreateParams
   };
 }
