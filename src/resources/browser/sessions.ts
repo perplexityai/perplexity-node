@@ -11,7 +11,10 @@ export class Sessions extends APIResource {
   /**
    * Create a new remote browser session for CDP-based automation.
    */
-  create(body?: SessionCreateParams | null | undefined, options?: RequestOptions): APIPromise<Shared.BrowserSessionResponse> {
+  create(
+    body?: SessionCreateParams | null | undefined,
+    options?: RequestOptions,
+  ): APIPromise<Shared.BrowserSessionResponse> {
     return this._client.post('/v1/browser/sessions', { body, ...options });
   }
 
@@ -19,15 +22,15 @@ export class Sessions extends APIResource {
    * Stop and clean up a remote browser session.
    */
   delete(sessionID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/browser/sessions/${sessionID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+    return this._client.delete(path`/v1/browser/sessions/${sessionID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 }
 
-export interface SessionCreateParams {
-}
+export interface SessionCreateParams {}
 
 export declare namespace Sessions {
-  export {
-    type SessionCreateParams as SessionCreateParams
-  };
+  export { type SessionCreateParams as SessionCreateParams };
 }

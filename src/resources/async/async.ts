@@ -11,7 +11,5 @@ export class Async extends APIResource {
 Async.Chat = Chat;
 
 export declare namespace Async {
-  export {
-    Chat as Chat
-  };
+  export { Chat as Chat };
 }
