@@ -13,10 +13,22 @@ export class Responses extends APIResource {
    * Generate a response for the provided input with optional web search and
    * reasoning.
    */
-  create(body: ResponseCreateParamsNonStreaming, options?: RequestOptions): APIPromise<ResponseCreateResponse>
-  create(body: ResponseCreateParamsStreaming, options?: RequestOptions): APIPromise<Stream<ResponseStreamChunk>>
-  create(body: ResponseCreateParamsBase, options?: RequestOptions): APIPromise<Stream<ResponseStreamChunk> | ResponseCreateResponse>
-  create(body: ResponseCreateParams, options?: RequestOptions): APIPromise<ResponseCreateResponse> | APIPromise<Stream<ResponseStreamChunk>> {
+  create(
+    body: ResponseCreateParamsNonStreaming,
+    options?: RequestOptions,
+  ): APIPromise<ResponseCreateResponse>;
+  create(
+    body: ResponseCreateParamsStreaming,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ResponseStreamChunk>>;
+  create(
+    body: ResponseCreateParamsBase,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ResponseStreamChunk> | ResponseCreateResponse>;
+  create(
+    body: ResponseCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<ResponseCreateResponse> | APIPromise<Stream<ResponseStreamChunk>> {
     const promise = this._client.post('/v1/responses', { body, ...options, stream: body.stream ?? false });
 
     // For non-streaming responses, automatically add output_text property
@@ -119,7 +131,10 @@ export interface FunctionTool {
   strict?: boolean;
 }
 
-export type InputItem = InputItem.InputMessage | InputItem.FunctionCallOutputInput | InputItem.FunctionCallInput
+export type InputItem =
+  | InputItem.InputMessage
+  | InputItem.FunctionCallOutputInput
+  | InputItem.FunctionCallInput;
 
 export namespace InputItem {
   export interface InputMessage {
@@ -192,7 +207,11 @@ export namespace InputItem {
   }
 }
 
-export type OutputItem = OutputItem.MessageOutputItem | OutputItem.SearchResultsOutputItem | OutputItem.FetchURLResultsOutputItem | FunctionCallOutputItem
+export type OutputItem =
+  | OutputItem.MessageOutputItem
+  | OutputItem.SearchResultsOutputItem
+  | OutputItem.FetchURLResultsOutputItem
+  | FunctionCallOutputItem;
 
 export namespace OutputItem {
   export interface MessageOutputItem {
@@ -268,7 +287,21 @@ export namespace OutputItem {
  * - `response.reasoning.fetch_url_results`: URL fetch results received
  * - `response.reasoning.stopped`: Reasoning phase complete
  */
-export type ResponseStreamChunk = ResponseStreamChunk.ResponseCreatedEvent | ResponseStreamChunk.ResponseInProgressEvent | ResponseStreamChunk.ResponseCompletedEvent | ResponseStreamChunk.ResponseFailedEvent | ResponseStreamChunk.OutputItemAddedEvent | ResponseStreamChunk.OutputItemDoneEvent | ResponseStreamChunk.TextDeltaEvent | ResponseStreamChunk.TextDoneEvent | ResponseStreamChunk.ReasoningStartedEvent | ResponseStreamChunk.SearchQueriesEvent | ResponseStreamChunk.SearchResultsEvent | ResponseStreamChunk.FetchURLQueriesEvent | ResponseStreamChunk.FetchURLResultsEvent | ResponseStreamChunk.ReasoningStoppedEvent
+export type ResponseStreamChunk =
+  | ResponseStreamChunk.ResponseCreatedEvent
+  | ResponseStreamChunk.ResponseInProgressEvent
+  | ResponseStreamChunk.ResponseCompletedEvent
+  | ResponseStreamChunk.ResponseFailedEvent
+  | ResponseStreamChunk.OutputItemAddedEvent
+  | ResponseStreamChunk.OutputItemDoneEvent
+  | ResponseStreamChunk.TextDeltaEvent
+  | ResponseStreamChunk.TextDoneEvent
+  | ResponseStreamChunk.ReasoningStartedEvent
+  | ResponseStreamChunk.SearchQueriesEvent
+  | ResponseStreamChunk.SearchResultsEvent
+  | ResponseStreamChunk.FetchURLQueriesEvent
+  | ResponseStreamChunk.FetchURLResultsEvent
+  | ResponseStreamChunk.ReasoningStoppedEvent;
 
 export namespace ResponseStreamChunk {
   /**
@@ -284,7 +317,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     /**
      * Non-streaming response returned when stream is false
@@ -334,7 +381,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     /**
      * Non-streaming response returned when stream is false
@@ -383,7 +444,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     /**
      * Non-streaming response returned when stream is false
@@ -435,7 +510,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
   }
 
   /**
@@ -455,7 +544,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
   }
 
   /**
@@ -475,7 +578,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
   }
 
   /**
@@ -499,7 +616,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
   }
 
   /**
@@ -523,7 +654,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
   }
 
   /**
@@ -539,7 +684,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     thought?: string;
   }
@@ -559,7 +718,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     thought?: string;
   }
@@ -579,7 +752,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     thought?: string;
 
@@ -599,7 +786,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     urls: Array<string>;
 
@@ -621,7 +822,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     thought?: string;
   }
@@ -661,7 +876,21 @@ export namespace ResponseStreamChunk {
     /**
      * SSE event type discriminator
      */
-    type: 'response.created' | 'response.in_progress' | 'response.completed' | 'response.failed' | 'response.output_item.added' | 'response.output_item.done' | 'response.output_text.delta' | 'response.output_text.done' | 'response.reasoning.started' | 'response.reasoning.search_queries' | 'response.reasoning.search_results' | 'response.reasoning.fetch_url_queries' | 'response.reasoning.fetch_url_results' | 'response.reasoning.stopped';
+    type:
+      | 'response.created'
+      | 'response.in_progress'
+      | 'response.completed'
+      | 'response.failed'
+      | 'response.output_item.added'
+      | 'response.output_item.done'
+      | 'response.output_text.delta'
+      | 'response.output_text.done'
+      | 'response.reasoning.started'
+      | 'response.reasoning.search_queries'
+      | 'response.reasoning.search_results'
+      | 'response.reasoning.fetch_url_queries'
+      | 'response.reasoning.fetch_url_results'
+      | 'response.reasoning.stopped';
 
     thought?: string;
   }
@@ -894,7 +1123,7 @@ export interface ResponseCreateResponse {
   output_text?: string;
 }
 
-export type ResponseCreateParams = ResponseCreateParamsNonStreaming | ResponseCreateParamsStreaming
+export type ResponseCreateParams = ResponseCreateParamsNonStreaming | ResponseCreateParamsStreaming;
 
 export interface ResponseCreateParamsBase {
   /**
@@ -1041,8 +1270,8 @@ export namespace ResponseCreateParams {
     max_urls?: number;
   }
 
-  export type ResponseCreateParamsNonStreaming = ResponsesAPI.ResponseCreateParamsNonStreaming
-  export type ResponseCreateParamsStreaming = ResponsesAPI.ResponseCreateParamsStreaming
+  export type ResponseCreateParamsNonStreaming = ResponsesAPI.ResponseCreateParamsNonStreaming;
+  export type ResponseCreateParamsStreaming = ResponsesAPI.ResponseCreateParamsStreaming;
 }
 
 export interface ResponseCreateParamsNonStreaming extends ResponseCreateParamsBase {
@@ -1074,6 +1303,6 @@ export declare namespace Responses {
     type ResponseCreateResponse as ResponseCreateResponse,
     type ResponseCreateParams as ResponseCreateParams,
     type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
-    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming
+    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
   };
 }

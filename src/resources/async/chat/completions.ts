@@ -26,9 +26,37 @@ export class Completions extends APIResource {
   /**
    * Retrieve the response for a given asynchronous chat completion request.
    */
-  get(apiRequest: string, params: CompletionGetParams | null | undefined = {}, options?: RequestOptions): APIPromise<CompletionGetResponse> {
-    const { 'x-client-env': xClientEnv, 'x-client-name': xClientName, 'x-created-at-epoch-seconds': xCreatedAtEpochSeconds, 'x-request-time': xRequestTime, 'x-usage-tier': xUsageTier, 'x-user-id': xUserID, ...query } = params ?? {}
-    return this._client.get(path`/async/chat/completions/${apiRequest}`, { query, ...options, headers: buildHeaders([{...(xClientEnv != null ? { 'x-client-env': xClientEnv } : undefined), ...(xClientName != null ? { 'x-client-name': xClientName } : undefined), ...(xCreatedAtEpochSeconds != null ? { 'x-created-at-epoch-seconds': xCreatedAtEpochSeconds } : undefined), ...(xRequestTime != null ? { 'x-request-time': xRequestTime } : undefined), ...(xUsageTier != null ? { 'x-usage-tier': xUsageTier } : undefined), ...(xUserID != null ? { 'x-user-id': xUserID } : undefined)}, options?.headers]) });
+  get(
+    apiRequest: string,
+    params: CompletionGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CompletionGetResponse> {
+    const {
+      'x-client-env': xClientEnv,
+      'x-client-name': xClientName,
+      'x-created-at-epoch-seconds': xCreatedAtEpochSeconds,
+      'x-request-time': xRequestTime,
+      'x-usage-tier': xUsageTier,
+      'x-user-id': xUserID,
+      ...query
+    } = params ?? {};
+    return this._client.get(path`/async/chat/completions/${apiRequest}`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xClientEnv != null ? { 'x-client-env': xClientEnv } : undefined),
+          ...(xClientName != null ? { 'x-client-name': xClientName } : undefined),
+          ...(xCreatedAtEpochSeconds != null ?
+            { 'x-created-at-epoch-seconds': xCreatedAtEpochSeconds }
+          : undefined),
+          ...(xRequestTime != null ? { 'x-request-time': xRequestTime } : undefined),
+          ...(xUsageTier != null ? { 'x-usage-tier': xUsageTier } : undefined),
+          ...(xUserID != null ? { 'x-user-id': xUserID } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -175,7 +203,11 @@ export namespace CompletionCreateParams {
 
     reasoning_effort?: 'minimal' | 'low' | 'medium' | 'high' | null;
 
-    response_format?: Request.ResponseFormatText | Request.ResponseFormatJsonSchema | Request.ResponseFormatRegex | null;
+    response_format?:
+      | Request.ResponseFormatText
+      | Request.ResponseFormatJsonSchema
+      | Request.ResponseFormatRegex
+      | null;
 
     response_metadata?: { [key: string]: unknown } | null;
 
@@ -348,6 +380,6 @@ export declare namespace Completions {
     type CompletionListResponse as CompletionListResponse,
     type CompletionGetResponse as CompletionGetResponse,
     type CompletionCreateParams as CompletionCreateParams,
-    type CompletionGetParams as CompletionGetParams
+    type CompletionGetParams as CompletionGetParams,
   };
 }
