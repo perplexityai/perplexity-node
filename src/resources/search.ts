@@ -63,6 +63,12 @@ export interface SearchCreateParams {
   search_mode?: 'web' | 'academic' | 'sec' | null;
 
   search_recency_filter?: 'hour' | 'day' | 'week' | 'month' | 'year' | null;
+
+  /**
+   * Search type — "web" for general web search, "people" for people search.
+   * max_results above 20 is only supported for people search.
+   */
+  search_type?: 'web' | 'people' | null;
 }
 
 export declare namespace Search {
