@@ -37,6 +37,7 @@ describe('resource search', () => {
       search_language_filter: ['string'],
       search_mode: 'web',
       search_recency_filter: 'hour',
+      search_type: 'web',
     });
   });
 });
