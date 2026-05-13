@@ -949,7 +949,13 @@ export interface ResponsesCreateParams {
   /**
    * Tools available to the model
    */
-  tools?: Array<ResponsesCreateParams.WebSearchTool | ResponsesCreateParams.FetchURLTool | FunctionTool>;
+  tools?: Array<
+    | ResponsesCreateParams.WebSearchTool
+    | ResponsesCreateParams.FetchURLTool
+    | ResponsesCreateParams.PeopleSearchTool
+    | FunctionTool
+    | ResponsesCreateParams.FinanceSearchTool
+  >;
 }
 
 export namespace ResponsesCreateParams {
@@ -1028,6 +1034,22 @@ export namespace ResponsesCreateParams {
      * Maximum number of URLs to fetch per tool call
      */
     max_urls?: number;
+  }
+
+  export interface PeopleSearchTool {
+    /**
+     * Enables the `people_search` tool.
+     */
+    type: 'people_search';
+  }
+
+  export interface FinanceSearchTool {
+    /**
+     * Enables the `finance_search` tool. The model can request structured financial
+     * data (quotes, financials, segments, earnings transcripts, etc.) via
+     * category-based fan-out to FMP, Finchat, and Quartr.
+     */
+    type: 'finance_search';
   }
 }
 
@@ -1172,7 +1194,13 @@ export interface ResponseCreateParamsBase {
   /**
    * Tools available to the model
    */
-  tools?: Array<ResponseCreateParams.WebSearchTool | ResponseCreateParams.FetchURLTool | FunctionTool>;
+  tools?: Array<
+    | ResponseCreateParams.WebSearchTool
+    | ResponseCreateParams.FetchURLTool
+    | ResponseCreateParams.PeopleSearchTool
+    | FunctionTool
+    | ResponseCreateParams.FinanceSearchTool
+  >;
 }
 
 export namespace ResponseCreateParams {
@@ -1251,6 +1279,22 @@ export namespace ResponseCreateParams {
      * Maximum number of URLs to fetch per tool call
      */
     max_urls?: number;
+  }
+
+  export interface PeopleSearchTool {
+    /**
+     * Enables the `people_search` tool.
+     */
+    type: 'people_search';
+  }
+
+  export interface FinanceSearchTool {
+    /**
+     * Enables the `finance_search` tool. The model can request structured financial
+     * data (quotes, financials, segments, earnings transcripts, etc.) via
+     * category-based fan-out to FMP, Finchat, and Quartr.
+     */
+    type: 'finance_search';
   }
 
   export type ResponseCreateParamsNonStreaming = ResponsesAPI.ResponseCreateParamsNonStreaming;
