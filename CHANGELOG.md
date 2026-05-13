@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.28.0 (2026-05-13)
+
+Full Changelog: [v0.27.0...v0.28.0](https://github.com/perplexityai/perplexity-node/compare/v0.27.0...v0.28.0)
+
+### Features
+
+* **responses:** add people_search and finance_search built-in tools ([f73d971](https://github.com/perplexityai/perplexity-node/commit/f73d971af644ff4d3166fe2f0c319a33a85e5e1c))
+* support setting headers via env ([8d99818](https://github.com/perplexityai/perplexity-node/commit/8d99818d6981bc084189213fc03f38408aa4dfe6))
+
+
+### Chores
+
+* apply prettier formatting to README ([147cf39](https://github.com/perplexityai/perplexity-node/commit/147cf3973b774527f0cba6426bb0c963a67befef))
+* **format:** run eslint and prettier separately ([bd0078c](https://github.com/perplexityai/perplexity-node/commit/bd0078c41267bf36971c2a621076d07056bd2e13))
+* **formatter:** run prettier and eslint separately ([e5b3c00](https://github.com/perplexityai/perplexity-node/commit/e5b3c0095da82ac41791343a1ba5333ca011fb7f))
+* **internal:** codegen related update ([d99d9e3](https://github.com/perplexityai/perplexity-node/commit/d99d9e316cf824d4a67cd29cb9ac026d63351aca))
+* **internal:** more robust bootstrap script ([c32e68e](https://github.com/perplexityai/perplexity-node/commit/c32e68ee007146374b83abb0901fde46731f0e3d))
+* redact api-key headers in debug logs ([af8b1ee](https://github.com/perplexityai/perplexity-node/commit/af8b1eee91c3ad2fa5f5f1adbb00d836e1560799))
+
 ## 0.27.0 (2026-04-14)
 
 Full Changelog: [v0.26.6...v0.27.0](https://github.com/perplexityai/perplexity-node/compare/v0.26.6...v0.27.0)

@@ -30,8 +30,8 @@ const client = new Perplexity({
 });
 
 const search = await client.search.create({
-  query: "latest AI developments 2024",
-  max_results: 5
+  query: 'latest AI developments 2024',
+  max_results: 5,
 });
 
 for (const result of search.results) {
@@ -66,12 +66,8 @@ Run multiple related searches in a single request:
 
 ```js
 const search = await client.search.create({
-  query: [
-    "renewable energy trends 2024",
-    "solar power innovations",
-    "wind energy developments"
-  ],
-  max_results: 10
+  query: ['renewable energy trends 2024', 'solar power innovations', 'wind energy developments'],
+  max_results: 10,
 });
 ```
 
@@ -81,14 +77,9 @@ Limit search results to specific trusted domains:
 
 ```js
 const search = await client.search.create({
-  query: "climate change research",
-  search_domain_filter: [
-    "science.org",
-    "pnas.org",
-    "cell.com",
-    "nature.com"
-  ],
-  max_results: 10
+  query: 'climate change research',
+  search_domain_filter: ['science.org', 'pnas.org', 'cell.com', 'nature.com'],
+  max_results: 10,
 });
 ```
 
@@ -99,15 +90,15 @@ Filter results by recency or specific date ranges:
 ```js
 // Get results from the past week
 const recentSearch = await client.search.create({
-  query: "latest AI developments",
-  search_recency_filter: "week"
+  query: 'latest AI developments',
+  search_recency_filter: 'week',
 });
 
 // Search within a specific date range
 const dateRangeSearch = await client.search.create({
-  query: "AI developments",
-  search_after_date_filter: "01/01/2024",
-  search_before_date_filter: "12/31/2024"
+  query: 'AI developments',
+  search_after_date_filter: '01/01/2024',
+  search_before_date_filter: '12/31/2024',
 });
 ```
 
@@ -117,9 +108,9 @@ Search academic sources for research purposes:
 
 ```js
 const academicSearch = await client.search.create({
-  query: "machine learning algorithms",
-  search_mode: "academic",
-  max_results: 10
+  query: 'machine learning algorithms',
+  search_mode: 'academic',
+  max_results: 10,
 });
 ```
 
@@ -158,16 +149,16 @@ const client = new Perplexity({
 
 // Search API types
 const searchParams: Perplexity.Search.SearchCreateParams = {
-  query: "artificial intelligence trends",
+  query: 'artificial intelligence trends',
   max_results: 5,
-  search_mode: "web"
+  search_mode: 'web',
 };
 const searchResponse: Perplexity.Search.SearchCreateResponse = await client.search.create(searchParams);
 
 // Responses API types
 const responseParams: Perplexity.ResponseCreateParams = {
-  input: "What is the capital of France?",
-  model: "sonar",
+  input: 'What is the capital of France?',
+  model: 'sonar',
 };
 const response: Perplexity.ResponseCreateResponse = await client.responses.create(responseParams);
 
@@ -189,17 +180,15 @@ a subclass of `APIError` will be thrown:
 
 ```ts
 // Search API error handling
-const search = await client.search
-  .create({ query: "AI developments", max_results: 5 })
-  .catch(async (err) => {
-    if (err instanceof Perplexity.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+const search = await client.search.create({ query: 'AI developments', max_results: 5 }).catch(async (err) => {
+  if (err instanceof Perplexity.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 
 // Chat completions error handling
 const streamChunk = await client.chat.completions
@@ -246,13 +235,19 @@ const client = new Perplexity({
 });
 
 // Or, configure per-request:
-await client.search.create({ query: "AI developments", max_results: 5 }, {
-  maxRetries: 5,
-});
+await client.search.create(
+  { query: 'AI developments', max_results: 5 },
+  {
+    maxRetries: 5,
+  },
+);
 
-await client.chat.completions.create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' }, {
-  maxRetries: 5,
-});
+await client.chat.completions.create(
+  { messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' },
+  {
+    maxRetries: 5,
+  },
+);
 ```
 
 ### Timeouts
@@ -266,13 +261,19 @@ const client = new Perplexity({
 });
 
 // Override per-request:
-await client.search.create({ query: "AI developments", max_results: 5 }, {
-  timeout: 5 * 1000,
-});
+await client.search.create(
+  { query: 'AI developments', max_results: 5 },
+  {
+    timeout: 5 * 1000,
+  },
+);
 
-await client.chat.completions.create({ messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' }, {
-  timeout: 5 * 1000,
-});
+await client.chat.completions.create(
+  { messages: [{ role: 'user', content: 'What is the capital of France?' }], model: 'sonar' },
+  {
+    timeout: 5 * 1000,
+  },
+);
 ```
 
 On timeout, an `APIConnectionTimeoutError` is thrown.
@@ -293,14 +294,12 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 const client = new Perplexity();
 
 // With search API
-const searchResponse = await client.search
-  .create({ query: "AI developments", max_results: 5 })
-  .asResponse();
+const searchResponse = await client.search.create({ query: 'AI developments', max_results: 5 }).asResponse();
 console.log(searchResponse.headers.get('X-My-Header'));
 console.log(searchResponse.statusText); // access the underlying Response object
 
 const { data: search, response: rawSearchResponse } = await client.search
-  .create({ query: "AI developments", max_results: 5 })
+  .create({ query: 'AI developments', max_results: 5 })
   .withResponse();
 console.log(rawSearchResponse.headers.get('X-My-Header'));
 console.log(search.results.length);
