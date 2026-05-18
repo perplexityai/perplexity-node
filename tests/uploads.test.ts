@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from '@perplexity-ai/perplexity_ai/internal/to-file';
 import { toFile } from '@perplexity-ai/perplexity_ai/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
