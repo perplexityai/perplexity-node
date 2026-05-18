@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.29.1 (2026-05-18)
+
+Full Changelog: [v0.29.0...v0.29.1](https://github.com/perplexityai/perplexity-node/compare/v0.29.0...v0.29.1)
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([5c5edbe](https://github.com/perplexityai/perplexity-node/commit/5c5edbefd4a8bb3b855cf16b68ea257c477cfede))
+
+
+### Chores
+
+* **tests:** remove redundant File import ([b6474ba](https://github.com/perplexityai/perplexity-node/commit/b6474bae54ac5d5f404da8daaffa2c96c9d801bb))
+
 ## 0.29.0 (2026-05-13)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/perplexityai/perplexity-node/compare/v0.28.0...v0.29.0)
