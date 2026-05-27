@@ -23,6 +23,7 @@ export {
   type ResponsesCreateParams,
   type ResponsesUsage,
   type ResponseCreateResponse,
+  type ResponseRetrieveResponse,
   type ResponseCreateParams,
   type ResponseCreateParamsNonStreaming,
   type ResponseCreateParamsStreaming,

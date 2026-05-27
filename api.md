@@ -54,10 +54,12 @@ Types:
 - <code><a href="./src/resources/responses.ts">ResponsesCreateParams</a></code>
 - <code><a href="./src/resources/responses.ts">ResponsesUsage</a></code>
 - <code><a href="./src/resources/responses.ts">ResponseCreateResponse</a></code>
+- <code><a href="./src/resources/responses.ts">ResponseRetrieveResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/responses">client.responses.<a href="./src/resources/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
+- <code title="get /v1/responses/{response_id}">client.responses.<a href="./src/resources/responses.ts">retrieve</a>(responseID) -> ResponseRetrieveResponse</code>
 
 # Embeddings
 
