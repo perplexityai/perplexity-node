@@ -7,6 +7,7 @@ import { APIPromise } from '../core/api-promise';
 import { Stream } from '../core/streaming';
 import { RequestOptions } from '../internal/request-options';
 import { addOutputText } from '../lib/add-output-text';
+import { path } from '../internal/utils/path';
 
 export class Responses extends APIResource {
   /**
@@ -42,6 +43,13 @@ export class Responses extends APIResource {
     }
 
     return promise as APIPromise<Stream<ResponseStreamChunk>>;
+  }
+
+  /**
+   * Retrieve a response by its ID. Use this to poll the status of background tasks.
+   */
+  retrieve(responseID: string, options?: RequestOptions): APIPromise<ResponseRetrieveResponse> {
+    return this._client.get(path`/v1/responses/${responseID}`, options);
   }
 }
 
@@ -97,7 +105,7 @@ export interface FunctionCallOutputItem {
   /**
    * Status of a response or output item
    */
-  status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+  status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
 
   type: 'function_call';
 
@@ -227,7 +235,7 @@ export namespace OutputItem {
     /**
      * Status of a response or output item
      */
-    status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+    status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
 
     type: 'message';
   }
@@ -346,7 +354,12 @@ export namespace ResponseStreamChunk {
       /**
        * Status of a response or output item
        */
-      status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+      status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
+
+      /**
+       * Whether the response was created in background mode.
+       */
+      background?: boolean;
 
       error?: ResponsesAPI.ErrorInfo;
 
@@ -396,7 +409,12 @@ export namespace ResponseStreamChunk {
       /**
        * Status of a response or output item
        */
-      status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+      status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
+
+      /**
+       * Whether the response was created in background mode.
+       */
+      background?: boolean;
 
       error?: ResponsesAPI.ErrorInfo;
 
@@ -445,7 +463,12 @@ export namespace ResponseStreamChunk {
       /**
        * Status of a response or output item
        */
-      status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+      status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
+
+      /**
+       * Whether the response was created in background mode.
+       */
+      background?: boolean;
 
       error?: ResponsesAPI.ErrorInfo;
 
@@ -707,6 +730,13 @@ export interface ResponsesCreateParams {
   input: string | Array<InputItem>;
 
   /**
+   * Run the response asynchronously. When true, the request is queued and the
+   * response object's `status` will be `queued` or `in_progress`. Poll GET
+   * /v1/responses/{response_id} to retrieve the final result.
+   */
+  background?: boolean | null;
+
+  /**
    * System instructions for the model
    */
   instructions?: string;
@@ -778,7 +808,7 @@ export namespace ResponsesCreateParams {
     /**
      * How much effort the model should spend on reasoning
      */
-    effort?: 'low' | 'medium' | 'high';
+    effort?: 'minimal' | 'low' | 'medium' | 'high' | 'xhigh';
   }
 
   export interface WebSearchTool {
@@ -936,7 +966,44 @@ export interface ResponseCreateResponse {
   /**
    * Status of a response or output item
    */
-  status: 'completed' | 'failed' | 'in_progress' | 'requires_action';
+  status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
+
+  /**
+   * Whether the response was created in background mode.
+   */
+  background?: boolean;
+
+  error?: ErrorInfo;
+
+  usage?: ResponsesUsage;
+}
+
+/**
+ * Non-streaming response returned when stream is false
+ */
+export interface ResponseRetrieveResponse {
+  id: string;
+
+  created_at: number;
+
+  model: string;
+
+  /**
+   * Object type in API responses
+   */
+  object: 'response';
+
+  output: Array<OutputItem>;
+
+  /**
+   * Status of a response or output item
+   */
+  status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
+
+  /**
+   * Whether the response was created in background mode.
+   */
+  background?: boolean;
 
   error?: ErrorInfo;
 
@@ -956,6 +1023,13 @@ export interface ResponseCreateParamsBase {
    * Input content - either a string or array of input items
    */
   input: string | Array<InputItem>;
+
+  /**
+   * Run the response asynchronously. When true, the request is queued and the
+   * response object's `status` will be `queued` or `in_progress`. Poll GET
+   * /v1/responses/{response_id} to retrieve the final result.
+   */
+  background?: boolean | null;
 
   /**
    * System instructions for the model
@@ -1029,7 +1103,7 @@ export namespace ResponseCreateParams {
     /**
      * How much effort the model should spend on reasoning
      */
-    effort?: 'low' | 'medium' | 'high';
+    effort?: 'minimal' | 'low' | 'medium' | 'high' | 'xhigh';
   }
 
   export interface WebSearchTool {
@@ -1149,6 +1223,7 @@ export declare namespace Responses {
     type ResponsesCreateParams as ResponsesCreateParams,
     type ResponsesUsage as ResponsesUsage,
     type ResponseCreateResponse as ResponseCreateResponse,
+    type ResponseRetrieveResponse as ResponseRetrieveResponse,
     type ResponseCreateParams as ResponseCreateParams,
     type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
     type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,

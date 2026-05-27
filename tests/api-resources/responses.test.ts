@@ -24,6 +24,7 @@ describe('resource responses', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.responses.create({
       input: 'string',
+      background: true,
       instructions: 'instructions',
       language_preference: 'language_preference',
       max_output_tokens: 1,
@@ -31,7 +32,7 @@ describe('resource responses', () => {
       model: 'model',
       models: ['string'],
       preset: 'preset',
-      reasoning: { effort: 'low' },
+      reasoning: { effort: 'minimal' },
       response_format: {
         type: 'json_schema',
         json_schema: {
@@ -65,5 +66,17 @@ describe('resource responses', () => {
         },
       ],
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve', async () => {
+    const responsePromise = client.responses.retrieve('response_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });
