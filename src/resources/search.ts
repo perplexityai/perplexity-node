@@ -56,12 +56,6 @@ export interface SearchCreateParams {
 
   search_before_date_filter?: string | null;
 
-  /**
-   * Controls how much search context is retrieved. Higher values return more content
-   * per result.
-   */
-  search_context_size?: 'low' | 'medium' | 'high' | null;
-
   search_domain_filter?: Array<string> | null;
 
   search_language_filter?: Array<string> | null;
