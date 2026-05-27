@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.30.0 (2026-05-27)
+
+Full Changelog: [v0.29.1...v0.30.0](https://github.com/perplexityai/perplexity-node/compare/v0.29.1...v0.30.0)
+
+### Features
+
+* **api:** search_context_size, background tasks, reasoning effort xhigh + responses.retrieve ([7cf9bba](https://github.com/perplexityai/perplexity-node/commit/7cf9bbac090f436fcb8e28cb03216626bb615fe9))
+
 ## 0.29.1 (2026-05-27)
 
 Full Changelog: [v0.29.0...v0.29.1](https://github.com/perplexityai/perplexity-node/compare/v0.29.0...v0.29.1)
