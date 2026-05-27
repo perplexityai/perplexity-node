@@ -315,23 +315,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.created")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.created';
 
     /**
      * Non-streaming response returned when stream is false
@@ -379,23 +365,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.in_progress")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.in_progress';
 
     /**
      * Non-streaming response returned when stream is false
@@ -442,23 +414,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.completed")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.completed';
 
     /**
      * Non-streaming response returned when stream is false
@@ -508,23 +466,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.failed")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.failed';
   }
 
   /**
@@ -542,23 +486,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.output_item.added")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.output_item.added';
   }
 
   /**
@@ -576,23 +506,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.output_item.done")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.output_item.done';
   }
 
   /**
@@ -614,23 +530,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.output_text.delta")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.output_text.delta';
   }
 
   /**
@@ -652,23 +554,9 @@ export namespace ResponseStreamChunk {
     text: string;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.output_text.done")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.output_text.done';
   }
 
   /**
@@ -682,23 +570,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.reasoning.started")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.reasoning.started';
 
     thought?: string;
   }
@@ -716,23 +590,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.reasoning.search_queries")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.reasoning.search_queries';
 
     thought?: string;
   }
@@ -750,23 +610,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.reasoning.search_results")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.reasoning.search_results';
 
     thought?: string;
 
@@ -784,23 +630,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.reasoning.fetch_url_queries")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.reasoning.fetch_url_queries';
 
     urls: Array<string>;
 
@@ -820,23 +652,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.reasoning.fetch_url_results")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.reasoning.fetch_url_results';
 
     thought?: string;
   }
@@ -874,23 +692,9 @@ export namespace ResponseStreamChunk {
     sequence_number: number;
 
     /**
-     * SSE event type discriminator
+     * SSE event type discriminator (always "response.reasoning.stopped")
      */
-    type:
-      | 'response.created'
-      | 'response.in_progress'
-      | 'response.completed'
-      | 'response.failed'
-      | 'response.output_item.added'
-      | 'response.output_item.done'
-      | 'response.output_text.delta'
-      | 'response.output_text.done'
-      | 'response.reasoning.started'
-      | 'response.reasoning.search_queries'
-      | 'response.reasoning.search_results'
-      | 'response.reasoning.fetch_url_queries'
-      | 'response.reasoning.fetch_url_results'
-      | 'response.reasoning.stopped';
+    type: 'response.reasoning.stopped';
 
     thought?: string;
   }
