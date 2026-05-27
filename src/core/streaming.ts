@@ -57,9 +57,7 @@ export class Stream<Item> implements AsyncIterable<Item> {
 
           if (sse.event === 'error') {
             throw new APIError(undefined, safeJSON(sse.data) ?? sse.data, undefined, response.headers);
-          }
-
-          if (sse.event === null) {
+          } else {
             try {
               yield JSON.parse(sse.data) as Item;
             } catch (e) {
