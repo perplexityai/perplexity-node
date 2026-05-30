@@ -789,6 +789,7 @@ export interface ResponsesCreateParams {
     | ResponsesCreateParams.PeopleSearchTool
     | FunctionTool
     | ResponsesCreateParams.FinanceSearchTool
+    | ResponsesCreateParams.SandboxTool
   >;
 }
 
@@ -884,6 +885,14 @@ export namespace ResponsesCreateParams {
      * category-based fan-out to FMP, Finchat, and Quartr.
      */
     type: 'finance_search';
+  }
+
+  export interface SandboxTool {
+    /**
+     * Enables the `sandbox` tool. The model can execute code in an isolated container
+     * during the request and use the result in its final answer.
+     */
+    type: 'sandbox';
   }
 }
 
@@ -1078,6 +1087,7 @@ export interface ResponseCreateParamsBase {
     | ResponseCreateParams.PeopleSearchTool
     | FunctionTool
     | ResponseCreateParams.FinanceSearchTool
+    | ResponseCreateParams.SandboxTool
   >;
 }
 
@@ -1173,6 +1183,14 @@ export namespace ResponseCreateParams {
      * category-based fan-out to FMP, Finchat, and Quartr.
      */
     type: 'finance_search';
+  }
+
+  export interface SandboxTool {
+    /**
+     * Enables the `sandbox` tool. The model can execute code in an isolated container
+     * during the request and use the result in its final answer.
+     */
+    type: 'sandbox';
   }
 
   export type ResponseCreateParamsNonStreaming = ResponsesAPI.ResponseCreateParamsNonStreaming;
