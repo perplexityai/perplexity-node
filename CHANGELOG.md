@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.31.0 (2026-05-30)
+
+Full Changelog: [v0.30.1...v0.31.0](https://github.com/perplexityai/perplexity-node/compare/v0.30.1...v0.31.0)
+
+### Features
+
+* **responses:** add sandbox built-in tool ([6b47293](https://github.com/perplexityai/perplexity-node/commit/6b4729307f2cd319119bba23ebca2bcbaee9cb62))
+
 ## 0.30.1 (2026-05-27)
 
 Full Changelog: [v0.30.0...v0.30.1](https://github.com/perplexityai/perplexity-node/compare/v0.30.0...v0.30.1)
