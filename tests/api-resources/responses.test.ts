@@ -56,6 +56,7 @@ describe('resource responses', () => {
           },
           max_tokens: 0,
           max_tokens_per_page: 0,
+          search_context_size: 'low',
           user_location: {
             city: 'city',
             country: 'country',
