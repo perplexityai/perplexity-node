@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.32.0 (2026-06-02)
+
+Full Changelog: [v0.31.0...v0.32.0](https://github.com/perplexityai/perplexity-node/compare/v0.31.0...v0.32.0)
+
+### Features
+
+* **search:** add search_context_size to search and web_search tool ([8244b60](https://github.com/perplexityai/perplexity-node/commit/8244b60de27b12a0c996ce2edfee93bd3d8b3912))
+
 ## 0.31.0 (2026-05-30)
 
 Full Changelog: [v0.30.1...v0.31.0](https://github.com/perplexityai/perplexity-node/compare/v0.30.1...v0.31.0)

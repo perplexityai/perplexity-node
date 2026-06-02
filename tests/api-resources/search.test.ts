@@ -33,6 +33,7 @@ describe('resource search', () => {
       max_tokens_per_page: 0,
       search_after_date_filter: 'search_after_date_filter',
       search_before_date_filter: 'search_before_date_filter',
+      search_context_size: 'low',
       search_domain_filter: ['string'],
       search_language_filter: ['string'],
       search_mode: 'web',

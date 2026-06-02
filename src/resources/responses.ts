@@ -822,6 +822,12 @@ export namespace ResponsesCreateParams {
     max_tokens_per_page?: number;
 
     /**
+     * Search context size (low, medium, high). Omit when supplying explicit max_tokens
+     * / max_tokens_per_page.
+     */
+    search_context_size?: 'low' | 'medium' | 'high';
+
+    /**
      * User's geographic location for search personalization
      */
     user_location?: WebSearchTool.UserLocation;
@@ -1124,6 +1130,12 @@ export namespace ResponseCreateParams {
     max_tokens?: number;
 
     max_tokens_per_page?: number;
+
+    /**
+     * Search context size (low, medium, high). Omit when supplying explicit max_tokens
+     * / max_tokens_per_page.
+     */
+    search_context_size?: 'low' | 'medium' | 'high';
 
     /**
      * User's geographic location for search personalization
