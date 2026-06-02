@@ -56,6 +56,13 @@ export interface SearchCreateParams {
 
   search_before_date_filter?: string | null;
 
+  /**
+   * Controls how much content is retrieved per result. Larger sizes return more page
+   * content at higher cost. Defaults to "high". Omit when supplying explicit
+   * max_tokens / max_tokens_per_page.
+   */
+  search_context_size?: 'low' | 'medium' | 'high';
+
   search_domain_filter?: Array<string> | null;
 
   search_language_filter?: Array<string> | null;
