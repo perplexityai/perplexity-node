@@ -23,6 +23,10 @@ import {
   ContextualizedEmbeddings,
 } from './resources/contextualized-embeddings';
 import { EmbeddingCreateParams, EmbeddingCreateResponse, Embeddings } from './resources/embeddings';
+import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
+import { Async } from './resources/async/async';
+import { Browser } from './resources/browser/browser';
+import { Chat, StreamChunk } from './resources/chat/chat';
 import {
   Annotation,
   ContentPart,
@@ -35,16 +39,14 @@ import {
   ResponseCreateParamsNonStreaming,
   ResponseCreateParamsStreaming,
   ResponseCreateResponse,
+  ResponseFile,
+  ResponseFileList,
   ResponseRetrieveResponse,
   ResponseStreamChunk,
   Responses,
   ResponsesCreateParams,
   ResponsesUsage,
-} from './resources/responses';
-import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
-import { Async } from './resources/async/async';
-import { Browser } from './resources/browser/browser';
-import { Chat, StreamChunk } from './resources/chat/chat';
+} from './resources/responses/responses';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -794,6 +796,8 @@ export declare namespace Perplexity {
     type FunctionTool as FunctionTool,
     type InputItem as InputItem,
     type OutputItem as OutputItem,
+    type ResponseFile as ResponseFile,
+    type ResponseFileList as ResponseFileList,
     type ResponseStreamChunk as ResponseStreamChunk,
     type ResponsesCreateParams as ResponsesCreateParams,
     type ResponsesUsage as ResponsesUsage,
