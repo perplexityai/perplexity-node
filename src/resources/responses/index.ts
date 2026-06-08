@@ -1,15 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export * from './shared';
-export { Async } from './async/async';
-export { Browser } from './browser/browser';
-export { Chat, type StreamChunk } from './chat/chat';
-export {
-  ContextualizedEmbeddings,
-  type ContextualizedEmbeddingCreateResponse,
-  type ContextualizedEmbeddingCreateParams,
-} from './contextualized-embeddings';
-export { Embeddings, type EmbeddingCreateResponse, type EmbeddingCreateParams } from './embeddings';
+export { Files, type FileContentParams } from './files';
 export {
   Responses,
   type Annotation,
@@ -29,5 +20,4 @@ export {
   type ResponseCreateParams,
   type ResponseCreateParamsNonStreaming,
   type ResponseCreateParamsStreaming,
-} from './responses/responses';
-export { Search, type SearchCreateResponse, type SearchCreateParams } from './search';
+} from './responses';
