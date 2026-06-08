@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.33.0 (2026-06-08)
+
+Full Changelog: [v0.32.0...v0.33.0](https://github.com/perplexityai/perplexity-node/compare/v0.32.0...v0.33.0)
+
+### Features
+
+* **responses:** add files subresource for sandbox file retrieval ([89150a4](https://github.com/perplexityai/perplexity-node/commit/89150a4b2e50b2709b6e2489a74776b7e95c1f04))
+
 ## 0.32.0 (2026-06-02)
 
 Full Changelog: [v0.31.0...v0.32.0](https://github.com/perplexityai/perplexity-node/compare/v0.31.0...v0.32.0)
