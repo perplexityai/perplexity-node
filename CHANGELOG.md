@@ -6,7 +6,7 @@ Full Changelog: [v0.33.0...v0.34.0](https://github.com/perplexityai/perplexity-n
 
 ### Features
 
-* **api:** manual updates ([38e23f1](https://github.com/perplexityai/perplexity-node/commit/38e23f16b2ae2d178815bede417d33e1a4a233e8))
+* **responses:** add `mcp` tool and typed `mcp_list_tools`/`mcp_call` output items ([38e23f1](https://github.com/perplexityai/perplexity-node/commit/38e23f16b2ae2d178815bede417d33e1a4a233e8))
 
 
 ### Bug Fixes
