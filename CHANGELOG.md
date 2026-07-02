@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.34.0 (2026-07-02)
+
+Full Changelog: [v0.33.0...v0.34.0](https://github.com/perplexityai/perplexity-node/compare/v0.33.0...v0.34.0)
+
+### Features
+
+* **api:** manual updates ([38e23f1](https://github.com/perplexityai/perplexity-node/commit/38e23f16b2ae2d178815bede417d33e1a4a233e8))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([ea14be8](https://github.com/perplexityai/perplexity-node/commit/ea14be8cd8fa67316a4edd0d998ad6721246f029))
+
 ## 0.33.0 (2026-06-08)
 
 Full Changelog: [v0.32.0...v0.33.0](https://github.com/perplexityai/perplexity-node/compare/v0.32.0...v0.33.0)
