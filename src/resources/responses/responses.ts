@@ -219,11 +219,17 @@ export namespace InputItem {
   }
 }
 
+/**
+ * One item in the response output: an assistant message, retrieved tool results,
+ * or a record of a tool call.
+ */
 export type OutputItem =
   | OutputItem.MessageOutputItem
   | OutputItem.SearchResultsOutputItem
   | OutputItem.FetchURLResultsOutputItem
-  | FunctionCallOutputItem;
+  | FunctionCallOutputItem
+  | OutputItem.McpListToolsOutputItem
+  | OutputItem.McpCallOutputItem;
 
 export namespace OutputItem {
   export interface MessageOutputItem {
@@ -278,6 +284,68 @@ export namespace OutputItem {
        */
       url: string;
     }
+  }
+
+  /**
+   * Tools discovered on one external MCP server at boot. Matches OpenAI's
+   * mcp_list_tools item.
+   */
+  export interface McpListToolsOutputItem {
+    id: string;
+
+    server_label: string;
+
+    tools: Array<McpListToolsOutputItem.Tool>;
+
+    type: 'mcp_list_tools';
+
+    error?: string;
+  }
+
+  export namespace McpListToolsOutputItem {
+    /**
+     * One tool discovered on a remote MCP server.
+     */
+    export interface Tool {
+      /**
+       * The server's JSON Schema for the tool, passed through unmodified.
+       */
+      input_schema: { [key: string]: unknown };
+
+      name: string;
+
+      description?: string;
+    }
+  }
+
+  /**
+   * One tool call executed against an external MCP server, modeled on OpenAI's
+   * mcp_call item.
+   */
+  export interface McpCallOutputItem {
+    id: string;
+
+    /**
+     * JSON-encoded arguments the model passed.
+     */
+    arguments: string;
+
+    name: string;
+
+    server_label: string;
+
+    type: 'mcp_call';
+
+    /**
+     * The failure string when the call failed (also returned to the model in-band);
+     * null on success, matching OpenAI's mcp_call.
+     */
+    error?: string | null;
+
+    /**
+     * Tool output text; empty when the call failed.
+     */
+    output?: string;
   }
 }
 
@@ -542,6 +610,10 @@ export namespace ResponseStreamChunk {
    * output item (message or tool call) starts.
    */
   export interface OutputItemAddedEvent {
+    /**
+     * One item in the response output: an assistant message, retrieved tool results,
+     * or a record of a tool call.
+     */
     item: ResponsesAPI.OutputItem;
 
     output_index: number;
@@ -562,6 +634,10 @@ export namespace ResponseStreamChunk {
    * output item (message or tool call) completes.
    */
   export interface OutputItemDoneEvent {
+    /**
+     * One item in the response output: an assistant message, retrieved tool results,
+     * or a record of a tool call.
+     */
     item: ResponsesAPI.OutputItem;
 
     output_index: number;
@@ -844,6 +920,7 @@ export interface ResponsesCreateParams {
     | FunctionTool
     | ResponsesCreateParams.FinanceSearchTool
     | ResponsesCreateParams.SandboxTool
+    | ResponsesCreateParams.McpTool
   >;
 }
 
@@ -953,6 +1030,43 @@ export namespace ResponsesCreateParams {
      * during the request and use the result in its final answer.
      */
     type: 'sandbox';
+  }
+
+  /**
+   * Connects a user-supplied remote MCP server. The worker discovers the server's
+   * tools at boot and calls them like native tools. Matches OpenAI's mcp tool.
+   * `require_approval`, `connector_id`, and `defer_loading` are not supported in v1
+   * and are ignored if sent: every call auto-runs, and only bring-your-own
+   * `server_url` is honored.
+   */
+  export interface McpTool {
+    /**
+     * Unique per request, ^[a-zA-Z0-9_-]{1,64}$. Namespaces the server's tools.
+     */
+    server_label: string;
+
+    /**
+     * HTTPS URL of the remote MCP server.
+     */
+    server_url: string;
+
+    type: 'mcp';
+
+    /**
+     * Optional allowlist of tool names. Empty exposes all discovered tools.
+     */
+    allowed_tools?: Array<string>;
+
+    /**
+     * An OAuth access token that can be used with a remote MCP server, with a custom
+     * MCP server URL. Never logged or echoed.
+     */
+    authorization?: string;
+
+    /**
+     * Extra request headers. Never logged or echoed.
+     */
+    headers?: { [key: string]: string };
   }
 }
 
@@ -1160,6 +1274,7 @@ export interface ResponseCreateParamsBase {
     | FunctionTool
     | ResponseCreateParams.FinanceSearchTool
     | ResponseCreateParams.SandboxTool
+    | ResponseCreateParams.McpTool
   >;
 }
 
@@ -1269,6 +1384,43 @@ export namespace ResponseCreateParams {
      * during the request and use the result in its final answer.
      */
     type: 'sandbox';
+  }
+
+  /**
+   * Connects a user-supplied remote MCP server. The worker discovers the server's
+   * tools at boot and calls them like native tools. Matches OpenAI's mcp tool.
+   * `require_approval`, `connector_id`, and `defer_loading` are not supported in v1
+   * and are ignored if sent: every call auto-runs, and only bring-your-own
+   * `server_url` is honored.
+   */
+  export interface McpTool {
+    /**
+     * Unique per request, ^[a-zA-Z0-9_-]{1,64}$. Namespaces the server's tools.
+     */
+    server_label: string;
+
+    /**
+     * HTTPS URL of the remote MCP server.
+     */
+    server_url: string;
+
+    type: 'mcp';
+
+    /**
+     * Optional allowlist of tool names. Empty exposes all discovered tools.
+     */
+    allowed_tools?: Array<string>;
+
+    /**
+     * An OAuth access token that can be used with a remote MCP server, with a custom
+     * MCP server URL. Never logged or echoed.
+     */
+    authorization?: string;
+
+    /**
+     * Extra request headers. Never logged or echoed.
+     */
+    headers?: { [key: string]: string };
   }
 
   export type ResponseCreateParamsNonStreaming = ResponsesAPI.ResponseCreateParamsNonStreaming;
