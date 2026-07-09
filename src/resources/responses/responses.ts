@@ -898,12 +898,27 @@ export interface ResponsesCreateParams {
    */
   preset?: string;
 
+  /**
+   * OpenAI-compatible previous response id for multi-turn response chains. When set,
+   * the new response continues from the completed prior response using its durable
+   * continuation snapshot. The prior response must belong to the same account and
+   * have completed.
+   */
+  previous_response_id?: string;
+
   reasoning?: ResponsesCreateParams.Reasoning;
 
   /**
    * Specifies the desired output format for the model response
    */
   response_format?: Shared.ResponseFormat;
+
+  /**
+   * OpenAI-compatible storage toggle. When false, the response is hidden from later
+   * retrieve calls, and the echoed response reports `store: false`. It can still be
+   * used as a `previous_response_id` continuation source.
+   */
+  store?: boolean;
 
   /**
    * If true, returns SSE stream instead of JSON
@@ -1252,12 +1267,27 @@ export interface ResponseCreateParamsBase {
    */
   preset?: string;
 
+  /**
+   * OpenAI-compatible previous response id for multi-turn response chains. When set,
+   * the new response continues from the completed prior response using its durable
+   * continuation snapshot. The prior response must belong to the same account and
+   * have completed.
+   */
+  previous_response_id?: string;
+
   reasoning?: ResponseCreateParams.Reasoning;
 
   /**
    * Specifies the desired output format for the model response
    */
   response_format?: Shared.ResponseFormat;
+
+  /**
+   * OpenAI-compatible storage toggle. When false, the response is hidden from later
+   * retrieve calls, and the echoed response reports `store: false`. It can still be
+   * used as a `previous_response_id` continuation source.
+   */
+  store?: boolean;
 
   /**
    * If true, returns SSE stream instead of JSON
