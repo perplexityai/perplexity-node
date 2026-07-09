@@ -32,6 +32,7 @@ describe('resource responses', () => {
       model: 'model',
       models: ['string'],
       preset: 'preset',
+      previous_response_id: 'previous_response_id',
       reasoning: { effort: 'minimal' },
       response_format: {
         type: 'json_schema',
@@ -42,6 +43,7 @@ describe('resource responses', () => {
           strict: true,
         },
       },
+      store: true,
       stream: false,
       tools: [
         {

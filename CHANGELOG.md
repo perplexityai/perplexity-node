@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.35.0 (2026-07-09)
+
+Full Changelog: [v0.34.0...v0.35.0](https://github.com/perplexityai/perplexity-node/compare/v0.34.0...v0.35.0)
+
+### Features
+
+* **api:** manual updates ([3cab532](https://github.com/perplexityai/perplexity-node/commit/3cab5324e3deaafb5e61a07aa2fdb34ff46ff221))
+
+
+### Chores
+
+* trigger release-please ([de199f7](https://github.com/perplexityai/perplexity-node/commit/de199f7d80f28d0571df03806e1030ddf87f037d))
+
 ## 0.34.0 (2026-07-02)
 
 Full Changelog: [v0.33.0...v0.34.0](https://github.com/perplexityai/perplexity-node/compare/v0.33.0...v0.34.0)
