@@ -57,11 +57,13 @@ Types:
 - <code><a href="./src/resources/responses/responses.ts">ResponsesUsage</a></code>
 - <code><a href="./src/resources/responses/responses.ts">ResponseCreateResponse</a></code>
 - <code><a href="./src/resources/responses/responses.ts">ResponseRetrieveResponse</a></code>
+- <code><a href="./src/resources/responses/responses.ts">ResponseCancelResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/responses">client.responses.<a href="./src/resources/responses/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
 - <code title="get /v1/responses/{response_id}">client.responses.<a href="./src/resources/responses/responses.ts">retrieve</a>(responseID) -> ResponseRetrieveResponse</code>
+- <code title="post /v1/responses/{response_id}/cancel">client.responses.<a href="./src/resources/responses/responses.ts">cancel</a>(responseID) -> ResponseCancelResponse</code>
 
 ## Files
 

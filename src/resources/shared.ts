@@ -519,6 +519,10 @@ export namespace UsageInfo {
 
     reasoning_tokens_cost?: number | null;
 
+    /**
+     * Flat request cost for the chat completion. Present on completed (terminal)
+     * responses and omitted from the zero cost skeleton on interim streaming chunks.
+     */
     request_cost?: number | null;
 
     search_queries_cost?: number | null;

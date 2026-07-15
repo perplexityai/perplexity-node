@@ -209,6 +209,13 @@ export namespace CompletionCreateParams {
       | Request.ResponseFormatRegex
       | null;
 
+    /**
+     * Optional locale tag used for response formatting conventions. Locale-style
+     * values such as `es_mx`, `EN-us`, and `zh-TW` are normalized to the canonical
+     * form (`es-MX`, `en-US`, `zh-TW`). Invalid values are ignored.
+     */
+    response_formatting_locale?: string | null;
+
     response_metadata?: { [key: string]: unknown } | null;
 
     return_images?: boolean | null;

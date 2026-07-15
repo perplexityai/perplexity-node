@@ -26,6 +26,7 @@ export {
   type ResponsesUsage,
   type ResponseCreateResponse,
   type ResponseRetrieveResponse,
+  type ResponseCancelResponse,
   type ResponseCreateParams,
   type ResponseCreateParamsNonStreaming,
   type ResponseCreateParamsStreaming,
