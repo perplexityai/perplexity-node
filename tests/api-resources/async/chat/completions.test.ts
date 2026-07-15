@@ -103,6 +103,7 @@ describe('resource completions', () => {
         ranking_model: 'ranking_model',
         reasoning_effort: 'minimal',
         response_format: { type: 'text' },
+        response_formatting_locale: 'response_formatting_locale',
         response_metadata: { foo: 'bar' },
         return_images: true,
         return_related_questions: true,

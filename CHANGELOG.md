@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.36.0 (2026-07-15)
+
+Full Changelog: [v0.35.0...v0.36.0](https://github.com/perplexityai/perplexity-node/compare/v0.35.0...v0.36.0)
+
+### Features
+
+* **api:** manual updates ([97833de](https://github.com/perplexityai/perplexity-node/commit/97833de3a6f175de815d2f18fa29acf801eeb89a))
+
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([73acb76](https://github.com/perplexityai/perplexity-node/commit/73acb7668c131075b62c04d081d872c009c3e564))
+
 ## 0.35.0 (2026-07-09)
 
 Full Changelog: [v0.34.0...v0.35.0](https://github.com/perplexityai/perplexity-node/compare/v0.34.0...v0.35.0)
