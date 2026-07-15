@@ -44,6 +44,19 @@ export class Responses extends APIResource {
   retrieve(responseID: string, options?: RequestOptions): APIPromise<ResponseRetrieveResponse> {
     return this._client.get(path`/v1/responses/${responseID}`, options);
   }
+
+  /**
+   * Request cancellation of a response. Acts on durable state, so it works for
+   * background responses that outlive the client connection as well as durably
+   * routed foreground responses. The cancel is asynchronous: a 200 acknowledges the
+   * request (status `cancelling`) and the run stops shortly after. Poll the retrieve
+   * endpoint for the terminal status. Cancelling a run that is already terminal
+   * returns 400. Ownership is enforced server side; an unknown id, or a response
+   * belonging to a different account, returns 404.
+   */
+  cancel(responseID: string, options?: RequestOptions): APIPromise<ResponseCancelResponse> {
+    return this._client.post(path`/v1/responses/${responseID}/cancel`, options);
+  }
 }
 
 /**
@@ -463,6 +476,19 @@ export namespace ResponseStreamChunk {
 
       error?: ResponsesAPI.ErrorInfo;
 
+      /**
+       * ID of the previous response in the chain, when the response was created with
+       * previous_response_id.
+       */
+      previous_response_id?: string | null;
+
+      /**
+       * Whether the response is stored and visible to later retrieve calls. A response
+       * created with store=false can still be used as a previous_response_id
+       * continuation source.
+       */
+      store?: boolean;
+
       usage?: ResponsesAPI.ResponsesUsage;
     }
   }
@@ -518,6 +544,19 @@ export namespace ResponseStreamChunk {
 
       error?: ResponsesAPI.ErrorInfo;
 
+      /**
+       * ID of the previous response in the chain, when the response was created with
+       * previous_response_id.
+       */
+      previous_response_id?: string | null;
+
+      /**
+       * Whether the response is stored and visible to later retrieve calls. A response
+       * created with store=false can still be used as a previous_response_id
+       * continuation source.
+       */
+      store?: boolean;
+
       usage?: ResponsesAPI.ResponsesUsage;
     }
   }
@@ -571,6 +610,19 @@ export namespace ResponseStreamChunk {
       background?: boolean;
 
       error?: ResponsesAPI.ErrorInfo;
+
+      /**
+       * ID of the previous response in the chain, when the response was created with
+       * previous_response_id.
+       */
+      previous_response_id?: string | null;
+
+      /**
+       * Whether the response is stored and visible to later retrieve calls. A response
+       * created with store=false can still be used as a previous_response_id
+       * continuation source.
+       */
+      store?: boolean;
 
       usage?: ResponsesAPI.ResponsesUsage;
     }
@@ -1151,6 +1203,19 @@ export interface ResponseCreateResponse {
 
   error?: ErrorInfo;
 
+  /**
+   * ID of the previous response in the chain, when the response was created with
+   * previous_response_id.
+   */
+  previous_response_id?: string | null;
+
+  /**
+   * Whether the response is stored and visible to later retrieve calls. A response
+   * created with store=false can still be used as a previous_response_id
+   * continuation source.
+   */
+  store?: boolean;
+
   usage?: ResponsesUsage;
 }
 
@@ -1183,7 +1248,33 @@ export interface ResponseRetrieveResponse {
 
   error?: ErrorInfo;
 
+  /**
+   * ID of the previous response in the chain, when the response was created with
+   * previous_response_id.
+   */
+  previous_response_id?: string | null;
+
+  /**
+   * Whether the response is stored and visible to later retrieve calls. A response
+   * created with store=false can still be used as a previous_response_id
+   * continuation source.
+   */
+  store?: boolean;
+
   usage?: ResponsesUsage;
+}
+
+export interface ResponseCancelResponse {
+  /**
+   * The response id (resp\_...).
+   */
+  response_id: string;
+
+  /**
+   * Always `cancelling`: the cancel was accepted and the run stops asynchronously.
+   * An already terminal run returns 400 instead, so no terminal status appears here.
+   */
+  status: 'cancelling';
 }
 
 export type ResponseCreateParams = ResponseCreateParamsNonStreaming | ResponseCreateParamsStreaming;
@@ -1466,6 +1557,7 @@ export declare namespace Responses {
     type ResponsesUsage as ResponsesUsage,
     type ResponseCreateResponse as ResponseCreateResponse,
     type ResponseRetrieveResponse as ResponseRetrieveResponse,
+    type ResponseCancelResponse as ResponseCancelResponse,
     type ResponseCreateParams as ResponseCreateParams,
     type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
     type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
