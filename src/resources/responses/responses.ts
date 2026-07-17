@@ -242,7 +242,18 @@ export type OutputItem =
   | OutputItem.FetchURLResultsOutputItem
   | FunctionCallOutputItem
   | OutputItem.McpListToolsOutputItem
-  | OutputItem.McpCallOutputItem;
+  | OutputItem.McpCallOutputItem
+  | OutputItem.SkillLoadedOutputItem
+  | OutputItem.AdvisorResultOutputItem
+  | OutputItem.SandboxResultsOutputItem
+  | OutputItem.SandboxWriteFileOutputItem
+  | OutputItem.SandboxReadFileOutputItem
+  | OutputItem.SandboxEditFileOutputItem
+  | OutputItem.SandboxGrepOutputItem
+  | OutputItem.SandboxGlobOutputItem
+  | OutputItem.SandboxApplyPatchOutputItem
+  | OutputItem.ShareFileOutputItem
+  | OutputItem.UnknownOutputItem;
 
 export namespace OutputItem {
   export interface MessageOutputItem {
@@ -360,6 +371,236 @@ export namespace OutputItem {
      */
     output?: string;
   }
+
+  /**
+   * Per-call result emitted by the `load_skill` tool. Only the resolved skill name
+   * is surfaced here; the skill body itself lives in the function_call_output input
+   * item the model consumes on its next turn.
+   */
+  export interface SkillLoadedOutputItem {
+    /**
+     * Name of the skill that was loaded.
+     */
+    name: string;
+
+    type: 'skill_loaded';
+  }
+
+  /**
+   * Preview API. Advisor tool invocation emitted in `response.output[]`. The advisor
+   * result is server-side guidance consumed by the agent loop; it is not a
+   * client-executable function call.
+   */
+  export interface AdvisorResultOutputItem {
+    call_id: string;
+
+    /**
+     * Status of a response or output item
+     */
+    status: 'completed' | 'failed' | 'in_progress' | 'queued' | 'cancelled' | 'requires_action';
+
+    type: 'advisor_result';
+
+    /**
+     * Guidance returned by the advisor model.
+     */
+    advice?: string;
+
+    /**
+     * Raw JSON arguments the executor passed to the advisor tool.
+     */
+    arguments?: string;
+
+    /**
+     * Non-fatal advisor error code when the advisor call failed.
+     */
+    error_code?: string;
+
+    /**
+     * Non-fatal advisor error message when the advisor call failed.
+     */
+    error_message?: string;
+
+    /**
+     * Parsed advisor question when present in arguments.
+     */
+    question?: string;
+  }
+
+  /**
+   * Sandbox tool results emitted in `response.output[]`. Cost is aggregated into
+   * `Usage.tool_calls_details.sandbox.cost_usd`; this item does not carry
+   * per-execution cost.
+   */
+  export interface SandboxResultsOutputItem {
+    call_id: string;
+
+    code: string;
+
+    language: 'python' | 'bash';
+
+    results: Array<SandboxResultsOutputItem.Result>;
+
+    status: 'in_progress' | 'completed' | 'failed' | 'timed_out';
+
+    type: 'sandbox_results';
+
+    container_id?: string;
+  }
+
+  export namespace SandboxResultsOutputItem {
+    /**
+     * One sandbox execution result. `status` describes whether the sandbox runner
+     * completed, failed, or timed out. `exit_code` is the program exit code, so
+     * `status: completed` can still have a non-zero `exit_code`.
+     */
+    export interface Result {
+      duration_ms: number;
+
+      exit_code: number;
+
+      status: 'in_progress' | 'completed' | 'failed' | 'timed_out';
+
+      stderr: string;
+
+      stdout: string;
+    }
+  }
+
+  /**
+   * Per-invocation result of the `write` tool inside the sandbox.
+   */
+  export interface SandboxWriteFileOutputItem {
+    call_id: string;
+
+    file_path: string;
+
+    type: 'sandbox_write_file';
+
+    error?: string;
+
+    size_bytes?: number;
+  }
+
+  /**
+   * Per-invocation result of the `read` tool inside the sandbox.
+   */
+  export interface SandboxReadFileOutputItem {
+    call_id: string;
+
+    file_path: string;
+
+    type: 'sandbox_read_file';
+
+    content?: string;
+
+    error?: string;
+
+    start_line?: number;
+
+    total_lines?: number;
+  }
+
+  /**
+   * Per-invocation result of the `edit` tool inside the sandbox.
+   */
+  export interface SandboxEditFileOutputItem {
+    call_id: string;
+
+    type: 'sandbox_edit_file';
+
+    error?: string;
+
+    file_path?: string;
+
+    message?: string;
+  }
+
+  /**
+   * Per-invocation result of the `grep` tool inside the sandbox.
+   */
+  export interface SandboxGrepOutputItem {
+    call_id: string;
+
+    type: 'sandbox_grep';
+
+    count?: number;
+
+    error?: string;
+
+    files?: Array<string>;
+
+    truncated?: boolean;
+  }
+
+  /**
+   * Per-invocation result of the `glob` tool inside the sandbox.
+   */
+  export interface SandboxGlobOutputItem {
+    call_id: string;
+
+    type: 'sandbox_glob';
+
+    count?: number;
+
+    error?: string;
+
+    files?: Array<string>;
+
+    truncated?: boolean;
+  }
+
+  /**
+   * Per-invocation result of the `apply_patch` tool inside the sandbox.
+   */
+  export interface SandboxApplyPatchOutputItem {
+    call_id: string;
+
+    type: 'sandbox_apply_patch';
+
+    added?: Array<string>;
+
+    deleted?: Array<string>;
+
+    error?: string;
+
+    modified?: Array<string>;
+  }
+
+  /**
+   * Result of one `share_file` tool call. On success, file_id and filename identify
+   * a sandbox file downloadable at url.
+   */
+  export interface ShareFileOutputItem {
+    call_id: string;
+
+    type: 'share_file';
+
+    error?: string;
+
+    file_id?: string;
+
+    filename?: string;
+
+    size_bytes?: number;
+
+    /**
+     * Relative download path, /v1/responses/{id}/files/{file_id}/content.
+     */
+    url?: string;
+  }
+
+  /**
+   * Forward-compat fallback for proto OutputItem variants the gateway does not yet
+   * have a typed schema for.
+   */
+  export interface UnknownOutputItem {
+    item_name: string;
+
+    payload: { [key: string]: unknown };
+
+    type: 'unknown';
+  }
 }
 
 /**
@@ -418,6 +659,7 @@ export interface ResponseFileList {
  * - `response.reasoning.fetch_url_queries`: URL fetch queries issued
  * - `response.reasoning.fetch_url_results`: URL fetch results received
  * - `response.reasoning.stopped`: Reasoning phase complete
+ * - `response.skill.loaded`: load_skill resolved a skill body
  */
 export type ResponseStreamChunk =
   | ResponseStreamChunk.ResponseCreatedEvent
@@ -433,7 +675,8 @@ export type ResponseStreamChunk =
   | ResponseStreamChunk.SearchResultsEvent
   | ResponseStreamChunk.FetchURLQueriesEvent
   | ResponseStreamChunk.FetchURLResultsEvent
-  | ResponseStreamChunk.ReasoningStoppedEvent;
+  | ResponseStreamChunk.ReasoningStoppedEvent
+  | ResponseStreamChunk.ResponseSkillLoadedEvent;
 
 export namespace ResponseStreamChunk {
   /**
@@ -892,6 +1135,28 @@ export namespace ResponseStreamChunk {
 
     thought?: string;
   }
+
+  /**
+   * Skill loaded event (type: "response.skill.loaded"). Fires when load_skill
+   * resolves a known skill. The skill body stays in the model conversation prefix;
+   * this event carries only the name for client rendering.
+   */
+  export interface ResponseSkillLoadedEvent {
+    /**
+     * Name of the skill that was loaded.
+     */
+    name: string;
+
+    /**
+     * Monotonically increasing sequence number for event ordering
+     */
+    sequence_number: number;
+
+    /**
+     * SSE event type discriminator (always "response.skill.loaded")
+     */
+    type: 'response.skill.loaded';
+  }
 }
 
 export interface ResponsesCreateParams {
@@ -924,7 +1189,7 @@ export interface ResponsesCreateParams {
 
   /**
    * Maximum number of research loop steps. If provided, overrides the preset's
-   * max_steps value. Must be >= 1 if specified. Maximum allowed is 10.
+   * max_steps value. Must be >= 1 if specified. Maximum allowed is 100.
    */
   max_steps?: number;
 
@@ -966,6 +1231,15 @@ export interface ResponsesCreateParams {
   response_format?: Shared.ResponseFormat;
 
   /**
+   * Built-in and request-scoped inline skills available to the model. Skill metadata
+   * is disclosed to the model up front; full instructions are loaded on demand
+   * through the `load_skill` tool. Selecting any skill enables the sandbox tool for
+   * the request. Requests with skills run on the durable backend and skills are not
+   * echoed back on Response objects.
+   */
+  skills?: Array<ResponsesCreateParams.BuiltinSkill | ResponsesCreateParams.InlineSkill>;
+
+  /**
    * OpenAI-compatible storage toggle. When false, the response is hidden from later
    * retrieve calls, and the echoed response reports `store: false`. It can still be
    * used as a `previous_response_id` continuation source.
@@ -997,6 +1271,45 @@ export namespace ResponsesCreateParams {
      * How much effort the model should spend on reasoning
      */
     effort?: 'minimal' | 'low' | 'medium' | 'high' | 'xhigh';
+  }
+
+  /**
+   * Selects a built-in skill from the catalog by name.
+   */
+  export interface BuiltinSkill {
+    /**
+     * Built-in skill to make available to the model. office is the full Office bundle
+     * (enables all four leaves). office/docx, office/pdf, office/pptx, office/xlsx
+     * each create polished documents of that type from scratch, with structural
+     * validation and visual QA.
+     */
+    name: 'office' | 'office/docx' | 'office/pdf' | 'office/pptx' | 'office/xlsx';
+
+    type: 'builtin';
+  }
+
+  /**
+   * Request-scoped skill defined inline. Inline skills have no files or sandbox
+   * mounts and are never echoed back in the response.
+   */
+  export interface InlineSkill {
+    /**
+     * Short discovery description, limited to 1,024 UTF-8 bytes.
+     */
+    description: string;
+
+    /**
+     * Instructions returned by `load_skill`, limited to 65,536 UTF-8 bytes per skill
+     * and 262,144 bytes across the request.
+     */
+    instructions: string;
+
+    /**
+     * Request-scoped lowercase ASCII name separated by single hyphens.
+     */
+    name: string;
+
+    type: 'inline';
   }
 
   export interface WebSearchTool {
@@ -1332,7 +1645,7 @@ export interface ResponseCreateParamsBase {
 
   /**
    * Maximum number of research loop steps. If provided, overrides the preset's
-   * max_steps value. Must be >= 1 if specified. Maximum allowed is 10.
+   * max_steps value. Must be >= 1 if specified. Maximum allowed is 100.
    */
   max_steps?: number;
 
@@ -1374,6 +1687,15 @@ export interface ResponseCreateParamsBase {
   response_format?: Shared.ResponseFormat;
 
   /**
+   * Built-in and request-scoped inline skills available to the model. Skill metadata
+   * is disclosed to the model up front; full instructions are loaded on demand
+   * through the `load_skill` tool. Selecting any skill enables the sandbox tool for
+   * the request. Requests with skills run on the durable backend and skills are not
+   * echoed back on Response objects.
+   */
+  skills?: Array<ResponseCreateParams.BuiltinSkill | ResponseCreateParams.InlineSkill>;
+
+  /**
    * OpenAI-compatible storage toggle. When false, the response is hidden from later
    * retrieve calls, and the echoed response reports `store: false`. It can still be
    * used as a `previous_response_id` continuation source.
@@ -1405,6 +1727,45 @@ export namespace ResponseCreateParams {
      * How much effort the model should spend on reasoning
      */
     effort?: 'minimal' | 'low' | 'medium' | 'high' | 'xhigh';
+  }
+
+  /**
+   * Selects a built-in skill from the catalog by name.
+   */
+  export interface BuiltinSkill {
+    /**
+     * Built-in skill to make available to the model. office is the full Office bundle
+     * (enables all four leaves). office/docx, office/pdf, office/pptx, office/xlsx
+     * each create polished documents of that type from scratch, with structural
+     * validation and visual QA.
+     */
+    name: 'office' | 'office/docx' | 'office/pdf' | 'office/pptx' | 'office/xlsx';
+
+    type: 'builtin';
+  }
+
+  /**
+   * Request-scoped skill defined inline. Inline skills have no files or sandbox
+   * mounts and are never echoed back in the response.
+   */
+  export interface InlineSkill {
+    /**
+     * Short discovery description, limited to 1,024 UTF-8 bytes.
+     */
+    description: string;
+
+    /**
+     * Instructions returned by `load_skill`, limited to 65,536 UTF-8 bytes per skill
+     * and 262,144 bytes across the request.
+     */
+    instructions: string;
+
+    /**
+     * Request-scoped lowercase ASCII name separated by single hyphens.
+     */
+    name: string;
+
+    type: 'inline';
   }
 
   export interface WebSearchTool {
