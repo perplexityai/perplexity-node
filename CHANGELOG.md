@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.38.0 (2026-07-17)
+
+Full Changelog: [v0.37.0...v0.38.0](https://github.com/perplexityai/perplexity-node/compare/v0.37.0...v0.38.0)
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([34bbefd](https://github.com/perplexityai/perplexity-node/commit/34bbefd90df93a834e231d0d234a7677a8e9f970))
+
 ## 0.37.0 (2026-07-17)
 
 Full Changelog: [v0.36.0...v0.37.0](https://github.com/perplexityai/perplexity-node/compare/v0.36.0...v0.37.0)
