@@ -43,6 +43,7 @@ describe('resource responses', () => {
           strict: true,
         },
       },
+      skills: [{ name: 'office', type: 'builtin' }],
       store: true,
       stream: false,
       tools: [
