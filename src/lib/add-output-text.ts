@@ -4,17 +4,20 @@
 /**
  * Response interface with output_text property added.
  * This will match the ResponseCreateResponse type once generated.
+ * `output` is intentionally loose: OutputItem is a discriminated union whose
+ * members carry different `content` shapes (message items use content parts,
+ * sandbox_read_file uses a string), so we only require the discriminator here
+ * and narrow message content at the use site.
  */
 interface Response {
   object: 'response';
-  output: Array<{
-    type: string;
-    content?: Array<{
-      type: string;
-      text?: string;
-    }>;
-  }>;
+  output: Array<{ type: string }>;
   output_text?: string;
+}
+
+interface MessageContentPart {
+  type: string;
+  text?: string;
 }
 
 /**
@@ -31,9 +34,10 @@ export function addOutputText(rsp: Response): void {
     if (output.type !== 'message') {
       continue;
     }
-    for (const content of output.content || []) {
-      if (content.type === 'output_text' && content.text) {
-        texts.push(content.text);
+    const content = (output as { content?: Array<MessageContentPart> }).content;
+    for (const part of content || []) {
+      if (part.type === 'output_text' && part.text) {
+        texts.push(part.text);
       }
     }
   }
