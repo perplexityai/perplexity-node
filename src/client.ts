@@ -1,32 +1,37 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { RequestInit, RequestInfo, BodyInit } from './internal/builtin-types';
-import type { HTTPMethod, PromiseOrValue, MergedRequestInit, FinalizedRequestInit } from './internal/types';
-import { uuid4 } from './internal/utils/uuid';
-import { validatePositiveInteger, isAbsoluteURL, safeJSON } from './internal/utils/values';
-import { sleep } from './internal/utils/sleep';
-export type { Logger, LogLevel } from './internal/utils/log';
-import { castToError, isAbortError } from './internal/errors';
-import type { APIResponseProps } from './internal/parse';
-import { getPlatformHeaders } from './internal/detect-platform';
-import * as Shims from './internal/shims';
-import * as Opts from './internal/request-options';
-import { stringifyQuery } from './internal/utils/query';
-import { VERSION } from './version';
-import * as Errors from './core/error';
-import * as Uploads from './core/uploads';
-import * as API from './resources/index';
-import { APIPromise } from './core/api-promise';
+import type { RequestInit, RequestInfo, BodyInit } from './internal/builtin-types.js';
+import type {
+  HTTPMethod,
+  PromiseOrValue,
+  MergedRequestInit,
+  FinalizedRequestInit,
+} from './internal/types.js';
+import { uuid4 } from './internal/utils/uuid.js';
+import { validatePositiveInteger, isAbsoluteURL, safeJSON } from './internal/utils/values.js';
+import { sleep } from './internal/utils/sleep.js';
+export type { Logger, LogLevel } from './internal/utils/log.js';
+import { castToError, isAbortError } from './internal/errors.js';
+import type { APIResponseProps } from './internal/parse.js';
+import { getPlatformHeaders } from './internal/detect-platform.js';
+import * as Shims from './internal/shims.js';
+import * as Opts from './internal/request-options.js';
+import { stringifyQuery } from './internal/utils/query.js';
+import { VERSION } from './version.js';
+import * as Errors from './core/error.js';
+import * as Uploads from './core/uploads.js';
+import * as API from './resources/index.js';
+import { APIPromise } from './core/api-promise.js';
 import {
   ContextualizedEmbeddingCreateParams,
   ContextualizedEmbeddingCreateResponse,
   ContextualizedEmbeddings,
-} from './resources/contextualized-embeddings';
-import { EmbeddingCreateParams, EmbeddingCreateResponse, Embeddings } from './resources/embeddings';
-import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search';
-import { Async } from './resources/async/async';
-import { Browser } from './resources/browser/browser';
-import { Chat, StreamChunk } from './resources/chat/chat';
+} from './resources/contextualized-embeddings.js';
+import { EmbeddingCreateParams, EmbeddingCreateResponse, Embeddings } from './resources/embeddings.js';
+import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search.js';
+import { Async } from './resources/async/async.js';
+import { Browser } from './resources/browser/browser.js';
+import { Chat, StreamChunk } from './resources/chat/chat.js';
 import {
   Annotation,
   ContentPart,
@@ -47,19 +52,19 @@ import {
   Responses,
   ResponsesCreateParams,
   ResponsesUsage,
-} from './resources/responses/responses';
-import { type Fetch } from './internal/builtin-types';
-import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
-import { FinalRequestOptions, RequestOptions } from './internal/request-options';
-import { readEnv } from './internal/utils/env';
+} from './resources/responses/responses.js';
+import { type Fetch } from './internal/builtin-types.js';
+import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers.js';
+import { FinalRequestOptions, RequestOptions } from './internal/request-options.js';
+import { readEnv } from './internal/utils/env.js';
 import {
   type LogLevel,
   type Logger,
   formatRequestDetails,
   loggerFor,
   parseLogLevel,
-} from './internal/utils/log';
-import { isEmptyObj } from './internal/utils/values';
+} from './internal/utils/log.js';
+import { isEmptyObj } from './internal/utils/values.js';
 
 export interface ClientOptions {
   /**
@@ -184,7 +189,7 @@ export class Perplexity {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Perplexity.DEFAULT_TIMEOUT /* 15 minutes */;
+    this.timeout = options.timeout ?? Perplexity.DEFAULT_TIMEOUT; /* 15 minutes */
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -283,9 +288,8 @@ export class Perplexity {
     defaultBaseURL?: string | undefined,
   ): string {
     const baseURL = (!this.#baseURLOverridden() && defaultBaseURL) || this.baseURL;
-    const url =
-      isAbsoluteURL(path) ?
-        new URL(path)
+    const url = isAbsoluteURL(path)
+      ? new URL(path)
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();

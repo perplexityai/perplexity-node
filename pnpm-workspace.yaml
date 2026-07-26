@@ -1,0 +1,7 @@
+autoInstallPeers: false
+
+allowBuilds:
+  lefthook: true
+
+overrides:
+  minimatch: ^9.0.5

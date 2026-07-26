@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { PerplexityError } from '../../core/error';
+import { PerplexityError } from '../../core/error.js';
 
 /**
  * Basic re-implementation of `qs.stringify` for primitive types.

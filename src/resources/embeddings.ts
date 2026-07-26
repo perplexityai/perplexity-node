@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../core/resource';
-import * as Shared from './shared';
-import { APIPromise } from '../core/api-promise';
-import { RequestOptions } from '../internal/request-options';
+import { APIResource } from '../core/resource.js';
+import * as Shared from './shared.js';
+import { APIPromise } from '../core/api-promise.js';
+import { RequestOptions } from '../internal/request-options.js';
 
 export class Embeddings extends APIResource {
   /**

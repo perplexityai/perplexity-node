@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../core/resource';
-import * as ChatAPI from './chat/chat';
-import { Chat } from './chat/chat';
+import { APIResource } from '../../core/resource.js';
+import * as ChatAPI from './chat/chat.js';
+import { Chat } from './chat/chat.js';
 
 export class Async extends APIResource {
   chat: ChatAPI.Chat = new ChatAPI.Chat(this._client);

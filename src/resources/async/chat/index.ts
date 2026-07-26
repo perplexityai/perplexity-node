@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Chat } from './chat';
+export { Chat } from './chat.js';
 export {
   Completions,
   type CompletionCreateResponse,
@@ -8,4 +8,4 @@ export {
   type CompletionGetResponse,
   type CompletionCreateParams,
   type CompletionGetParams,
-} from './completions';
+} from './completions.js';

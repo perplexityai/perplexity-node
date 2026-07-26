@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { type Perplexity } from '../client';
+import { type Perplexity } from '../client.js';
 
-import { type PromiseOrValue } from '../internal/types';
-import { APIResponseProps, defaultParseResponse } from '../internal/parse';
+import { type PromiseOrValue } from '../internal/types.js';
+import { APIResponseProps, defaultParseResponse } from '../internal/parse.js';
 
 /**
  * A subclass of `Promise` providing additional helper methods

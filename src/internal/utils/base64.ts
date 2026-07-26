@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { PerplexityError } from '../../core/error';
-import { encodeUTF8 } from './bytes';
+import { PerplexityError } from '../../core/error.js';
+import { encodeUTF8 } from './bytes.js';
 
 export const toBase64 = (data: string | Uint8Array | null | undefined): string => {
   if (!data) return '';

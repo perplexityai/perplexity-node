@@ -1,6 +1,6 @@
-import { BlobPart, getName, makeFile, isAsyncIterable } from './uploads';
-import type { FilePropertyBag } from './builtin-types';
-import { checkFileSupport } from './uploads';
+import { BlobPart, getName, makeFile, isAsyncIterable } from './uploads.js';
+import type { FilePropertyBag } from './builtin-types.js';
+import { checkFileSupport } from './uploads.js';
 
 type BlobLikePart = string | ArrayBuffer | ArrayBufferView | BlobLike | DataView;
 

@@ -22,7 +22,7 @@ describe('resource search', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.search.create({
+    const _response = await client.search.create({
       query: 'string',
       country: 'country',
       display_server_time: true,

@@ -34,7 +34,7 @@ describe('toFile', () => {
     // @ts-expect-error we intentionally do not type support for `string`
     // to help people avoid passing a file path
     const file = await toFile('contents');
-    expect(file.text()).resolves.toEqual('contents');
+    await expect(file.text()).resolves.toEqual('contents');
   });
 
   it('extracts a file name from a Response', async () => {
@@ -68,7 +68,8 @@ describe('toFile', () => {
     const result = await toFile(input);
     const file: File = result;
     const blob: Blob = result;
-    void file, blob;
+    void file;
+    void blob;
   });
 });
 
@@ -78,7 +79,7 @@ describe('missing File error message', () => {
   beforeEach(() => {
     // The file shim captures the global File object when it's first imported.
     // Reset modules before each test so we can test the error thrown when it's undefined.
-    jest.resetModules();
+    resetModules();
     const buffer = require('node:buffer');
     // @ts-ignore
     prevGlobalFile = globalThis.File;
@@ -92,11 +93,12 @@ describe('missing File error message', () => {
     // @ts-ignore
     globalThis.File = prevGlobalFile;
     require('node:buffer').File = prevNodeFile;
-    jest.resetModules();
+    resetModules();
   });
 
   test('is thrown', async () => {
-    const uploads = await import('@perplexity-ai/perplexity_ai/core/uploads');
+    const uploads =
+      require('@perplexity-ai/perplexity_ai/core/uploads') as typeof import('@perplexity-ai/perplexity_ai/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

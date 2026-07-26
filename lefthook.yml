@@ -1,0 +1,16 @@
+output:
+  - meta
+  - summary
+
+no_auto_install: true
+
+pre-commit:
+  commands:
+    oxlint:
+      glob: '*.{cjs,js,mjs,ts,tsx}'
+      run: ./node_modules/.bin/oxlint --fix {staged_files}
+      stage_fixed: true
+    oxfmt:
+      glob: '*.{cjs,js,json,md,mjs,ts,tsx,yaml,yml}'
+      run: ./node_modules/.bin/oxfmt --write {staged_files}
+      stage_fixed: true

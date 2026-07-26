@@ -1,12 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../../core/resource';
-import * as Shared from '../../shared';
-import * as ChatAPI from '../../chat/chat';
-import { APIPromise } from '../../../core/api-promise';
-import { buildHeaders } from '../../../internal/headers';
-import { RequestOptions } from '../../../internal/request-options';
-import { path } from '../../../internal/utils/path';
+import { APIResource } from '../../../core/resource.js';
+import * as Shared from '../../shared.js';
+import * as ChatAPI from '../../chat/chat.js';
+import { APIPromise } from '../../../core/api-promise.js';
+import { buildHeaders } from '../../../internal/headers.js';
+import { RequestOptions } from '../../../internal/request-options.js';
+import { path } from '../../../internal/utils/path.js';
 
 export class Completions extends APIResource {
   /**
@@ -47,9 +47,9 @@ export class Completions extends APIResource {
         {
           ...(xClientEnv != null ? { 'x-client-env': xClientEnv } : undefined),
           ...(xClientName != null ? { 'x-client-name': xClientName } : undefined),
-          ...(xCreatedAtEpochSeconds != null ?
-            { 'x-created-at-epoch-seconds': xCreatedAtEpochSeconds }
-          : undefined),
+          ...(xCreatedAtEpochSeconds != null
+            ? { 'x-created-at-epoch-seconds': xCreatedAtEpochSeconds }
+            : undefined),
           ...(xRequestTime != null ? { 'x-request-time': xRequestTime } : undefined),
           ...(xUsageTier != null ? { 'x-usage-tier': xUsageTier } : undefined),
           ...(xUserID != null ? { 'x-user-id': xUserID } : undefined),

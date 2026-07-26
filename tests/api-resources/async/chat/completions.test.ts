@@ -24,7 +24,7 @@ describe('resource completions', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.async.chat.completions.create({
+    const _response = await client.async.chat.completions.create({
       request: {
         messages: [
           {

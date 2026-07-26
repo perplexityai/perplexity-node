@@ -1,0 +1,4 @@
+common --enable_bzlmod
+common --enable_platform_specific_config
+
+test --test_output=errors

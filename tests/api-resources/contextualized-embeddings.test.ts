@@ -25,7 +25,7 @@ describe('resource contextualizedEmbeddings', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.contextualizedEmbeddings.create({
+    const _response = await client.contextualizedEmbeddings.create({
       input: [['x']],
       model: 'pplx-embed-context-v1-0.6b',
       dimensions: 128,
