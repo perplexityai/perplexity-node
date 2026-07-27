@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import { APIResource } from '../../core/resource.js';
 import * as ChatAPI from './chat/chat.js';
 import { Chat } from './chat/chat.js';

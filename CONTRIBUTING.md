@@ -14,13 +14,11 @@ This installs dependencies and builds the publishable package at `bazel-bin/pack
 
 ## Modifying/Adding code
 
-Most of the SDK is generated code. Modifications to code will be persisted between generations, but may
-result in merge conflicts between manual patches and changes from the generator. The generator will never
-modify the contents of the `src/lib/` and `examples/` directories.
+API resources are generated from the OpenAPI specification. Keep manual helpers in `src/lib/`.
 
 ## Adding and running examples
 
-All files in the `examples/` directory are not modified by the generator and can be freely edited or added to.
+Examples can be added under `examples/`.
 
 ```ts
 // add an example to examples/<your-example>.mts
@@ -80,5 +78,4 @@ You can release to package managers by using [the `Publish NPM` GitHub action](h
 
 ### Publish manually
 
-If you need to manually release a package, you can run the `bin/publish-npm` script with an `NPM_TOKEN` set on
-the environment.
+If needed, build the package with `pnpm build` and publish `bazel-bin/package` with npm.

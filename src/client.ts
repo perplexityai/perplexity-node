@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import type { RequestInit, RequestInfo, BodyInit } from './internal/builtin-types.js';
 import type {
   HTTPMethod,
@@ -13,7 +11,6 @@ import { sleep } from './internal/utils/sleep.js';
 export type { Logger, LogLevel } from './internal/utils/log.js';
 import { castToError, isAbortError } from './internal/errors.js';
 import type { APIResponseProps } from './internal/parse.js';
-import { getPlatformHeaders } from './internal/detect-platform.js';
 import * as Shims from './internal/shims.js';
 import * as Opts from './internal/request-options.js';
 import { stringifyQuery } from './internal/utils/query.js';
@@ -270,7 +267,7 @@ export class Perplexity {
   }
 
   protected defaultIdempotencyKey(): string {
-    return `stainless-node-retry-${uuid4()}`;
+    return `perplexity-node-retry-${uuid4()}`;
   }
 
   protected makeStatusError(
@@ -679,9 +676,6 @@ export class Perplexity {
       {
         Accept: 'application/json',
         'User-Agent': this.getUserAgent(),
-        'X-Stainless-Retry-Count': String(retryCount),
-        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
-        ...getPlatformHeaders(),
         'X-Source': 'perplexity-node',
         'X-Title': 'Perplexity Node SDK',
       },

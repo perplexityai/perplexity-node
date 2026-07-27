@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import Perplexity from '@perplexity-ai/perplexity_ai';
 
 const client = new Perplexity({
@@ -201,7 +199,7 @@ describe('resource completions', () => {
           'x-usage-tier': 'x-usage-tier',
           'x-user-id': 'x-user-id',
         },
-        { path: '/_stainless_unknown_path' },
+        { path: '/_unknown_path' },
       ),
     ).rejects.toThrow(Perplexity.NotFoundError);
   });

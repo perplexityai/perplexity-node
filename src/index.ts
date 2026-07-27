@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 export { Perplexity as default } from './client.js';
 
 export { type Uploadable, toFile } from './core/uploads.js';

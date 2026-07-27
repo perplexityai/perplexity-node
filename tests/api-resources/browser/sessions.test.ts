@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import Perplexity from '@perplexity-ai/perplexity_ai';
 
 const client = new Perplexity({
@@ -23,7 +21,7 @@ describe('resource sessions', () => {
   // Mock server tests are disabled
   test.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.browser.sessions.create({}, { path: '/_stainless_unknown_path' })).rejects.toThrow(
+    await expect(client.browser.sessions.create({}, { path: '/_unknown_path' })).rejects.toThrow(
       Perplexity.NotFoundError,
     );
   });
