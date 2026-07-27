@@ -75,32 +75,20 @@ describe('toFile', () => {
 
 describe('missing File error message', () => {
   let prevGlobalFile: unknown;
-  let prevNodeFile: unknown;
   beforeEach(() => {
-    // The file shim captures the global File object when it's first imported.
-    // Reset modules before each test so we can test the error thrown when it's undefined.
-    resetModules();
-    const buffer = require('node:buffer');
     // @ts-ignore
     prevGlobalFile = globalThis.File;
-    prevNodeFile = buffer.File;
     // @ts-ignore
     globalThis.File = undefined;
-    buffer.File = undefined;
   });
   afterEach(() => {
-    // Clean up
     // @ts-ignore
     globalThis.File = prevGlobalFile;
-    require('node:buffer').File = prevNodeFile;
-    resetModules();
   });
 
   test('is thrown', async () => {
-    const uploads =
-      require('@perplexity-ai/perplexity_ai/core/uploads') as typeof import('@perplexity-ai/perplexity_ai/core/uploads');
     await expect(
-      uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
+      toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(
       `[Error: \`File\` is not defined as a global, which is required for file uploads.]`,
     );

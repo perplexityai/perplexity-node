@@ -5,5 +5,5 @@
   "singleQuote": true,
   "trailingComma": "all",
   "sortPackageJson": false,
-  "ignorePatterns": ["dist/**", "bazel-*/**"]
+  "ignorePatterns": ["dist/**", "bazel-*/**", "src/generated/**"]
 }

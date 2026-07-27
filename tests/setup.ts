@@ -220,18 +220,9 @@ function spyOn<T extends object, K extends keyof T>(object: T, key: K): MockFunc
   return spy;
 }
 
-function resetModules(): void {
-  for (const id of Object.keys(require.cache)) {
-    if (/\/dist\/cjs\/(?:core\/uploads|internal\/(?:uploads|to-file|shims))\.js$/.test(id)) {
-      delete require.cache[id];
-    }
-  }
-}
-
 Object.assign(globalThis, {
   expect: (actual: unknown) => new Expectation(actual),
   mock: { fn: mockFunction, spyOn },
-  resetModules,
 });
 Object.defineProperty(globalThis, 'test', {
   configurable: true,
@@ -244,5 +235,4 @@ declare global {
     fn: typeof mockFunction;
     spyOn: typeof spyOn;
   };
-  function resetModules(): void;
 }

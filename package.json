@@ -3,9 +3,9 @@
   "version": "0.37.0",
   "description": "The official TypeScript library for the Perplexity API",
   "author": "Perplexity <api@perplexity.ai>",
-  "types": "./dist/index.d.cts",
+  "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
-  "type": "commonjs",
+  "type": "module",
   "repository": "github:perplexityai/perplexity-node",
   "license": "Apache-2.0",
   "packageManager": "pnpm@11.17.0",
@@ -30,6 +30,8 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.1.1",
     "iconv-lite": "^0.7.3",
@@ -45,30 +47,15 @@
   },
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.js"
-      }
-    },
-    "./*.mjs": {
-      "default": "./dist/esm/*.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./*.js": {
-      "default": "./dist/cjs/*.js"
+      "import": "./dist/*.js"
     },
     "./*": {
-      "import": {
-        "types": "./dist/esm/*.d.ts",
-        "default": "./dist/esm/*.js"
-      },
-      "require": {
-        "types": "./dist/cjs/*.d.ts",
-        "default": "./dist/cjs/*.js"
-      }
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
     }
   }
 }
