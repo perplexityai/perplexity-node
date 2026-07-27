@@ -35,6 +35,9 @@ importers:
       publint:
         specifier: ^0.3.22
         version: 0.3.22
+      published-sdk:
+        specifier: npm:@perplexity-ai/perplexity_ai@0.37.0
+        version: '@perplexity-ai/perplexity_ai@0.37.0'
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -399,6 +402,9 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [win32]
+
+  '@perplexity-ai/perplexity_ai@0.37.0':
+    resolution: {integrity: sha512-SAHwhMdrIhn25tq1PbSOpyr0QYz2Bp9jn/xZ87xPmEEVpXwEyTiuUCT1S5crIBbiHSVUAZR8MwiNNmeMhkwKDw==}
 
   '@publint/pack@0.1.6':
     resolution: {integrity: sha512-3uVNyGcVplhPZSLVyeIpL7+cIRn1YCSNHLG/rUIlBQMVH8YuN9++YF+5+UDIIO9RW98dujiUoTltO7RDB5bFJA==}
@@ -1275,6 +1281,8 @@ snapshots:
 
   '@oxlint/binding-win32-x64-msvc@1.75.0':
     optional: true
+
+  '@perplexity-ai/perplexity_ai@0.37.0': {}
 
   '@publint/pack@0.1.6':
     dependencies:
