@@ -11,6 +11,8 @@ commit-msg:
 
 pre-commit:
   commands:
+    gazelle:
+      run: bazel run //:gazelle -- -mode=diff
     oxlint:
       glob: '*.{cjs,js,mjs,ts,tsx}'
       run: ./node_modules/.bin/oxlint --fix {staged_files}
