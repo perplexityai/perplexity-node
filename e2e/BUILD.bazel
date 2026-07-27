@@ -1,6 +1,6 @@
 load("@aspect_rules_js//js:defs.bzl", "js_test")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
-load("//:ts.bzl", "ts_library")
+load("//:ts.bzl", "ts_test")
 load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS")
 
 package(default_visibility = ["//visibility:private"])
@@ -12,7 +12,7 @@ js_test(
         "//:node_modules/@perplexity-ai/perplexity_ai",
         "//:node_modules/published-sdk",
     ],
-    entry_point = "sdk-parity.ts",
+    entry_point = "sdk-parity.spec.ts",
     tags = ["manual"],
 )
 
@@ -23,16 +23,14 @@ js_test(
         "//:node_modules/@perplexity-ai/perplexity_ai",
         "//:node_modules/published-sdk",
     ],
-    entry_point = "live.ts",
+    entry_point = "live.spec.ts",
     tags = ["manual"],
 )
 
 ts_project(
     name = "typecheck",
-    srcs = [
-        "live.ts",
-        "sdk-parity.ts",
-    ],
+    testonly = True,
+    srcs = [":e2e_test_sources"],
     no_emit = True,
     tags = ["manual"],
     tsc = "//:tsc",
@@ -51,14 +49,14 @@ ts_project(
     ],
 )
 
-ts_library(
-    name = "e2e",
+ts_test(
+    name = "e2e_test",
     srcs = [
-        "live.ts",
-        "sdk-parity.ts",
+        "live.spec.ts",
+        "sdk-parity.spec.ts",
     ],
+    tags = ["manual"],
     tsconfig_types = ["node"],
-    visibility = ["//visibility:public"],
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/published-sdk",

@@ -1,0 +1,50 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("//:ts.bzl", "ts_library")
+load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS")
+
+ts_project(
+    name = "typecheck",
+    srcs = [
+        "async-chat-completion.ts",
+        "browser-session.ts",
+        "chat-completion.ts",
+        "chat-streaming.ts",
+        "contextualized-embeddings.ts",
+        "embeddings.ts",
+        "responses.ts",
+        "responses-streaming.ts",
+        "search.ts",
+    ],
+    no_emit = True,
+    tsc = "//:tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "ESNext",
+            moduleResolution = "Bundler",
+            types = ["node"],
+        ),
+    },
+    deps = [
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_library(
+    name = "examples",
+    srcs = [
+        "async-chat-completion.ts",
+        "browser-session.ts",
+        "chat-completion.ts",
+        "chat-streaming.ts",
+        "contextualized-embeddings.ts",
+        "embeddings.ts",
+        "responses.ts",
+        "responses-streaming.ts",
+        "search.ts",
+    ],
+    tsconfig_types = ["node"],
+    visibility = ["//visibility:public"],
+    deps = ["//:node_modules/@types/node"],
+)
