@@ -14,8 +14,10 @@ ts_library(
 ts_test(
     name = "chat_test",
     srcs = ["completions.test.ts"],
+    tsconfig_types = ["node"],
     deps = [
         ":chat",
+        "//:node_modules/@types/node",
         "//src",
     ],
 )

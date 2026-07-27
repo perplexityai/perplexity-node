@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import Perplexity from '../../index.js';
 
 const client = new Perplexity({
@@ -7,34 +9,35 @@ const client = new Perplexity({
 
 describe('resource sessions', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
+  it.skip('create', async () => {
     const responsePromise = client.browser.sessions.create();
     const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
+    assert.ok(rawResponse instanceof Response);
     const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
+    assert.ok(!(Object(response) instanceof Response));
     const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+    assert.strictEqual(dataAndResponse.data, response);
+    assert.strictEqual(dataAndResponse.response, rawResponse);
   });
 
   // Mock server tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
+  it.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.browser.sessions.create({}, { path: '/_unknown_path' })).rejects.toThrow(
+    await assert.rejects(
+      client.browser.sessions.create({}, { path: '/_unknown_path' }),
       Perplexity.NotFoundError,
     );
   });
 
   // Mock server tests are disabled
-  test.skip('delete', async () => {
+  it.skip('delete', async () => {
     const responsePromise = client.browser.sessions.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
+    assert.ok(rawResponse instanceof Response);
     const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
+    assert.ok(!((response as unknown as object) instanceof Response));
     const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+    assert.strictEqual(dataAndResponse.data, response);
+    assert.strictEqual(dataAndResponse.response, rawResponse);
   });
 });

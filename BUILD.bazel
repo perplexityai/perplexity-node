@@ -1,11 +1,11 @@
 load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_files")
+load("@aspect_rules_js//js:defs.bzl", "js_test")
 load("@aspect_rules_js//npm:defs.bzl", "npm_link_package", "npm_package")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@npm//:@arethetypeswrong/cli/package_json.bzl", attw_bin = "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
-load("@npm//:mocha/package_json.bzl", mocha_bin = "bin")
 load("@npm//:publint/package_json.bzl", publint_bin = "bin")
 load("@npm//:typescript/package_json.bzl", typescript_bin = "bin")
 load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS", "TSCONFIG")
@@ -78,7 +78,6 @@ TEST_SOURCES = [
     "//src/resources/browser:browser_test_sources",
     "//src/resources/chat:chat_test_sources",
     "//src/resources/responses:responses_test_sources",
-    "//src/test",
 ]
 
 ts_project(
@@ -163,29 +162,22 @@ ts_project(
             noEmit = False,
             outDir = "test-dist",
             rootDir = "src",
-            types = [
-                "node",
-                "mocha",
-            ],
+            types = ["node"],
         ),
     },
     deps = [
-        ":node_modules/@types/mocha",
         ":node_modules/@types/node",
     ],
 )
 
-mocha_bin.mocha_test(
+js_test(
     name = "test",
-    args = [
-        "--require",
-        "test-dist/test/setup.js",
-        "test-dist/**/*.test.js",
-    ],
     data = [
         ":test_js",
         "//src/internal:internal_test_sources",
     ],
+    entry_point = "test-runner.mjs",
+    node_options = ["--test"],
 )
 
 publint_bin.publint_test(

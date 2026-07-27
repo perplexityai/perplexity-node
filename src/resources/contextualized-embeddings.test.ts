@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import Perplexity from '../index.js';
 
 const client = new Perplexity({
@@ -7,22 +9,22 @@ const client = new Perplexity({
 
 describe('resource contextualizedEmbeddings', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
+  it.skip('create: only required params', async () => {
     const responsePromise = client.contextualizedEmbeddings.create({
       input: [['x']],
       model: 'pplx-embed-context-v1-0.6b',
     });
     const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
+    assert.ok(rawResponse instanceof Response);
     const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
+    assert.ok(!(response instanceof Response));
     const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+    assert.strictEqual(dataAndResponse.data, response);
+    assert.strictEqual(dataAndResponse.response, rawResponse);
   });
 
   // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
+  it.skip('create: required and optional params', async () => {
     const _response = await client.contextualizedEmbeddings.create({
       input: [['x']],
       model: 'pplx-embed-context-v1-0.6b',

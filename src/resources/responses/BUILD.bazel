@@ -17,8 +17,10 @@ ts_test(
         "files.test.ts",
         "responses.test.ts",
     ],
+    tsconfig_types = ["node"],
     deps = [
         ":responses",
+        "//:node_modules/@types/node",
         "//src",
     ],
 )

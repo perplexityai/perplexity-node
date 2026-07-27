@@ -1,10 +1,11 @@
-import assert from 'assert';
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { Stream, _iterSSEMessages } from './streaming.js';
 import { APIError } from './error.js';
 import { ReadableStreamFrom } from '../internal/shims.js';
 
 describe('streaming decoding', () => {
-  test('basic', async () => {
+  it('basic', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: completion\n');
       yield Buffer.from('data: {"foo":true}\n');
@@ -17,13 +18,13 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(JSON.parse(event.value.data)).toEqual({ foo: true });
+    assert.deepStrictEqual(JSON.parse(event.value.data), { foo: true });
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('data without event', async () => {
+  it('data without event', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('data: {"foo":true}\n');
       yield Buffer.from('\n');
@@ -35,14 +36,14 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toBeNull();
-    expect(JSON.parse(event.value.data)).toEqual({ foo: true });
+    assert.strictEqual(event.value.event, null);
+    assert.deepStrictEqual(JSON.parse(event.value.data), { foo: true });
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('event without data', async () => {
+  it('event without data', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: foo\n');
       yield Buffer.from('\n');
@@ -54,14 +55,14 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('foo');
-    expect(event.value.data).toEqual('');
+    assert.deepStrictEqual(event.value.event, 'foo');
+    assert.deepStrictEqual(event.value.data, '');
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('multiple events', async () => {
+  it('multiple events', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: foo\n');
       yield Buffer.from('\n');
@@ -75,19 +76,19 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('foo');
-    expect(event.value.data).toEqual('');
+    assert.deepStrictEqual(event.value.event, 'foo');
+    assert.deepStrictEqual(event.value.data, '');
 
     event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('ping');
-    expect(event.value.data).toEqual('');
+    assert.deepStrictEqual(event.value.event, 'ping');
+    assert.deepStrictEqual(event.value.data, '');
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('multiple events with data', async () => {
+  it('multiple events with data', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: foo\n');
       yield Buffer.from('data: {"foo":true}\n');
@@ -103,19 +104,19 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('foo');
-    expect(JSON.parse(event.value.data)).toEqual({ foo: true });
+    assert.deepStrictEqual(event.value.event, 'foo');
+    assert.deepStrictEqual(JSON.parse(event.value.data), { foo: true });
 
     event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('ping');
-    expect(JSON.parse(event.value.data)).toEqual({ bar: false });
+    assert.deepStrictEqual(event.value.event, 'ping');
+    assert.deepStrictEqual(JSON.parse(event.value.data), { bar: false });
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('multiple data lines with empty line', async () => {
+  it('multiple data lines with empty line', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: ping\n');
       yield Buffer.from('data: {\n');
@@ -132,15 +133,15 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('ping');
-    expect(JSON.parse(event.value.data)).toEqual({ foo: true });
-    expect(event.value.data).toEqual('{\n"foo":\n\n\ntrue}');
+    assert.deepStrictEqual(event.value.event, 'ping');
+    assert.deepStrictEqual(JSON.parse(event.value.data), { foo: true });
+    assert.deepStrictEqual(event.value.data, '{\n"foo":\n\n\ntrue}');
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('data json escaped double new line', async () => {
+  it('data json escaped double new line', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: ping\n');
       yield Buffer.from('data: {"foo": "my long\\n\\ncontent"}');
@@ -153,14 +154,14 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('ping');
-    expect(JSON.parse(event.value.data)).toEqual({ foo: 'my long\n\ncontent' });
+    assert.deepStrictEqual(event.value.event, 'ping');
+    assert.deepStrictEqual(JSON.parse(event.value.data), { foo: 'my long\n\ncontent' });
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('special new line characters', async () => {
+  it('special new line characters', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('data: {"content": "culpa "}\n');
       yield Buffer.from('\n');
@@ -178,21 +179,23 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(JSON.parse(event.value.data)).toEqual({ content: 'culpa ' });
+    assert.deepStrictEqual(JSON.parse(event.value.data), { content: 'culpa ' });
 
     event = await stream.next();
     assert(event.value);
-    expect(JSON.parse(event.value.data)).toEqual({ content: Buffer.from([0xe2, 0x80, 0xa8]).toString() });
+    assert.deepStrictEqual(JSON.parse(event.value.data), {
+      content: Buffer.from([0xe2, 0x80, 0xa8]).toString(),
+    });
 
     event = await stream.next();
     assert(event.value);
-    expect(JSON.parse(event.value.data)).toEqual({ content: 'foo' });
+    assert.deepStrictEqual(JSON.parse(event.value.data), { content: 'foo' });
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 
-  test('multi-byte characters across chunks', async () => {
+  it('multi-byte characters across chunks', async () => {
     async function* body(): AsyncGenerator<Buffer> {
       yield Buffer.from('event: completion\n');
       yield Buffer.from('data: {"content": "');
@@ -211,15 +214,15 @@ describe('streaming decoding', () => {
 
     let event = await stream.next();
     assert(event.value);
-    expect(event.value.event).toEqual('completion');
-    expect(JSON.parse(event.value.data)).toEqual({ content: 'известни' });
+    assert.deepStrictEqual(event.value.event, 'completion');
+    assert.deepStrictEqual(JSON.parse(event.value.data), { content: 'известни' });
 
     event = await stream.next();
-    expect(event.done).toBeTruthy();
+    assert.ok(event.done);
   });
 });
 
-test('error handling', async () => {
+it('error handling', async () => {
   async function* body(): AsyncGenerator<Buffer> {
     yield Buffer.from('event: error\n');
     yield Buffer.from('data: {"type":"error","error":{"type":"overloaded_error","message":"Overloaded"}}');
@@ -231,15 +234,18 @@ test('error handling', async () => {
     new AbortController(),
   );
 
-  const err = expect(
+  await assert.rejects(
     (async () => {
       for await (const _event of stream) {
       }
     })(),
-  ).rejects;
-
-  await err.toMatchInlineSnapshot(
-    `[Error: {"type":"error","error":{"type":"overloaded_error","message":"Overloaded"}}]`,
+    (error: unknown) => {
+      assert.ok(error instanceof APIError);
+      assert.strictEqual(
+        error.message,
+        '{"type":"error","error":{"type":"overloaded_error","message":"Overloaded"}}',
+      );
+      return true;
+    },
   );
-  await err.toBeInstanceOf(APIError);
 });

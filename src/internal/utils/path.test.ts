@@ -1,9 +1,15 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { createPathTagFunction, encodeURIPath } from './path.js';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 
+function assertThrowsWithMessage(block: () => unknown, expected: string): void {
+  assert.throws(block, (error: unknown) => error instanceof Error && error.message.includes(expected));
+}
+
 describe('path template tag function', () => {
-  test('validates input', () => {
+  it('validates input', () => {
     const testParams = ['', '.', '..', 'x', '%2e', '%2E', '%2e%2e', '%2E%2e', '%2e%2E', '%2E%2E'];
     const testCases = [
       ['/path_params/', '/a'],
@@ -48,43 +54,50 @@ describe('path template tag function', () => {
     })();
 
     // Invalid values
-    expect(() => rawPath`/a/${null}/b`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/a/${null}/b`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Null is not a valid path parameter\n' +
         '/a/null/b\n' +
         '   ^^^^',
     );
-    expect(() => rawPath`/a/${undefined}/b`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/a/${undefined}/b`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Undefined is not a valid path parameter\n' +
         '/a/undefined/b\n' +
         '   ^^^^^^^^^',
     );
-    expect(() => rawPath`/a/${emptyObject}/b`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/a/${emptyObject}/b`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Object is not a valid path parameter\n' +
         '/a/[object Object]/b\n' +
         '   ^^^^^^^^^^^^^^^',
     );
-    expect(() => rawPath`?${mathObject}`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`?${mathObject}`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Math is not a valid path parameter\n' +
         '?[object Math]\n' +
         ' ^^^^^^^^^^^^^',
     );
-    expect(() => rawPath`/${basicClass}`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/${basicClass}`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Object is not a valid path parameter\n' +
         '/[object Object]\n' +
         ' ^^^^^^^^^^^^^^',
     );
-    expect(() => rawPath`/../${''}`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/../${''}`,
       'Path parameters result in path with invalid segments:\n' +
         'Value ".." can\'t be safely passed as a path parameter\n' +
         '/../\n' +
         ' ^^',
     );
-    expect(() => rawPath`/../${{}}`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/../${{}}`,
       'Path parameters result in path with invalid segments:\n' +
         'Value ".." can\'t be safely passed as a path parameter\n' +
         'Value of type Object is not a valid path parameter\n' +
@@ -93,17 +106,17 @@ describe('path template tag function', () => {
     );
 
     // Valid values
-    expect(rawPath`/${0}`).toBe('/0');
-    expect(rawPath`/${''}`).toBe('/');
-    expect(rawPath`/${numberObject}`).toBe('/0');
-    expect(rawPath`${stringObject}/`).toBe('/');
-    expect(rawPath`/${classWithToString}`).toBe('/ok');
+    assert.strictEqual(rawPath`/${0}`, '/0');
+    assert.strictEqual(rawPath`/${''}`, '/');
+    assert.strictEqual(rawPath`/${numberObject}`, '/0');
+    assert.strictEqual(rawPath`${stringObject}/`, '/');
+    assert.strictEqual(rawPath`/${classWithToString}`, '/ok');
 
     // We need to check what happens with cross-realm values, which we might get from
     // Jest or other frames in a browser.
 
     const newRealm = runInNewContext('globalThis');
-    expect(newRealm.Object).not.toBe(Object);
+    assert.notStrictEqual(newRealm.Object, Object);
 
     const crossRealmObject = newRealm.Object();
     const crossRealmMathObject = newRealm.Math;
@@ -117,19 +130,22 @@ describe('path template tag function', () => {
     })();
 
     // Invalid cross-realm values
-    expect(() => rawPath`/a/${crossRealmObject}/b`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/a/${crossRealmObject}/b`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Object is not a valid path parameter\n' +
         '/a/[object Object]/b\n' +
         '   ^^^^^^^^^^^^^^^',
     );
-    expect(() => rawPath`?${crossRealmMathObject}`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`?${crossRealmMathObject}`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Math is not a valid path parameter\n' +
         '?[object Math]\n' +
         ' ^^^^^^^^^^^^^',
     );
-    expect(() => rawPath`/${crossRealmClass}`).toThrow(
+    assertThrowsWithMessage(
+      () => rawPath`/${crossRealmClass}`,
       'Path parameters result in path with invalid segments:\n' +
         'Value of type Object is not a valid path parameter\n' +
         '/[object Object]\n' +
@@ -137,9 +153,9 @@ describe('path template tag function', () => {
     );
 
     // Valid cross-realm values
-    expect(rawPath`/${crossRealmNumber}`).toBe('/0');
-    expect(rawPath`${crossRealmString}/`).toBe('/');
-    expect(rawPath`/${crossRealmClassWithToString}`).toBe('/ok');
+    assert.strictEqual(rawPath`/${crossRealmNumber}`, '/0');
+    assert.strictEqual(rawPath`${crossRealmString}/`, '/');
+    assert.strictEqual(rawPath`/${crossRealmClassWithToString}`, '/ok');
 
     const results: {
       [pathParts: string]: {
@@ -161,20 +177,20 @@ describe('path template tag function', () => {
         const pathResultsKey = JSON.stringify(params);
         try {
           const result = rawPath(pathParts, ...params);
-          expect(result).toBe(stringRaw);
+          assert.strictEqual(result, stringRaw);
           // there are no special segments, so the length of the normalized path is
           // equal to the length of the normalized plain path.
-          expect(normalizedStringRaw.length).toBe(normalizedPlainString.length);
+          assert.strictEqual(normalizedStringRaw.length, normalizedPlainString.length);
           pathResults[pathResultsKey] = {
             valid: true,
             result,
           };
         } catch (e) {
           const error = String(e);
-          expect(error).toMatch(/Path parameters result in path with invalid segment/);
+          assert.match(error, /Path parameters result in path with invalid segment/);
           // there are special segments, so the length of the normalized path is
           // different than the length of the normalized plain path.
-          expect(normalizedStringRaw.length).not.toBe(normalizedPlainString.length);
+          assert.notStrictEqual(normalizedStringRaw.length, normalizedPlainString.length);
           pathResults[pathResultsKey] = {
             valid: false,
             error,
@@ -183,7 +199,7 @@ describe('path template tag function', () => {
       }
     }
 
-    expect(results).toMatchObject({
+    assert.partialDeepStrictEqual(results, {
       '["/path_params/","/a"]': {
         '["x"]': { valid: true, result: '/path_params/x/a' },
         '[""]': { valid: true, result: '/path_params//a' },
@@ -443,20 +459,20 @@ describe('encodeURIPath', () => {
   ];
 
   for (const param of testCases) {
-    test('properly encodes ' + inspect(param), () => {
+    it('properly encodes ' + inspect(param), () => {
       const encoded = encodeURIPath(param);
       const naiveEncoded = encodeURIComponent(param);
       // we should never encode more characters than encodeURIComponent
-      expect(naiveEncoded.length).toBeGreaterThanOrEqual(encoded.length);
-      expect(decodeURIComponent(encoded)).toBe(param);
+      assert.ok(naiveEncoded.length >= encoded.length);
+      assert.strictEqual(decodeURIComponent(encoded), param);
     });
   }
 
-  test("leaves ':' intact", () => {
-    expect(encodeURIPath(':')).toBe(':');
+  it("leaves ':' intact", () => {
+    assert.strictEqual(encodeURIPath(':'), ':');
   });
 
-  test("leaves '@' intact", () => {
-    expect(encodeURIPath('@')).toBe('@');
+  it("leaves '@' intact", () => {
+    assert.strictEqual(encodeURIPath('@'), '@');
   });
 });
