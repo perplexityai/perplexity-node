@@ -15,6 +15,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-lint
+          repository-cache: true
+
       - name: Set up Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
