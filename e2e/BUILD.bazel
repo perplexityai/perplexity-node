@@ -1,0 +1,66 @@
+load("@aspect_rules_js//js:defs.bzl", "js_test")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("//:ts.bzl", "ts_library")
+load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS")
+
+package(default_visibility = ["//visibility:private"])
+
+js_test(
+    name = "sdk_parity",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "sdk-parity.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "live",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "live.ts",
+    tags = ["manual"],
+)
+
+ts_project(
+    name = "typecheck",
+    srcs = [
+        "live.ts",
+        "sdk-parity.ts",
+    ],
+    no_emit = True,
+    tags = ["manual"],
+    tsc = "//:tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "ESNext",
+            moduleResolution = "Bundler",
+            types = ["node"],
+        ),
+    },
+    deps = [
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/@types/node",
+        "//:node_modules/published-sdk",
+    ],
+)
+
+ts_library(
+    name = "e2e",
+    srcs = [
+        "live.ts",
+        "sdk-parity.ts",
+    ],
+    tsconfig_types = ["node"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/published-sdk",
+    ],
+)

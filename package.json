@@ -29,6 +29,7 @@
     "oxfmt": "^0.60.0",
     "oxlint": "^1.75.0",
     "publint": "^0.3.22",
+    "published-sdk": "npm:@perplexity-ai/perplexity_ai@0.37.0",
     "typescript": "7.0.2"
   },
   "overrides": {
