@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from '@perplexity-ai/perplexity_ai/internal/utils/base64';
+import { fromBase64, toBase64 } from './base64.js';
 
 for (const mode of ['Buffer', 'atob']) {
   describe(`with ${mode}`, () => {

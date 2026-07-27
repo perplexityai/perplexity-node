@@ -68,14 +68,17 @@ TS_SOURCES = [
 ]
 
 TEST_SOURCES = [
-    "//tests",
-    "//tests:tests_test_sources",
-    "//tests/api-resources:api-resources_test_sources",
-    "//tests/api-resources/async/chat:chat_test_sources",
-    "//tests/api-resources/browser:browser_test_sources",
-    "//tests/api-resources/chat:chat_test_sources",
-    "//tests/api-resources/responses:responses_test_sources",
-    "//tests/internal/decoders:decoders_test_sources",
+    "//src:src_test_sources",
+    "//src/core:core_test_sources",
+    "//src/internal:internal_test_sources",
+    "//src/internal/decoders:decoders_test_sources",
+    "//src/internal/utils:utils_test_sources",
+    "//src/resources:resources_test_sources",
+    "//src/resources/async/chat:chat_test_sources",
+    "//src/resources/browser:browser_test_sources",
+    "//src/resources/chat:chat_test_sources",
+    "//src/resources/responses:responses_test_sources",
+    "//src/test",
 ]
 
 ts_project(
@@ -147,9 +150,9 @@ npm_link_package(
 ts_project(
     name = "test_js",
     testonly = True,
-    srcs = TEST_SOURCES,
+    srcs = TS_SOURCES + TEST_SOURCES,
     out_dir = "test-dist",
-    root_dir = "tests",
+    root_dir = "src",
     transpiler = "tsc",
     tsc = ":tsc",
     tsconfig = {
@@ -159,7 +162,7 @@ ts_project(
             moduleResolution = "Bundler",
             noEmit = False,
             outDir = "test-dist",
-            rootDir = "tests",
+            rootDir = "src",
             types = [
                 "node",
                 "mocha",
@@ -167,7 +170,6 @@ ts_project(
         ),
     },
     deps = [
-        ":node_modules/@perplexity-ai/perplexity_ai",
         ":node_modules/@types/mocha",
         ":node_modules/@types/node",
     ],
@@ -177,13 +179,12 @@ mocha_bin.mocha_test(
     name = "test",
     args = [
         "--require",
-        "test-dist/setup.js",
+        "test-dist/test/setup.js",
         "test-dist/**/*.test.js",
     ],
     data = [
-        ":node_modules/@perplexity-ai/perplexity_ai",
         ":test_js",
-        "//tests:tests_test_sources",
+        "//src/internal:internal_test_sources",
     ],
 )
 

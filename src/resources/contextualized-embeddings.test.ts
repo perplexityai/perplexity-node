@@ -1,4 +1,4 @@
-import Perplexity from '@perplexity-ai/perplexity_ai';
+import Perplexity from '../index.js';
 
 const client = new Perplexity({
   apiKey: 'My API Key',

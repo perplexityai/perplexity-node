@@ -36,7 +36,6 @@ TSCONFIG = {
     "exclude": [],
     "include": [
         "src",
-        "tests",
         "examples",
     ],
 }

@@ -1,0 +1,17 @@
+load("//:ts.bzl", "ts_library")
+
+exports_files(
+    ["globals.d.ts"],
+    visibility = ["//visibility:public"],
+)
+
+ts_library(
+    name = "test",
+    srcs = [
+        "globals.d.ts",
+        "setup.ts",
+    ],
+    tsconfig_types = ["node"],
+    visibility = ["//visibility:public"],
+    deps = ["//:node_modules/@types/node"],
+)

@@ -1,4 +1,4 @@
-import { findDoubleNewlineIndex, LineDecoder } from '@perplexity-ai/perplexity_ai/internal/decoders/line';
+import { findDoubleNewlineIndex, LineDecoder } from './line.js';
 
 function decodeChunks(chunks: string[], { flush }: { flush: boolean } = { flush: false }): string[] {
   const decoder = new LineDecoder();

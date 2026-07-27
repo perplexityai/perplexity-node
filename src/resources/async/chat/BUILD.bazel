@@ -1,4 +1,4 @@
-load("//:ts.bzl", "ts_library")
+load("//:ts.bzl", "ts_library", "ts_test")
 
 ts_library(
     name = "chat",
@@ -14,5 +14,14 @@ ts_library(
         "//src/internal/utils",
         "//src/resources",
         "//src/resources/chat",
+    ],
+)
+
+ts_test(
+    name = "chat_test",
+    srcs = ["completions.test.ts"],
+    deps = [
+        ":chat",
+        "//src",
     ],
 )

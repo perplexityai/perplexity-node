@@ -1,6 +1,0 @@
-load("//:ts.bzl", "ts_test")
-
-ts_test(
-    name = "chat_test",
-    srcs = ["completions.test.ts"],
-)

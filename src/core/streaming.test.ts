@@ -1,7 +1,7 @@
 import assert from 'assert';
-import { Stream, _iterSSEMessages } from '@perplexity-ai/perplexity_ai/core/streaming';
-import { APIError } from '@perplexity-ai/perplexity_ai/core/error';
-import { ReadableStreamFrom } from '@perplexity-ai/perplexity_ai/internal/shims';
+import { Stream, _iterSSEMessages } from './streaming.js';
+import { APIError } from './error.js';
+import { ReadableStreamFrom } from '../internal/shims.js';
 
 describe('streaming decoding', () => {
   test('basic', async () => {

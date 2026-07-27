@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from '@perplexity-ai/perplexity_ai/internal/to-file';
-import { toFile } from '@perplexity-ai/perplexity_ai/core/uploads';
+import type { ResponseLike } from './to-file.js';
+import { toFile } from '../core/uploads.js';
 
 class MyClass {
   name: string = 'foo';
@@ -50,9 +50,9 @@ describe('toFile', () => {
   });
 
   it('extracts a file name from a ReadStream', async () => {
-    const input = fs.createReadStream('tests/uploads.test.ts');
+    const input = fs.createReadStream('src/internal/to-file.test.ts');
     const file = await toFile(input);
-    expect(file.name).toEqual('uploads.test.ts');
+    expect(file.name).toEqual('to-file.test.ts');
   });
 
   it('does not copy File objects', async () => {

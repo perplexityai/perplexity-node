@@ -14,7 +14,7 @@ def _sources(name, srcs, testonly, **kwargs):
     copy_to_bin(**attrs)
 
 def ts_library(name, srcs, **kwargs):
-    testonly = native.package_name().startswith("tests")
+    testonly = native.package_name() == "src/test"
     _sources(name, srcs, testonly, **kwargs)
 
     native.test_suite(
