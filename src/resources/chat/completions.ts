@@ -1,254 +1,37 @@
-import { APIResource } from '../../core/resource.js';
-import * as CompletionsAPI from './completions.js';
-import * as Shared from '../shared.js';
-import * as ChatAPI from './chat.js';
-import { APIPromise } from '../../core/api-promise.js';
-import { Stream } from '../../core/streaming.js';
-import { RequestOptions } from '../../internal/request-options.js';
+import { Chat } from '../../generated/api.js';
 
-export class Completions extends APIResource {
-  /**
-   * Generate a chat completion response for the given conversation.
-   */
-  create(body: CompletionCreateParamsNonStreaming, options?: RequestOptions): APIPromise<ChatAPI.StreamChunk>;
-  create(
-    body: CompletionCreateParamsStreaming,
-    options?: RequestOptions,
-  ): APIPromise<Stream<ChatAPI.StreamChunk>>;
-  create(
-    body: CompletionCreateParamsBase,
-    options?: RequestOptions,
-  ): APIPromise<Stream<ChatAPI.StreamChunk> | ChatAPI.StreamChunk>;
-  create(
-    body: CompletionCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<ChatAPI.StreamChunk> | APIPromise<Stream<ChatAPI.StreamChunk>> {
-    return this._client.post('/chat/completions', { body, ...options, stream: body.stream ?? false }) as
-      | APIPromise<ChatAPI.StreamChunk>
-      | APIPromise<Stream<ChatAPI.StreamChunk>>;
-  }
-}
-
-export type CompletionCreateParams = CompletionCreateParamsNonStreaming | CompletionCreateParamsStreaming;
-
-export interface CompletionCreateParamsBase {
-  messages: Array<Shared.ChatMessageInput>;
-
-  model: string;
-
-  _debug_pro_search?: boolean;
-
-  _force_new_agent?: boolean | null;
-
-  _inputs?: Array<number> | null;
-
-  _prompt_token_length?: number | null;
-
-  best_of?: number | null;
-
-  country?: string | null;
-
-  cum_logprobs?: boolean | null;
-
-  disable_search?: boolean | null;
-
-  diverse_first_token?: boolean | null;
-
-  enable_search_classifier?: boolean | null;
-
-  file_workspace_id?: string | null;
-
-  frequency_penalty?: number | null;
-
-  has_image_url?: boolean;
-
-  image_domain_filter?: Array<string> | null;
-
-  image_format_filter?: Array<string> | null;
-
-  language_preference?: string | null;
-
-  last_updated_after_filter?: string | null;
-
-  last_updated_before_filter?: string | null;
-
-  latitude?: number | null;
-
-  logprobs?: boolean | null;
-
-  longitude?: number | null;
-
-  max_tokens?: number | null;
-
-  n?: number | null;
-
-  num_images?: number;
-
-  num_search_results?: number;
-
-  parallel_tool_calls?: boolean | null;
-
-  presence_penalty?: number | null;
-
-  ranking_model?: string | null;
-
-  reasoning_effort?: 'minimal' | 'low' | 'medium' | 'high' | null;
-
-  response_format?:
-    | CompletionCreateParams.ResponseFormatText
-    | CompletionCreateParams.ResponseFormatJsonSchema
-    | CompletionCreateParams.ResponseFormatRegex
-    | null;
-
-  /**
-   * Optional locale tag used for response formatting conventions. Locale-style
-   * values such as `es_mx`, `EN-us`, and `zh-TW` are normalized to the canonical
-   * form (`es-MX`, `en-US`, `zh-TW`). Invalid values are ignored.
-   */
-  response_formatting_locale?: string | null;
-
-  response_metadata?: { [key: string]: unknown } | null;
-
-  return_images?: boolean | null;
-
-  return_related_questions?: boolean | null;
-
-  safe_search?: boolean | null;
-
-  search_after_date_filter?: string | null;
-
-  search_before_date_filter?: string | null;
-
-  search_domain_filter?: Array<string> | null;
-
-  search_internal_properties?: { [key: string]: unknown } | null;
-
-  search_language_filter?: Array<string> | null;
-
-  search_mode?: 'web' | 'academic' | 'sec' | null;
-
-  search_recency_filter?: 'hour' | 'day' | 'week' | 'month' | 'year' | null;
-
-  search_tenant?: string | null;
-
-  stop?: string | Array<string> | null;
-
-  stream?: boolean | null;
-
-  stream_mode?: 'full' | 'concise';
-
-  temperature?: number | null;
-
-  thread_id?: string | null;
-
-  tool_choice?: 'none' | 'auto' | 'required' | null;
-
-  tools?: Array<CompletionCreateParams.Tool> | null;
-
-  top_k?: number | null;
-
-  top_logprobs?: number | null;
-
-  top_p?: number | null;
-
-  updated_after_timestamp?: number | null;
-
-  updated_before_timestamp?: number | null;
-
-  use_threads?: boolean | null;
-
-  user_original_query?: string | null;
-
-  web_search_options?: Shared.WebSearchOptions;
-}
+export const Completions = Chat.Completions;
+export type Completions = InstanceType<typeof Completions>;
+export type CompletionCreateParams = Chat.CompletionCreateParams;
+export type CompletionCreateParamsNonStreaming = Chat.CompletionCreateParamsNonStreaming;
+export type CompletionCreateParamsStreaming = Chat.CompletionCreateParamsStreaming;
 
 export namespace CompletionCreateParams {
-  export interface ResponseFormatText {
-    type: 'text';
-  }
-
-  export interface ResponseFormatJsonSchema {
-    json_schema: ResponseFormatJsonSchema.JsonSchema;
-
-    type: 'json_schema';
-  }
-
+  export type ResponseFormatText = Extract<
+    NonNullable<CompletionCreateParams['response_format']>,
+    { type: 'text' }
+  >;
+  export type ResponseFormatJsonSchema = Extract<
+    NonNullable<CompletionCreateParams['response_format']>,
+    { type: 'json_schema' }
+  >;
   export namespace ResponseFormatJsonSchema {
-    export interface JsonSchema {
-      schema: { [key: string]: unknown };
-
-      description?: string | null;
-
-      name?: string | null;
-
-      strict?: boolean | null;
-    }
+    export type JsonSchema = ResponseFormatJsonSchema['json_schema'];
   }
-
-  export interface ResponseFormatRegex {
-    regex: ResponseFormatRegex.Regex;
-
-    type: 'regex';
-  }
-
+  export type ResponseFormatRegex = Extract<
+    NonNullable<CompletionCreateParams['response_format']>,
+    { type: 'regex' }
+  >;
   export namespace ResponseFormatRegex {
-    export interface Regex {
-      regex: string;
-
-      description?: string | null;
-
-      name?: string | null;
-
-      strict?: boolean | null;
-    }
+    export type Regex = ResponseFormatRegex['regex'];
   }
-
-  export interface Tool {
-    function: Tool.Function;
-
-    type: 'function';
-  }
-
+  export type Tool = NonNullable<CompletionCreateParams['tools']>[number];
   export namespace Tool {
-    export interface Function {
-      description: string;
-
-      name: string;
-
-      parameters: Function.Parameters;
-
-      strict?: boolean | null;
-    }
-
+    export type Function = Tool['function'];
     export namespace Function {
-      export interface Parameters {
-        properties: { [key: string]: unknown };
-
-        type: string;
-
-        additional_properties?: boolean | null;
-
-        required?: Array<string> | null;
-      }
+      export type Parameters = Function['parameters'];
     }
   }
-
-  export type CompletionCreateParamsNonStreaming = CompletionsAPI.CompletionCreateParamsNonStreaming;
-  export type CompletionCreateParamsStreaming = CompletionsAPI.CompletionCreateParamsStreaming;
-}
-
-export interface CompletionCreateParamsNonStreaming extends CompletionCreateParamsBase {
-  stream?: false | null;
-}
-
-export interface CompletionCreateParamsStreaming extends CompletionCreateParamsBase {
-  stream: true;
-}
-
-export declare namespace Completions {
-  export {
-    type CompletionCreateParams as CompletionCreateParams,
-    type CompletionCreateParamsNonStreaming as CompletionCreateParamsNonStreaming,
-    type CompletionCreateParamsStreaming as CompletionCreateParamsStreaming,
-  };
+  export type CompletionCreateParamsNonStreaming = Chat.CompletionCreateParamsNonStreaming;
+  export type CompletionCreateParamsStreaming = Chat.CompletionCreateParamsStreaming;
 }

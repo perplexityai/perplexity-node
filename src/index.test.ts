@@ -2,6 +2,19 @@ import { APIPromise } from './core/api-promise.js';
 
 import util from 'node:util';
 import Perplexity, { APIUserAbortError, ChatResource, type API } from './index.js';
+import {
+  Async as GeneratedAsync,
+  Browser as GeneratedBrowser,
+  Chat as GeneratedChat,
+  Responses as GeneratedResponses,
+} from './generated/api.js';
+import { Async as LegacyAsync } from './resources/async/async.js';
+import { Completions as LegacyAsyncCompletions } from './resources/async/chat/completions.js';
+import { Browser as LegacyBrowser } from './resources/browser/browser.js';
+import { Chat as LegacyChat } from './resources/chat/chat.js';
+import { Completions as LegacyChatCompletions } from './resources/chat/completions.js';
+import { Files as LegacyResponseFiles } from './resources/responses/files.js';
+import { Responses as LegacyResponses } from './resources/responses/responses.js';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -16,16 +29,18 @@ describe('instantiate client', () => {
   });
 
   test('generated chat API uses client transport', async () => {
-    const request: API.ApiChatCompletionsRequestInput = {
+    const generatedRequest: API.ApiChatCompletionsRequestInput = {
       messages: [{ content: 'What is the answer?', role: 'user' }],
       model: 'sonar',
     };
-    const expectedResponse: API.CompletionResponseOutput = {
+    const request: Perplexity.Chat.CompletionCreateParams = generatedRequest;
+    const generatedResponse: API.CompletionResponseOutput = {
       choices: [],
       created: 1,
       id: 'completion-id',
       model: 'sonar',
     };
+    const expectedResponse: Perplexity.StreamChunk = generatedResponse;
     let capturedRequest:
       | { body: BodyInit | null | undefined; method: string | undefined; url: string }
       | undefined;
@@ -53,6 +68,26 @@ describe('instantiate client', () => {
       url: 'https://api.example.com/chat/completions',
     });
     expect(response).toEqual(expectedResponse);
+  });
+
+  test('legacy resource entrypoints re-export generated resources', () => {
+    expect([
+      LegacyAsync,
+      LegacyAsyncCompletions,
+      LegacyBrowser,
+      LegacyChat,
+      LegacyChatCompletions,
+      LegacyResponseFiles,
+      LegacyResponses,
+    ]).toEqual([
+      GeneratedAsync,
+      GeneratedAsync.Chat.Completions,
+      GeneratedBrowser,
+      GeneratedChat,
+      GeneratedChat.Completions,
+      GeneratedResponses.Files,
+      GeneratedResponses,
+    ]);
   });
 
   describe('defaultHeaders', () => {

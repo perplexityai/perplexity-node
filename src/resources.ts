@@ -1,1 +1,1 @@
-export * from './generated/api.js';
+export * from './resources/index.js';

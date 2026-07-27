@@ -19,6 +19,7 @@ ts_library(
         "//src/generated",
         "//src/internal",
         "//src/internal/utils",
+        "//src/resources",
     ],
 )
 
@@ -30,5 +31,11 @@ ts_test(
         ":src",
         "//:node_modules/@types/node",
         "//src/core",
+        "//src/generated",
+        "//src/resources/async",
+        "//src/resources/async/chat",
+        "//src/resources/browser",
+        "//src/resources/chat",
+        "//src/resources/responses",
     ],
 )

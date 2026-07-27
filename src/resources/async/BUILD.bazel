@@ -9,7 +9,7 @@ ts_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//src/core",
+        "//src/generated",
         "//src/resources/async/chat",
     ],
 )
