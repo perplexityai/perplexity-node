@@ -43,19 +43,30 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint commits
+      - name: Run Lefthook file checks
+        run: pnpm lefthook run pre-commit --all-files --force --fail-on-changes
+
+      - name: Run Lefthook commit checks
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
+          commits="$RUNNER_TEMP/commits"
+          message="$RUNNER_TEMP/commit-message"
+
           if git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
-            pnpm exec commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
+            git rev-list --reverse "$BASE_SHA..$HEAD_SHA" > "$commits"
           else
-            pnpm exec commitlint --last --verbose
+            echo "$HEAD_SHA" > "$commits"
           fi
 
-      - name: Lint
+          while IFS= read -r commit; do
+            git show --no-patch --format=%B "$commit" > "$message"
+            pnpm lefthook run commit-msg "$message" --force
+          done < "$commits"
+
+      - name: Run Bazel package checks
         run: bazel test //:lint
 
   build:
