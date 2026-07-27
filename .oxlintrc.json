@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": ["dist/**", "bazel-*/**"],
+  "ignorePatterns": ["dist/**", "bazel-*/**", "src/generated/**"],
   "categories": {
     "correctness": "off"
   },

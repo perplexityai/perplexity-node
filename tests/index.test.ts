@@ -11,7 +11,6 @@ describe('instantiate client', () => {
   const env = process.env;
 
   beforeEach(() => {
-    resetModules();
     process.env = { ...env };
   });
 
