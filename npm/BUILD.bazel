@@ -1,0 +1,13 @@
+load("@jq.bzl//jq:jq.bzl", "jq")
+
+exports_files([
+    "index.d.cts",
+    "index.js",
+])
+
+jq(
+    name = "package",
+    srcs = ["//:package.json"],
+    filter = "del(.devDependencies, .overrides, .packageManager, .scripts)",
+    visibility = ["//visibility:public"],
+)

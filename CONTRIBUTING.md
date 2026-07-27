@@ -1,16 +1,16 @@
 ## Setting up the environment
 
-This repository uses [`yarn@v1`](https://classic.yarnpkg.com/lang/en/docs/install).
-Other package managers may work but are not officially supported for development.
+This repository uses Bazel 9.2, Node 26, and [`pnpm`](https://pnpm.io/installation).
 
 To set up the repository, run:
 
 ```sh
-$ yarn
-$ yarn build
+$ corepack enable pnpm
+$ pnpm install
+$ pnpm build
 ```
 
-This will install all the required dependencies and build output files to `dist/`.
+This installs dependencies and builds the publishable package at `bazel-bin/package/`.
 
 ## Modifying/Adding code
 
@@ -23,42 +23,25 @@ modify the contents of the `src/lib/` and `examples/` directories.
 All files in the `examples/` directory are not modified by the generator and can be freely edited or added to.
 
 ```ts
-// add an example to examples/<your-example>.ts
+// add an example to examples/<your-example>.mts
 
-#!/usr/bin/env -S npm run tsn -T
+#!/usr/bin/env -S node --experimental-transform-types
 …
 ```
 
 ```sh
-$ chmod +x examples/<your-example>.ts
+$ chmod +x examples/<your-example>.mts
 # run the example against your api
-$ yarn tsn -T examples/<your-example>.ts
+$ node --experimental-transform-types examples/<your-example>.mts
 ```
 
 ## Using the repository from source
 
-If you’d like to use the repository from source, you can either install from git or link to a cloned repository:
-
-To install via git:
+To link a local build:
 
 ```sh
-$ npm install git+ssh://git@github.com:perplexityai/perplexity-node.git
-```
-
-Alternatively, to link a local copy of the repo:
-
-```sh
-# Clone
-$ git clone https://www.github.com/perplexityai/perplexity-node
-$ cd perplexity-node
-
-# With yarn
-$ yarn link
-$ cd ../my-package
-$ yarn link @perplexity-ai/perplexity_ai
-
-# With pnpm
-$ pnpm link --global
+$ pnpm build
+$ pnpm --dir bazel-bin/package link --global
 $ cd ../my-package
 $ pnpm link --global @perplexity-ai/perplexity_ai
 ```
@@ -66,24 +49,24 @@ $ pnpm link --global @perplexity-ai/perplexity_ai
 ## Running tests
 
 ```sh
-$ yarn run test
+$ pnpm test
 ```
 
 ## Linting and formatting
 
-This repository uses [prettier](https://www.npmjs.com/package/prettier) and
-[eslint](https://www.npmjs.com/package/eslint) to format the code in the repository.
+This repository uses [Oxfmt](https://www.npmjs.com/package/oxfmt) and
+[Oxlint](https://www.npmjs.com/package/oxlint) to format and lint the code.
 
 To lint:
 
 ```sh
-$ yarn lint
+$ pnpm lint
 ```
 
 To format and fix all lint issues automatically:
 
 ```sh
-$ yarn fix
+$ pnpm fix
 ```
 
 ## Publishing and releases

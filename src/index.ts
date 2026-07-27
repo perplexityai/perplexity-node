@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Perplexity as default } from './client';
+export { Perplexity as default } from './client.js';
 
-export { type Uploadable, toFile } from './core/uploads';
-export { APIPromise } from './core/api-promise';
-export { Perplexity, type ClientOptions } from './client';
+export { type Uploadable, toFile } from './core/uploads.js';
+export { APIPromise } from './core/api-promise.js';
+export { Perplexity, type ClientOptions } from './client.js';
 export {
   PerplexityError,
   APIError,
@@ -19,4 +19,4 @@ export {
   InternalServerError,
   PermissionDeniedError,
   UnprocessableEntityError,
-} from './core/error';
+} from './core/error.js';

@@ -23,16 +23,26 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-lint
+          repository-cache: true
+
       - name: Set up Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: '24'
+          node-version: '26'
 
-      - name: Bootstrap
-        run: ./scripts/bootstrap
+      - name: Enable pnpm
+        run: corepack enable pnpm
 
-      - name: Check types
-        run: ./scripts/lint
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: bazel test //:lint
 
   build:
     timeout-minutes: 5
@@ -45,16 +55,26 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-build
+          repository-cache: true
+
       - name: Set up Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: '24'
+          node-version: '26'
 
-      - name: Bootstrap
-        run: ./scripts/bootstrap
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Check build
-        run: ./scripts/build
+        run: bazel build //:pkg
 
       - name: Get GitHub OIDC Token
         if: |-
@@ -73,7 +93,18 @@ jobs:
           URL: https://pkg.stainless.com/s
           AUTH: ${{ steps.github-oidc.outputs.github_token }}
           SHA: ${{ github.sha }}
-        run: ./scripts/utils/upload-artifact.sh
+        run: |
+          set -euo pipefail
+          package_path="$(bazel cquery --output=files //:pkg)"
+          response="$(curl -fsS -X POST "$URL" \
+            -H "Authorization: Bearer $AUTH" \
+            -H "Content-Type: application/json")"
+          signed_url="$(echo "$response" | jq -r -e '.url')"
+          tarball="$(npm pack --silent "$package_path")"
+          curl -fsS -X PUT \
+            -H "Content-Type: application/gzip" \
+            --data-binary "@$tarball" "$signed_url"
+          echo "Installation: npm install 'https://pkg.stainless.com/s/perplexity-typescript/$SHA'"
   test:
     timeout-minutes: 10
     name: test
@@ -82,13 +113,23 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-test
+          repository-cache: true
+
       - name: Set up Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: '24'
+          node-version: '26'
 
-      - name: Bootstrap
-        run: ./scripts/bootstrap
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: ./scripts/test
+        run: bazel test //:test

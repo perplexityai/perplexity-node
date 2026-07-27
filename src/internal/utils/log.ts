@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { hasOwn } from './values';
-import { type Perplexity } from '../../client';
-import { RequestOptions } from '../request-options';
+import { hasOwn } from './values.js';
+import { type Perplexity } from '../../client.js';
+import { RequestOptions } from '../request-options.js';
 
 type LogFn = (message: string, ...rest: unknown[]) => void;
 export type Logger = {
@@ -105,15 +105,13 @@ export const formatRequestDetails = (details: {
       (details.headers instanceof Headers ? [...details.headers] : Object.entries(details.headers)).map(
         ([name, value]) => [
           name,
-          (
-            name.toLowerCase() === 'authorization' ||
-            name.toLowerCase() === 'api-key' ||
-            name.toLowerCase() === 'x-api-key' ||
-            name.toLowerCase() === 'cookie' ||
-            name.toLowerCase() === 'set-cookie'
-          ) ?
-            '***'
-          : value,
+          name.toLowerCase() === 'authorization' ||
+          name.toLowerCase() === 'api-key' ||
+          name.toLowerCase() === 'x-api-key' ||
+          name.toLowerCase() === 'cookie' ||
+          name.toLowerCase() === 'set-cookie'
+            ? '***'
+            : value,
         ],
       ),
     );

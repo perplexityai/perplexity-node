@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { FinalRequestOptions } from './request-options';
-import { Stream } from '../core/streaming';
-import { type Perplexity } from '../client';
-import { formatRequestDetails, loggerFor } from './utils/log';
+import type { FinalRequestOptions } from './request-options.js';
+import { Stream } from '../core/streaming.js';
+import { type Perplexity } from '../client.js';
+import { formatRequestDetails, loggerFor } from './utils/log.js';
 
 export type APIResponseProps = {
   response: Response;

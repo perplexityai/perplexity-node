@@ -22,6 +22,6 @@ describe('resource files', () => {
 
   // Mock server tests are disabled
   test.skip('content: required and optional params', async () => {
-    const response = await client.responses.files.content('file_id', { response_id: 'response_id' });
+    const _response = await client.responses.files.content('file_id', { response_id: 'response_id' });
   });
 });

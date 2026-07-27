@@ -1,12 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../core/resource';
-import * as CompletionsAPI from './completions';
-import * as Shared from '../shared';
-import * as ChatAPI from './chat';
-import { APIPromise } from '../../core/api-promise';
-import { Stream } from '../../core/streaming';
-import { RequestOptions } from '../../internal/request-options';
+import { APIResource } from '../../core/resource.js';
+import * as CompletionsAPI from './completions.js';
+import * as Shared from '../shared.js';
+import * as ChatAPI from './chat.js';
+import { APIPromise } from '../../core/api-promise.js';
+import { Stream } from '../../core/streaming.js';
+import { RequestOptions } from '../../internal/request-options.js';
 
 export class Completions extends APIResource {
   /**

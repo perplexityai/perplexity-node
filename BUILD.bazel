@@ -1,0 +1,229 @@
+load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_files")
+load("@aspect_rules_js//npm:defs.bzl", "npm_link_package", "npm_package")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@npm//:@arethetypeswrong/cli/package_json.bzl", attw_bin = "bin")
+load("@npm//:mocha/package_json.bzl", mocha_bin = "bin")
+load("@npm//:oxfmt/package_json.bzl", oxfmt_bin = "bin")
+load("@npm//:oxlint/package_json.bzl", oxlint_bin = "bin")
+load("@npm//:publint/package_json.bzl", publint_bin = "bin")
+load("@npm//:typescript/package_json.bzl", typescript_bin = "bin")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS", "TSCONFIG")
+
+package(default_visibility = ["//visibility:public"])
+
+npm_link_all_packages()
+
+typescript_bin.tsc_binary(name = "tsc")
+
+write_file(
+    name = "tsconfig_json",
+    out = "_tsconfig.json",
+    content = [json.encode_indent(TSCONFIG, indent = "  ") + "\n"],
+)
+
+write_source_files(
+    name = "tsconfig",
+    files = {"tsconfig.json": ":tsconfig_json"},
+)
+
+TS_SOURCES = glob(["src/**/*.ts"])
+TEST_SOURCES = glob(["tests/**/*.ts"])
+
+ts_project(
+    name = "dist_cjs",
+    srcs = TS_SOURCES,
+    declaration = True,
+    declaration_map = True,
+    out_dir = "dist/cjs",
+    root_dir = "src",
+    source_map = True,
+    transpiler = "tsc",
+    tsc = ":tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            declaration = True,
+            declarationMap = True,
+            module = "Node16",
+            moduleResolution = "Node16",
+            noEmit = False,
+            outDir = "dist/cjs",
+            rootDir = "src",
+            sourceMap = True,
+            types = ["node"],
+        ),
+    },
+    deps = [":node_modules/@types/node"],
+)
+
+ts_project(
+    name = "dist_esm",
+    srcs = TS_SOURCES,
+    declaration = True,
+    declaration_map = True,
+    out_dir = "dist/esm",
+    root_dir = "src",
+    source_map = True,
+    transpiler = "tsc",
+    tsc = ":tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            declaration = True,
+            declarationMap = True,
+            module = "ESNext",
+            moduleResolution = "Bundler",
+            noEmit = False,
+            outDir = "dist/esm",
+            rootDir = "src",
+            sourceMap = True,
+            types = ["node"],
+        ),
+    },
+    deps = [":node_modules/@types/node"],
+)
+
+npm_package(
+    name = "pkg",
+    srcs = [
+        "CHANGELOG.md",
+        "LICENSE",
+        "README.md",
+        ":dist_cjs",
+        ":dist_esm",
+        "//npm:package",
+        "//npm:index.d.cts",
+        "//npm:index.js",
+    ] + TS_SOURCES + [
+        "esm/package.json",
+    ],
+    out = "package",
+    package = "@perplexity-ai/perplexity_ai",
+    publishable = True,
+    replace_prefixes = {
+        "esm": "dist/esm",
+        "npm/index.d.cts": "dist/index.d.cts",
+        "npm/index.js": "dist/index.js",
+        "npm/package.json": "package.json",
+    },
+)
+
+npm_link_package(
+    name = "node_modules/@perplexity-ai/perplexity_ai",
+    src = ":pkg",
+)
+
+ts_project(
+    name = "test_js",
+    srcs = TEST_SOURCES,
+    out_dir = "test-dist",
+    root_dir = "tests",
+    testonly = True,
+    transpiler = "tsc",
+    tsc = ":tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "Node16",
+            moduleResolution = "Node16",
+            noEmit = False,
+            outDir = "test-dist",
+            rootDir = "tests",
+            types = [
+                "node",
+                "mocha",
+            ],
+        ),
+    },
+    deps = [
+        ":node_modules/@perplexity-ai/perplexity_ai",
+        ":node_modules/@types/mocha",
+        ":node_modules/@types/node",
+    ],
+)
+
+mocha_bin.mocha_test(
+    name = "test",
+    args = [
+        "--require",
+        "test-dist/setup.js",
+        "test-dist/**/*.test.js",
+    ],
+    data = [
+        ":node_modules/@perplexity-ai/perplexity_ai",
+        ":test_js",
+        "tests/uploads.test.ts",
+    ],
+)
+
+FORMAT_SOURCES = glob(
+    [
+        ".github/**/*.yaml",
+        ".github/**/*.yml",
+        "src/**/*.ts",
+        "tests/**/*.ts",
+        "*.json",
+        "*.md",
+        "*.yml",
+    ],
+    allow_empty = True,
+)
+
+oxfmt_bin.oxfmt_test(
+    name = "format_check",
+    args = [
+        "--check",
+        "--config=$(rootpath :.oxfmtrc.json)",
+        "--ignore-path=$(rootpath :.prettierignore)",
+    ] + FORMAT_SOURCES,
+    data = [
+        ".oxfmtrc.json",
+        ".prettierignore",
+    ] + FORMAT_SOURCES,
+)
+
+oxlint_bin.oxlint_test(
+    name = "oxlint",
+    args = [
+        "--config=$(rootpath :.oxlintrc.json)",
+    ] + TS_SOURCES + TEST_SOURCES,
+    data = [
+        ".oxlintrc.json",
+    ] + TS_SOURCES + TEST_SOURCES,
+)
+
+publint_bin.publint_test(
+    name = "publint",
+    args = [
+        "$(rootpath :pkg)",
+        "--pack",
+        "false",
+    ],
+    data = [":pkg"],
+)
+
+attw_bin.attw_test(
+    name = "attw",
+    args = [
+        "$(rootpath :pkg)",
+        "--pack",
+        "--ignore-rules",
+        "cjs-resolves-to-esm",
+        "missing-export-equals",
+        "internal-resolution-error",
+    ],
+    data = [":pkg"],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":attw",
+        ":format_check",
+        ":oxlint",
+        ":publint",
+        ":tsconfig_tests",
+    ],
+)

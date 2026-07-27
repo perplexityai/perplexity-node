@@ -22,7 +22,7 @@ describe('resource embeddings', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.embeddings.create({
+    const _response = await client.embeddings.create({
       input: 'x',
       model: 'pplx-embed-v1-0.6b',
       dimensions: 128,

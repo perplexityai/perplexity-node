@@ -1,15 +1,15 @@
-import { PerplexityError } from './error';
-import { type ReadableStream } from '../internal/shim-types';
-import { makeReadableStream } from '../internal/shims';
-import { findDoubleNewlineIndex, LineDecoder } from '../internal/decoders/line';
-import { ReadableStreamToAsyncIterable } from '../internal/shims';
-import { isAbortError } from '../internal/errors';
-import { safeJSON } from '../internal/utils/values';
-import { encodeUTF8 } from '../internal/utils/bytes';
-import { loggerFor } from '../internal/utils/log';
-import type { Perplexity } from '../client';
+import { PerplexityError } from './error.js';
+import { type ReadableStream } from '../internal/shim-types.js';
+import { makeReadableStream } from '../internal/shims.js';
+import { findDoubleNewlineIndex, LineDecoder } from '../internal/decoders/line.js';
+import { ReadableStreamToAsyncIterable } from '../internal/shims.js';
+import { isAbortError } from '../internal/errors.js';
+import { safeJSON } from '../internal/utils/values.js';
+import { encodeUTF8 } from '../internal/utils/bytes.js';
+import { loggerFor } from '../internal/utils/log.js';
+import type { Perplexity } from '../client.js';
 
-import { APIError } from './error';
+import { APIError } from './error.js';
 
 type Bytes = string | ArrayBuffer | Uint8Array | null | undefined;
 
@@ -243,9 +243,11 @@ async function* iterSSEChunks(iterator: AsyncIterableIterator<Bytes>): AsyncGene
     }
 
     const binaryChunk =
-      chunk instanceof ArrayBuffer ? new Uint8Array(chunk)
-      : typeof chunk === 'string' ? encodeUTF8(chunk)
-      : chunk;
+      chunk instanceof ArrayBuffer
+        ? new Uint8Array(chunk)
+        : typeof chunk === 'string'
+          ? encodeUTF8(chunk)
+          : chunk;
 
     let newData = new Uint8Array(data.length + binaryChunk.length);
     newData.set(data);

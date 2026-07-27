@@ -19,15 +19,31 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-publish
+          repository-cache: true
+
       - name: Set up Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: '24'
+          node-version: '26'
 
-      - name: Install dependencies
-        run: |
-          yarn install
+      - name: Enable pnpm
+        run: corepack enable pnpm
 
       - name: Publish to NPM
         run: |
-          bash ./bin/publish-npm
+          set -euo pipefail
+          bazel build //:pkg
+          package_path="$(bazel cquery --output=files //:pkg)"
+          package_version="$(node -p "require('./$package_path/package.json').version")"
+          if [[ "$package_version" == *-* ]]; then
+            npm_dist_tag="${package_version#*-}"
+            npm_dist_tag="${npm_dist_tag%%.*}"
+          else
+            npm_dist_tag=latest
+          fi
+          npm publish "$package_path" --access public --tag "$npm_dist_tag" --provenance

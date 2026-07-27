@@ -1,15 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../core/resource';
-import * as ResponsesAPI from './responses';
-import * as Shared from '../shared';
-import * as FilesAPI from './files';
-import { FileContentParams, Files } from './files';
-import { APIPromise } from '../../core/api-promise';
-import { Stream } from '../../core/streaming';
-import { RequestOptions } from '../../internal/request-options';
-import { addOutputText } from '../../lib/add-output-text';
-import { path } from '../../internal/utils/path';
+import { APIResource } from '../../core/resource.js';
+import * as ResponsesAPI from './responses.js';
+import * as Shared from '../shared.js';
+import * as FilesAPI from './files.js';
+import { FileContentParams, Files } from './files.js';
+import { APIPromise } from '../../core/api-promise.js';
+import { Stream } from '../../core/streaming.js';
+import { RequestOptions } from '../../internal/request-options.js';
+import { addOutputText } from '../../lib/add-output-text.js';
+import { path } from '../../internal/utils/path.js';
 
 export class Responses extends APIResource {
   files: FilesAPI.Files = new FilesAPI.Files(this._client);

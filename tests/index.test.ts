@@ -11,7 +11,7 @@ describe('instantiate client', () => {
   const env = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    resetModules();
     process.env = { ...env };
   });
 
@@ -79,12 +79,12 @@ describe('instantiate client', () => {
     };
 
     test('debug logs when log level is debug', async () => {
-      const debugMock = jest.fn();
+      const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
-        info: jest.fn(),
-        warn: jest.fn(),
-        error: jest.fn(),
+        info: mock.fn(),
+        warn: mock.fn(),
+        error: mock.fn(),
       };
 
       const client = new Perplexity({
@@ -103,12 +103,12 @@ describe('instantiate client', () => {
     });
 
     test('debug logs are skipped when log level is info', async () => {
-      const debugMock = jest.fn();
+      const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
-        info: jest.fn(),
-        warn: jest.fn(),
-        error: jest.fn(),
+        info: mock.fn(),
+        warn: mock.fn(),
+        error: mock.fn(),
       };
 
       const client = new Perplexity({
@@ -122,12 +122,12 @@ describe('instantiate client', () => {
     });
 
     test('debug logs happen with debug env var', async () => {
-      const debugMock = jest.fn();
+      const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
-        info: jest.fn(),
-        warn: jest.fn(),
-        error: jest.fn(),
+        info: mock.fn(),
+        warn: mock.fn(),
+        error: mock.fn(),
       };
 
       process.env['PERPLEXITY_LOG'] = 'debug';
@@ -139,12 +139,12 @@ describe('instantiate client', () => {
     });
 
     test('warn when env var level is invalid', async () => {
-      const warnMock = jest.fn();
+      const warnMock = mock.fn();
       const logger = {
-        debug: jest.fn(),
-        info: jest.fn(),
+        debug: mock.fn(),
+        info: mock.fn(),
         warn: warnMock,
-        error: jest.fn(),
+        error: mock.fn(),
       };
 
       process.env['PERPLEXITY_LOG'] = 'not a log level';
@@ -156,12 +156,12 @@ describe('instantiate client', () => {
     });
 
     test('client log level overrides env var', async () => {
-      const debugMock = jest.fn();
+      const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
-        info: jest.fn(),
-        warn: jest.fn(),
-        error: jest.fn(),
+        info: mock.fn(),
+        warn: mock.fn(),
+        error: mock.fn(),
       };
 
       process.env['PERPLEXITY_LOG'] = 'debug';
@@ -176,12 +176,12 @@ describe('instantiate client', () => {
     });
 
     test('no warning logged for invalid env var level + valid client level', async () => {
-      const warnMock = jest.fn();
+      const warnMock = mock.fn();
       const logger = {
-        debug: jest.fn(),
-        info: jest.fn(),
+        debug: mock.fn(),
+        info: mock.fn(),
         warn: warnMock,
-        error: jest.fn(),
+        error: mock.fn(),
       };
 
       process.env['PERPLEXITY_LOG'] = 'not a log level';
@@ -243,7 +243,7 @@ describe('instantiate client', () => {
 
   test('explicit global fetch', async () => {
     // make sure the global fetch type is assignable to our Fetch type
-    const client = new Perplexity({
+    const _client = new Perplexity({
       baseURL: 'http://localhost:5000/',
       apiKey: 'My API Key',
       fetch: defaultFetch,
@@ -270,7 +270,7 @@ describe('instantiate client', () => {
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 200);
 
-    const spy = jest.spyOn(client, 'request');
+    const spy = mock.spyOn(client, 'request');
 
     await expect(client.get('/foo', { signal: controller.signal })).rejects.toThrowError(APIUserAbortError);
     expect(spy).toHaveBeenCalledTimes(1);
@@ -552,8 +552,8 @@ describe('retries', () => {
       { signal }: RequestInit = {},
     ): Promise<Response> => {
       if (count++ === 0) {
-        return new Promise(
-          (resolve, reject) => signal?.addEventListener('abort', () => reject(new Error('timed out'))),
+        return new Promise((resolve, reject) =>
+          signal?.addEventListener('abort', () => reject(new Error('timed out'))),
         );
       }
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });

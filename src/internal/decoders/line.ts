@@ -1,4 +1,4 @@
-import { concatBytes, decodeUTF8, encodeUTF8 } from '../utils/bytes';
+import { concatBytes, decodeUTF8, encodeUTF8 } from '../utils/bytes.js';
 
 export type Bytes = string | ArrayBuffer | Uint8Array | null | undefined;
 
@@ -27,9 +27,11 @@ export class LineDecoder {
     }
 
     const binaryChunk =
-      chunk instanceof ArrayBuffer ? new Uint8Array(chunk)
-      : typeof chunk === 'string' ? encodeUTF8(chunk)
-      : chunk;
+      chunk instanceof ArrayBuffer
+        ? new Uint8Array(chunk)
+        : typeof chunk === 'string'
+          ? encodeUTF8(chunk)
+          : chunk;
 
     this.#buffer = concatBytes([this.#buffer, binaryChunk]);
 

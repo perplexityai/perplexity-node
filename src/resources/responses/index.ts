@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Files, type FileContentParams } from './files';
+export { Files, type FileContentParams } from './files.js';
 export {
   Responses,
   type Annotation,
@@ -21,4 +21,4 @@ export {
   type ResponseCreateParams,
   type ResponseCreateParamsNonStreaming,
   type ResponseCreateParamsStreaming,
-} from './responses';
+} from './responses.js';

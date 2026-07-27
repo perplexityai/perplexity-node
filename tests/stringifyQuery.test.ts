@@ -2,7 +2,7 @@
 
 import { stringifyQuery } from '@perplexity-ai/perplexity_ai/internal/utils/query';
 
-describe(stringifyQuery, () => {
+describe('stringifyQuery', () => {
   for (const [input, expected] of [
     [{ a: '1', b: 2, c: true }, 'a=1&b=2&c=true'],
     [{ a: null, b: false, c: undefined }, 'a=&b=false'],

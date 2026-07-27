@@ -22,7 +22,7 @@ describe('resource responses', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.responses.create({
+    const _response = await client.responses.create({
       input: 'string',
       background: true,
       instructions: 'instructions',
