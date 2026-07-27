@@ -67,7 +67,7 @@ jobs:
           done < "$commits"
 
       - name: Run Bazel package checks
-        run: bazel test //:lint
+        run: bazel test //:package_checks
 
   build:
     timeout-minutes: 5
