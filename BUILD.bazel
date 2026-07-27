@@ -2,25 +2,49 @@ load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_files")
 load("@aspect_rules_js//npm:defs.bzl", "npm_link_package", "npm_package")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@npm//:@arethetypeswrong/cli/package_json.bzl", attw_bin = "bin")
+load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:mocha/package_json.bzl", mocha_bin = "bin")
 load("@npm//:publint/package_json.bzl", publint_bin = "bin")
 load("@npm//:typescript/package_json.bzl", typescript_bin = "bin")
-load("@npm//:defs.bzl", "npm_link_all_packages")
 load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS", "TSCONFIG")
 
 package(default_visibility = ["//visibility:public"])
 
+# gazelle:exclude bazel-*
+# gazelle:exclude dist
+# gazelle:exclude node_modules
+# gazelle:exclude target
+# gazelle:exclude test-dist
+# gazelle:exclude tests
+# gazelle:map_kind ts_library ts_library //:ts.bzl
+# gazelle:map_kind ts_test ts_test //:ts.bzl
+# gazelle:ts_npm_link_pattern //:node_modules/{pkg}
+
 exports_files(["package.json"])
 
 npm_link_all_packages()
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = ["@gazelle_ts//ts"],
+)
+
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
 
 typescript_bin.tsc_binary(name = "tsc")
 
 write_file(
     name = "tsconfig_json",
     out = "_tsconfig.json",
-    content = [json.encode_indent(TSCONFIG, indent = "  ") + "\n"],
+    content = [json.encode_indent(
+        TSCONFIG,
+        indent = "  ",
+    ) + "\n"],
 )
 
 write_source_files(
@@ -28,7 +52,22 @@ write_source_files(
     files = {"tsconfig.json": ":tsconfig_json"},
 )
 
-TS_SOURCES = glob(["src/**/*.ts"])
+TS_SOURCES = [
+    "//src",
+    "//src/core",
+    "//src/generated",
+    "//src/internal",
+    "//src/internal/decoders",
+    "//src/internal/utils",
+    "//src/lib",
+    "//src/resources",
+    "//src/resources/async",
+    "//src/resources/async/chat",
+    "//src/resources/browser",
+    "//src/resources/chat",
+    "//src/resources/responses",
+]
+
 TEST_SOURCES = glob(["tests/**/*.ts"])
 
 ts_project(
@@ -82,10 +121,10 @@ npm_link_package(
 
 ts_project(
     name = "test_js",
+    testonly = True,
     srcs = TEST_SOURCES,
     out_dir = "test-dist",
     root_dir = "tests",
-    testonly = True,
     transpiler = "tsc",
     tsc = ":tsc",
     tsconfig = {
@@ -117,9 +156,9 @@ mocha_bin.mocha_test(
         "test-dist/**/*.test.js",
     ],
     data = [
+        "tests/uploads.test.ts",
         ":node_modules/@perplexity-ai/perplexity_ai",
         ":test_js",
-        "tests/uploads.test.ts",
     ],
 )
 

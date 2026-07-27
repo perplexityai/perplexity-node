@@ -1,4 +1,11 @@
 common --enable_bzlmod
 common --enable_platform_specific_config
+common --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
+common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
+common --@llvm//config:experimental_stub_libgcc_s=True
+common:linux --host_platform=@gazelle_ts//platforms:local_gnu
+common:windows --host_platform=@gazelle_ts//platforms:local_windows_msvc
+
+build:linux --linkopt=-no-pie
 
 test --test_output=errors

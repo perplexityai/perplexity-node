@@ -1,0 +1,10 @@
+load("//:ts.bzl", "ts_library")
+
+ts_library(
+    name = "generated",
+    srcs = [
+        "api.ts",
+        "runtime.ts",
+    ],
+    visibility = ["//visibility:public"],
+)

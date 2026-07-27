@@ -1,0 +1,7 @@
+load("//:ts.bzl", "ts_library")
+
+ts_library(
+    name = "lib",
+    srcs = ["add-output-text.ts"],
+    visibility = ["//visibility:public"],
+)
