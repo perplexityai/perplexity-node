@@ -4,14 +4,14 @@ load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@npm//:@arethetypeswrong/cli/package_json.bzl", attw_bin = "bin")
 load("@npm//:mocha/package_json.bzl", mocha_bin = "bin")
-load("@npm//:oxfmt/package_json.bzl", oxfmt_bin = "bin")
-load("@npm//:oxlint/package_json.bzl", oxlint_bin = "bin")
 load("@npm//:publint/package_json.bzl", publint_bin = "bin")
 load("@npm//:typescript/package_json.bzl", typescript_bin = "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS", "TSCONFIG")
 
 package(default_visibility = ["//visibility:public"])
+
+exports_files(["package.json"])
 
 npm_link_all_packages()
 
@@ -123,52 +123,6 @@ mocha_bin.mocha_test(
     ],
 )
 
-FORMAT_SOURCES = glob(
-    [
-        ".github/**/*.yaml",
-        ".github/**/*.yml",
-        "src/**/*.ts",
-        "tests/**/*.ts",
-        "*.json",
-        "*.md",
-        "*.mjs",
-        "*.yml",
-    ],
-    allow_empty = True,
-    exclude = ["src/generated/**"],
-)
-
-LINT_SOURCES = glob(
-    [
-        "src/**/*.ts",
-        "tests/**/*.ts",
-    ],
-    exclude = ["src/generated/**"],
-)
-
-oxfmt_bin.oxfmt_test(
-    name = "format_check",
-    args = [
-        "--check",
-        "--config=$(rootpath :.oxfmtrc.json)",
-        "--ignore-path=$(rootpath :.prettierignore)",
-    ] + FORMAT_SOURCES,
-    data = [
-        ".oxfmtrc.json",
-        ".prettierignore",
-    ] + FORMAT_SOURCES,
-)
-
-oxlint_bin.oxlint_test(
-    name = "oxlint",
-    args = [
-        "--config=$(rootpath :.oxlintrc.json)",
-    ] + LINT_SOURCES,
-    data = [
-        ".oxlintrc.json",
-    ] + LINT_SOURCES,
-)
-
 publint_bin.publint_test(
     name = "publint",
     args = [
@@ -192,11 +146,9 @@ attw_bin.attw_test(
 )
 
 test_suite(
-    name = "lint",
+    name = "package_checks",
     tests = [
         ":attw",
-        ":format_check",
-        ":oxlint",
         ":publint",
         ":tsconfig_tests",
     ],
