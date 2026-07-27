@@ -1,4 +1,4 @@
-import { stringifyQuery } from '@perplexity-ai/perplexity_ai/internal/utils/query';
+import { stringifyQuery } from './query.js';
 
 describe('stringifyQuery', () => {
   for (const [input, expected] of [

@@ -1,4 +1,4 @@
-load("//:ts.bzl", "ts_library")
+load("//:ts.bzl", "ts_library", "ts_test")
 
 ts_library(
     name = "src",
@@ -23,5 +23,16 @@ ts_library(
         "//src/resources/browser",
         "//src/resources/chat",
         "//src/resources/responses",
+    ],
+)
+
+ts_test(
+    name = "src_test",
+    srcs = ["index.test.ts"],
+    tsconfig_types = ["node"],
+    deps = [
+        ":src",
+        "//:node_modules/@types/node",
+        "//src/core",
     ],
 )

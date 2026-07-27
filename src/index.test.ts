@@ -1,8 +1,7 @@
-import { APIPromise } from '@perplexity-ai/perplexity_ai/core/api-promise';
+import { APIPromise } from './core/api-promise.js';
 
 import util from 'node:util';
-import Perplexity from '@perplexity-ai/perplexity_ai';
-import { APIUserAbortError } from '@perplexity-ai/perplexity_ai';
+import Perplexity, { APIUserAbortError } from './index.js';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

@@ -1,4 +1,4 @@
-load("//:ts.bzl", "ts_library")
+load("//:ts.bzl", "ts_library", "ts_test")
 
 ts_library(
     name = "utils",
@@ -18,5 +18,19 @@ ts_library(
         "//src",
         "//src/core",
         "//src/internal",
+    ],
+)
+
+ts_test(
+    name = "utils_test",
+    srcs = [
+        "base64.test.ts",
+        "path.test.ts",
+        "query.test.ts",
+    ],
+    tsconfig_types = ["node"],
+    deps = [
+        ":utils",
+        "//:node_modules/@types/node",
     ],
 )

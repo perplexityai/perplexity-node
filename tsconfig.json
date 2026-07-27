@@ -34,7 +34,6 @@
   "exclude": [],
   "include": [
     "src",
-    "tests",
     "examples"
   ]
 }

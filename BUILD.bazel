@@ -17,7 +17,6 @@ package(default_visibility = ["//visibility:public"])
 # gazelle:exclude node_modules
 # gazelle:exclude target
 # gazelle:exclude test-dist
-# gazelle:exclude tests
 # gazelle:map_kind ts_library ts_library //:ts.bzl
 # gazelle:map_kind ts_test ts_test //:ts.bzl
 # gazelle:ts_npm_link_pattern //:node_modules/{pkg}
@@ -68,7 +67,36 @@ TS_SOURCES = [
     "//src/resources/responses",
 ]
 
-TEST_SOURCES = glob(["tests/**/*.ts"])
+TEST_SOURCES = [
+    "//src:src_test_sources",
+    "//src/core:core_test_sources",
+    "//src/internal:internal_test_sources",
+    "//src/internal/decoders:decoders_test_sources",
+    "//src/internal/utils:utils_test_sources",
+    "//src/resources:resources_test_sources",
+    "//src/resources/async/chat:chat_test_sources",
+    "//src/resources/browser:browser_test_sources",
+    "//src/resources/chat:chat_test_sources",
+    "//src/resources/responses:responses_test_sources",
+    "//src/test",
+]
+
+ts_project(
+    name = "library_typecheck",
+    srcs = TS_SOURCES,
+    declaration = True,
+    no_emit = True,
+    tsc = ":tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "ESNext",
+            moduleResolution = "Bundler",
+            types = ["node"],
+        ),
+    },
+    deps = [":node_modules/@types/node"],
+)
 
 ts_project(
     name = "dist",
@@ -122,9 +150,9 @@ npm_link_package(
 ts_project(
     name = "test_js",
     testonly = True,
-    srcs = TEST_SOURCES,
+    srcs = TS_SOURCES + TEST_SOURCES,
     out_dir = "test-dist",
-    root_dir = "tests",
+    root_dir = "src",
     transpiler = "tsc",
     tsc = ":tsc",
     tsconfig = {
@@ -134,7 +162,7 @@ ts_project(
             moduleResolution = "Bundler",
             noEmit = False,
             outDir = "test-dist",
-            rootDir = "tests",
+            rootDir = "src",
             types = [
                 "node",
                 "mocha",
@@ -142,7 +170,6 @@ ts_project(
         ),
     },
     deps = [
-        ":node_modules/@perplexity-ai/perplexity_ai",
         ":node_modules/@types/mocha",
         ":node_modules/@types/node",
     ],
@@ -152,13 +179,12 @@ mocha_bin.mocha_test(
     name = "test",
     args = [
         "--require",
-        "test-dist/setup.js",
+        "test-dist/test/setup.js",
         "test-dist/**/*.test.js",
     ],
     data = [
-        "tests/uploads.test.ts",
-        ":node_modules/@perplexity-ai/perplexity_ai",
         ":test_js",
+        "//src/internal:internal_test_sources",
     ],
 )
 

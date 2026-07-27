@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { isDeepStrictEqual } from 'node:util';
 
 type Constructor = new (...args: never[]) => unknown;
-type MockFunction = ((...args: unknown[]) => unknown) & {
+export type MockFunction = ((...args: unknown[]) => unknown) & {
   mock: { calls: unknown[][] };
 };
 
@@ -33,7 +33,7 @@ function matchesObject(actual: unknown, expected: unknown): boolean {
   );
 }
 
-class Expectation {
+export class Expectation {
   constructor(
     protected readonly actual: unknown,
     protected readonly negated = false,
@@ -203,7 +203,7 @@ class AsyncExpectation {
   }
 }
 
-function mockFunction(implementation?: (...args: unknown[]) => unknown): MockFunction {
+export function mockFunction(implementation?: (...args: unknown[]) => unknown): MockFunction {
   const fn = (...args: unknown[]): unknown => {
     fn.mock.calls.push(args);
     return implementation?.(...args);
@@ -212,7 +212,7 @@ function mockFunction(implementation?: (...args: unknown[]) => unknown): MockFun
   return fn;
 }
 
-function spyOn<T extends object, K extends keyof T>(object: T, key: K): MockFunction {
+export function spyOn<T extends object, K extends keyof T>(object: T, key: K): MockFunction {
   const original = object[key];
   assert.equal(typeof original, 'function');
   const spy = mockFunction((...args) => (original as (...values: unknown[]) => unknown).apply(object, args));
@@ -228,11 +228,3 @@ Object.defineProperty(globalThis, 'test', {
   configurable: true,
   get: () => globalThis.it,
 });
-
-declare global {
-  function expect(actual: unknown): Expectation;
-  const mock: {
-    fn: typeof mockFunction;
-    spyOn: typeof spyOn;
-  };
-}
