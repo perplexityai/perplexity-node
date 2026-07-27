@@ -1,4 +1,4 @@
-// Custom code that persists through Stainless regeneration.
+// Custom response-output helpers.
 // This adds the output_text convenience property to Response objects,
 
 /**

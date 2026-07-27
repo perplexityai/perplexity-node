@@ -3,6 +3,6 @@ load("@jq.bzl//jq:jq.bzl", "jq")
 jq(
     name = "package",
     srcs = ["//:package.json"],
-    filter = "del(.devDependencies, .overrides, .packageManager, .scripts)",
+    filter = "del(.devDependencies, .overrides, .packageManager)",
     visibility = ["//visibility:public"],
 )

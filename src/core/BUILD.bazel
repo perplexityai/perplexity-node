@@ -1,0 +1,19 @@
+load("//:ts.bzl", "ts_library")
+
+ts_library(
+    name = "core",
+    srcs = [
+        "api-promise.ts",
+        "error.ts",
+        "resource.ts",
+        "streaming.ts",
+        "uploads.ts",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src",
+        "//src/internal",
+        "//src/internal/decoders",
+        "//src/internal/utils",
+    ],
+)

@@ -6,10 +6,5 @@
   "features": {
     "ghcr.io/devcontainers/features/node:1": {}
   },
-  "postCreateCommand": "corepack enable pnpm && pnpm install",
-  "customizations": {
-    "vscode": {
-      "extensions": ["esbenp.prettier-vscode"]
-    }
-  }
+  "postCreateCommand": "corepack enable pnpm && pnpm install"
 }

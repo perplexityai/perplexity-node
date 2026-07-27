@@ -184,7 +184,6 @@ Full Changelog: [v0.26.1...v0.26.2](https://github.com/perplexityai/perplexity-n
 
 ### Chores
 
-* **ci:** skip uploading artifacts on stainless-internal branches ([3d2b6b3](https://github.com/perplexityai/perplexity-node/commit/3d2b6b3abcc61ba4284b0c7382d8d53a5b0c167b))
 * **internal:** update dependencies to address dependabot vulnerabilities ([b494823](https://github.com/perplexityai/perplexity-node/commit/b494823152750452f7eaee967274904e30076615))
 
 ## 0.26.1 (2026-02-26)

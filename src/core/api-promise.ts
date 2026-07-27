@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import { type Perplexity } from '../client.js';
 
 import { type PromiseOrValue } from '../internal/types.js';

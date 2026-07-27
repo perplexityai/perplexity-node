@@ -1,0 +1,25 @@
+load("//:ts.bzl", "ts_library")
+
+ts_library(
+    name = "resources",
+    srcs = [
+        "async.ts",
+        "browser.ts",
+        "chat.ts",
+        "contextualized-embeddings.ts",
+        "embeddings.ts",
+        "index.ts",
+        "responses.ts",
+        "search.ts",
+        "shared.ts",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/core",
+        "//src/internal",
+        "//src/resources/async",
+        "//src/resources/browser",
+        "//src/resources/chat",
+        "//src/resources/responses",
+    ],
+)
