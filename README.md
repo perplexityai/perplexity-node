@@ -15,6 +15,7 @@ npm install @perplexity-ai/perplexity_ai
 ## Usage
 
 The full API of this library can be found in [api.md](api.md).
+Runnable TypeScript examples for each API are available in [examples](examples).
 
 ### Search API
 
