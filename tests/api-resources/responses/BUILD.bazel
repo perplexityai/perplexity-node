@@ -1,0 +1,9 @@
+load("//:ts.bzl", "ts_test")
+
+ts_test(
+    name = "responses_test",
+    srcs = [
+        "files.test.ts",
+        "responses.test.ts",
+    ],
+)

@@ -17,7 +17,6 @@ package(default_visibility = ["//visibility:public"])
 # gazelle:exclude node_modules
 # gazelle:exclude target
 # gazelle:exclude test-dist
-# gazelle:exclude tests
 # gazelle:map_kind ts_library ts_library //:ts.bzl
 # gazelle:map_kind ts_test ts_test //:ts.bzl
 # gazelle:ts_npm_link_pattern //:node_modules/{pkg}
@@ -68,7 +67,33 @@ TS_SOURCES = [
     "//src/resources/responses",
 ]
 
-TEST_SOURCES = glob(["tests/**/*.ts"])
+TEST_SOURCES = [
+    "//tests",
+    "//tests:tests_test_sources",
+    "//tests/api-resources:api-resources_test_sources",
+    "//tests/api-resources/async/chat:chat_test_sources",
+    "//tests/api-resources/browser:browser_test_sources",
+    "//tests/api-resources/chat:chat_test_sources",
+    "//tests/api-resources/responses:responses_test_sources",
+    "//tests/internal/decoders:decoders_test_sources",
+]
+
+ts_project(
+    name = "library_typecheck",
+    srcs = TS_SOURCES,
+    declaration = True,
+    no_emit = True,
+    tsc = ":tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "ESNext",
+            moduleResolution = "Bundler",
+            types = ["node"],
+        ),
+    },
+    deps = [":node_modules/@types/node"],
+)
 
 ts_project(
     name = "dist",
@@ -156,9 +181,9 @@ mocha_bin.mocha_test(
         "test-dist/**/*.test.js",
     ],
     data = [
-        "tests/uploads.test.ts",
         ":node_modules/@perplexity-ai/perplexity_ai",
         ":test_js",
+        "//tests:tests_test_sources",
     ],
 )
 
