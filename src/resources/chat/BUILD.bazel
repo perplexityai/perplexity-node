@@ -8,11 +8,7 @@ ts_library(
         "index.ts",
     ],
     visibility = ["//visibility:public"],
-    deps = [
-        "//src/core",
-        "//src/internal",
-        "//src/resources",
-    ],
+    deps = ["//src/generated"],
 )
 
 ts_test(

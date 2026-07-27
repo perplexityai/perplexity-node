@@ -16,13 +16,10 @@ ts_library(
     visibility = ["//visibility:public"],
     deps = [
         "//src/core",
+        "//src/generated",
         "//src/internal",
         "//src/internal/utils",
         "//src/resources",
-        "//src/resources/async",
-        "//src/resources/browser",
-        "//src/resources/chat",
-        "//src/resources/responses",
     ],
 )
 
@@ -34,5 +31,11 @@ ts_test(
         ":src",
         "//:node_modules/@types/node",
         "//src/core",
+        "//src/generated",
+        "//src/resources/async",
+        "//src/resources/async/chat",
+        "//src/resources/browser",
+        "//src/resources/chat",
+        "//src/resources/responses",
     ],
 )
