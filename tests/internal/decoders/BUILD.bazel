@@ -1,0 +1,6 @@
+load("//:ts.bzl", "ts_test")
+
+ts_test(
+    name = "decoders_test",
+    srcs = ["line.test.ts"],
+)

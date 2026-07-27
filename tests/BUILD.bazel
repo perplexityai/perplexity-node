@@ -1,0 +1,28 @@
+load("//:ts.bzl", "ts_library", "ts_test")
+
+ts_library(
+    name = "tests",
+    srcs = ["setup.ts"],
+    tsconfig_types = ["node"],
+    visibility = ["//visibility:public"],
+    deps = ["//:node_modules/@types/node"],
+)
+
+ts_test(
+    name = "tests_test",
+    srcs = [
+        "base64.test.ts",
+        "buildHeaders.test.ts",
+        "form.test.ts",
+        "index.test.ts",
+        "path.test.ts",
+        "streaming.test.ts",
+        "stringifyQuery.test.ts",
+        "uploads.test.ts",
+    ],
+    tsconfig_types = ["node"],
+    deps = [
+        ":tests",
+        "//:node_modules/@types/node",
+    ],
+)

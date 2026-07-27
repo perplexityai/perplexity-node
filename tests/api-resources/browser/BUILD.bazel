@@ -1,0 +1,6 @@
+load("//:ts.bzl", "ts_test")
+
+ts_test(
+    name = "browser_test",
+    srcs = ["sessions.test.ts"],
+)
