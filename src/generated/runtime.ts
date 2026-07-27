@@ -6,12 +6,15 @@ export type HeadersLike =
   | null;
 
 export type RequestOptions = {
+  method?: 'delete' | 'get' | 'patch' | 'post' | 'put';
+  path?: string;
   query?: object | null;
   body?: unknown;
   headers?: HeadersLike;
   maxRetries?: number;
   stream?: boolean;
   timeout?: number;
+  fetchOptions?: Omit<RequestInit, 'body' | 'headers' | 'method' | 'signal'>;
   signal?: AbortSignal | null;
   idempotencyKey?: string;
   defaultBaseURL?: string;

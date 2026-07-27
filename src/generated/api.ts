@@ -1815,3 +1815,145 @@ export class PerplexitySdk {
         this.search = new SearchResource(client);
     }
 }
+export class Async extends AsyncResource {
+}
+export class Browser extends BrowserResource {
+}
+export class Chat extends ChatResource {
+}
+export class ContextualizedEmbeddings extends ContextualizedEmbeddingsResource {
+}
+export class Embeddings extends EmbeddingsResource {
+}
+export class Responses extends ResponsesResource {
+}
+export class Search extends SearchResource {
+}
+export type Annotation = AnnotationOutput;
+export type APIPublicSearchResult = ApiPublicSearchResultOutput;
+export type BrowserSessionResponse = BrowserSessionResponseOutput;
+export type ChatMessageInput = ChatMessageInputInput;
+export type ChatMessageOutput = ChatMessageOutputOutput;
+export type Choice = ChoiceOutput;
+export type ContentPart = ContentPartOutput;
+export type ContextualizedEmbeddingCreateParams = ContextualizedEmbeddingsRequestInput;
+export type ContextualizedEmbeddingCreateResponse = ContextualizedEmbeddingsResponseOutput;
+export type ContextualizedEmbeddingObject = ContextualizedEmbeddingObjectOutput;
+export type EmbeddingCreateParams = EmbeddingsRequestInput;
+export type EmbeddingCreateResponse = EmbeddingsResponseOutput;
+export type EmbeddingObject = EmbeddingObjectOutput;
+export type EmbeddingsUsage = EmbeddingsUsageOutput;
+export type ErrorInfo = ErrorInfoOutput;
+export type FunctionCallOutputItem = FunctionCallOutputItemOutput;
+export type FunctionTool = FunctionToolInput;
+export type InputItem = InputItemInput;
+export type JsonSchemaFormat = JSONSchemaFormatInput;
+export type OutputItem = OutputItemOutput;
+export type ResponseCancelResponse = Awaited<ReturnType<ResponsesResource["cancel"]>>;
+export type ResponseCreateParams = ResponsesRequestInput;
+export type ResponseCreateResponse = ResponsesResponseOutput;
+export type ResponseFile = ResponseFileOutput;
+export type ResponseFileList = ResponseFileListOutput;
+export type ResponseFormat = ResponseFormatInput;
+export type ResponseRetrieveResponse = ResponsesResponseOutput;
+export type ResponsesCreateParams = ResponsesRequestInput;
+export type ResponseStreamChunk = ResponseStreamEventOutput;
+export type ResponsesUsage = ResponsesUsageOutput;
+export type SearchCreateParams = ApiSearchRequestInput;
+export type SearchCreateResponse = ApiSearchResponseOutput;
+export type SearchResult = SearchResultOutput;
+export type StreamChunk = CompletionResponseOutput;
+export type UsageInfo = UsageInfoOutput;
+export type UserLocation = UserLocationInput;
+export type WebSearchOptions = WebSearchOptionsInput;
+export namespace Async {
+    export class Chat extends AsyncChatResource {
+    }
+    export namespace Chat {
+        export class Completions extends AsyncChatCompletionsResource {
+        }
+        export type CompletionCreateParams = AsyncApiChatCompletionsRequestInput;
+        export type CompletionCreateResponse = AsyncApiChatCompletionsResponseOutput;
+        export type CompletionGetParams = NonNullable<Parameters<AsyncChatCompletionsResource["get"]>[1]>;
+        export type CompletionGetResponse = AsyncApiChatCompletionsResponseOutput;
+        export type CompletionListResponse = ListAsyncApiChatCompletionsResponseOutput;
+        export namespace Completions {
+            export type CompletionCreateParams = AsyncApiChatCompletionsRequestInput;
+            export type CompletionCreateResponse = AsyncApiChatCompletionsResponseOutput;
+            export type CompletionGetParams = NonNullable<Parameters<AsyncChatCompletionsResource["get"]>[1]>;
+            export type CompletionGetResponse = AsyncApiChatCompletionsResponseOutput;
+            export type CompletionListResponse = ListAsyncApiChatCompletionsResponseOutput;
+        }
+    }
+}
+export namespace Browser {
+    export class Sessions extends BrowserSessionsResource {
+    }
+    export type SessionCreateParams = CreateBrowserSessionRequestInput;
+    export namespace Sessions {
+        export type SessionCreateParams = CreateBrowserSessionRequestInput;
+    }
+}
+export namespace Chat {
+    export class Completions extends ChatCompletionsResource {
+    }
+    export type CompletionCreateParams = ApiChatCompletionsRequestInput;
+    export type CompletionCreateParamsNonStreaming = Omit<ApiChatCompletionsRequestInput, "stream"> & {
+        stream?: false | null;
+    };
+    export type CompletionCreateParamsStreaming = Omit<ApiChatCompletionsRequestInput, "stream"> & {
+        stream: true;
+    };
+    export type StreamChunk = CompletionResponseOutput;
+    export namespace Completions {
+        export type CompletionCreateParams = ApiChatCompletionsRequestInput;
+        export type CompletionCreateParamsNonStreaming = Omit<ApiChatCompletionsRequestInput, "stream"> & {
+            stream?: false | null;
+        };
+        export type CompletionCreateParamsStreaming = Omit<ApiChatCompletionsRequestInput, "stream"> & {
+            stream: true;
+        };
+    }
+}
+export namespace ContextualizedEmbeddings {
+    export type ContextualizedEmbeddingCreateParams = ContextualizedEmbeddingsRequestInput;
+    export type ContextualizedEmbeddingCreateResponse = ContextualizedEmbeddingsResponseOutput;
+}
+export namespace Embeddings {
+    export type EmbeddingCreateParams = EmbeddingsRequestInput;
+    export type EmbeddingCreateResponse = EmbeddingsResponseOutput;
+}
+export namespace Responses {
+    export class Files extends ResponsesFilesResource {
+    }
+    export type Annotation = AnnotationOutput;
+    export type ContentPart = ContentPartOutput;
+    export type ErrorInfo = ErrorInfoOutput;
+    export type FileContentParams = NonNullable<Parameters<ResponsesFilesResource["content"]>[1]>;
+    export type FunctionCallOutputItem = FunctionCallOutputItemOutput;
+    export type FunctionTool = FunctionToolInput;
+    export type InputItem = InputItemInput;
+    export type OutputItem = OutputItemOutput;
+    export type ResponseCancelResponse = Awaited<ReturnType<ResponsesResource["cancel"]>>;
+    export type ResponseCreateParams = ResponsesRequestInput;
+    export type ResponseCreateParamsNonStreaming = Omit<ResponsesRequestInput, "stream"> & {
+        stream?: false;
+    };
+    export type ResponseCreateParamsStreaming = Omit<ResponsesRequestInput, "stream"> & {
+        stream: true;
+    };
+    export type ResponseCreateResponse = ResponsesResponseOutput;
+    export type ResponseFile = ResponseFileOutput;
+    export type ResponseFileList = ResponseFileListOutput;
+    export type ResponseRetrieveResponse = ResponsesResponseOutput;
+    export type ResponsesCreateParams = ResponsesRequestInput;
+    export type ResponseStreamChunk = ResponseStreamEventOutput;
+    export type ResponsesUsage = ResponsesUsageOutput;
+    export namespace Files {
+        export type FileContentParams = NonNullable<Parameters<ResponsesFilesResource["content"]>[1]>;
+    }
+}
+export namespace Search {
+    export type SearchCreateParams = ApiSearchRequestInput;
+    export type SearchCreateResponse = ApiSearchResponseOutput;
+}

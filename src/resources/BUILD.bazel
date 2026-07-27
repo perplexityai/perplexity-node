@@ -15,8 +15,7 @@ ts_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//src/core",
-        "//src/internal",
+        "//src/generated",
         "//src/resources/async",
         "//src/resources/browser",
         "//src/resources/chat",

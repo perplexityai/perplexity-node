@@ -8,12 +8,7 @@ ts_library(
         "sessions.ts",
     ],
     visibility = ["//visibility:public"],
-    deps = [
-        "//src/core",
-        "//src/internal",
-        "//src/internal/utils",
-        "//src/resources",
-    ],
+    deps = ["//src/generated"],
 )
 
 ts_test(

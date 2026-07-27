@@ -17,21 +17,20 @@ import { stringifyQuery } from './internal/utils/query.js';
 import { VERSION } from './version.js';
 import * as Errors from './core/error.js';
 import * as Uploads from './core/uploads.js';
-import * as API from './resources/index.js';
 import { APIPromise } from './core/api-promise.js';
+import * as API from './generated/api.js';
 import {
+  Annotation,
+  Async,
+  Browser,
+  Chat,
+  ContentPart,
   ContextualizedEmbeddingCreateParams,
   ContextualizedEmbeddingCreateResponse,
   ContextualizedEmbeddings,
-} from './resources/contextualized-embeddings.js';
-import { EmbeddingCreateParams, EmbeddingCreateResponse, Embeddings } from './resources/embeddings.js';
-import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search.js';
-import { Async } from './resources/async/async.js';
-import { Browser } from './resources/browser/browser.js';
-import { Chat, StreamChunk } from './resources/chat/chat.js';
-import {
-  Annotation,
-  ContentPart,
+  EmbeddingCreateParams,
+  EmbeddingCreateResponse,
+  Embeddings,
   ErrorInfo,
   FunctionCallOutputItem,
   FunctionTool,
@@ -39,8 +38,6 @@ import {
   OutputItem,
   ResponseCancelResponse,
   ResponseCreateParams,
-  ResponseCreateParamsNonStreaming,
-  ResponseCreateParamsStreaming,
   ResponseCreateResponse,
   ResponseFile,
   ResponseFileList,
@@ -49,7 +46,14 @@ import {
   Responses,
   ResponsesCreateParams,
   ResponsesUsage,
-} from './resources/responses/responses.js';
+  Search,
+  SearchCreateParams,
+  SearchCreateResponse,
+  SdkTransport,
+  StreamChunk,
+} from './generated/api.js';
+type ResponseCreateParamsNonStreaming = API.Responses.ResponseCreateParamsNonStreaming;
+type ResponseCreateParamsStreaming = API.Responses.ResponseCreateParamsStreaming;
 import { type Fetch } from './internal/builtin-types.js';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers.js';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options.js';
@@ -141,7 +145,7 @@ export interface ClientOptions {
 /**
  * API Client for interfacing with the Perplexity API.
  */
-export class Perplexity {
+export class Perplexity implements SdkTransport {
   apiKey: string;
 
   baseURL: string;
@@ -768,13 +772,13 @@ export class Perplexity {
 
   static toFile = Uploads.toFile;
 
-  chat: API.Chat = new API.Chat(this);
-  search: API.Search = new API.Search(this);
-  responses: API.Responses = new API.Responses(this);
-  embeddings: API.Embeddings = new API.Embeddings(this);
-  contextualizedEmbeddings: API.ContextualizedEmbeddings = new API.ContextualizedEmbeddings(this);
-  browser: API.Browser = new API.Browser(this);
-  async: API.Async = new API.Async(this);
+  chat = new Chat(this);
+  search = new Search(this);
+  responses = new Responses(this);
+  embeddings = new Embeddings(this);
+  contextualizedEmbeddings = new ContextualizedEmbeddings(this);
+  browser = new Browser(this);
+  async = new Async(this);
 }
 
 Perplexity.Chat = Chat;
