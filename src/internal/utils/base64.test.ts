@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+import { after, before, describe, it } from 'node:test';
 import { fromBase64, toBase64 } from './base64.js';
 
 for (const mode of ['Buffer', 'atob']) {
@@ -15,7 +17,7 @@ for (const mode of ['Buffer', 'atob']) {
         globalThis.Buffer = originalBuffer;
       }
     });
-    test('toBase64', () => {
+    it('toBase64', () => {
       const testCases = [
         {
           input: 'hello world',
@@ -47,11 +49,11 @@ for (const mode of ['Buffer', 'atob']) {
       ];
 
       testCases.forEach(({ input, expected }) => {
-        expect(toBase64(input)).toBe(expected);
+        assert.strictEqual(toBase64(input), expected);
       });
     });
 
-    test('fromBase64', () => {
+    it('fromBase64', () => {
       const testCases = [
         {
           input: 'aGVsbG8gd29ybGQ=',
@@ -75,7 +77,7 @@ for (const mode of ['Buffer', 'atob']) {
       ];
 
       testCases.forEach(({ input, expected }) => {
-        expect(fromBase64(input)).toEqual(expected);
+        assert.deepStrictEqual(fromBase64(input), expected);
       });
     });
   });

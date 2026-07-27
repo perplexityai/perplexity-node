@@ -30,8 +30,10 @@ ts_test(
         "embeddings.test.ts",
         "search.test.ts",
     ],
+    tsconfig_types = ["node"],
     deps = [
         ":resources",
+        "//:node_modules/@types/node",
         "//src",
     ],
 )

@@ -1,5 +1,7 @@
 import { APIPromise } from './core/api-promise.js';
 
+import assert from 'node:assert/strict';
+import { afterEach, beforeEach, describe, it, mock } from 'node:test';
 import util from 'node:util';
 import Perplexity, { APIUserAbortError, ChatResource, type API } from './index.js';
 import {
@@ -28,7 +30,7 @@ describe('instantiate client', () => {
     process.env = env;
   });
 
-  test('generated chat API uses client transport', async () => {
+  it('generated chat API uses client transport', async () => {
     const generatedRequest: API.ApiChatCompletionsRequestInput = {
       messages: [{ content: 'What is the answer?', role: 'user' }],
       model: 'sonar',
@@ -61,33 +63,36 @@ describe('instantiate client', () => {
 
     const response = await client.chat.completions.create(request);
 
-    expect(client.chat).toBeInstanceOf(ChatResource);
-    expect(capturedRequest).toEqual({
+    assert.ok(client.chat instanceof ChatResource);
+    assert.deepStrictEqual(capturedRequest, {
       body: JSON.stringify(request),
       method: 'POST',
       url: 'https://api.example.com/chat/completions',
     });
-    expect(response).toEqual(expectedResponse);
+    assert.deepStrictEqual(response, expectedResponse);
   });
 
-  test('legacy resource entrypoints re-export generated resources', () => {
-    expect([
-      LegacyAsync,
-      LegacyAsyncCompletions,
-      LegacyBrowser,
-      LegacyChat,
-      LegacyChatCompletions,
-      LegacyResponseFiles,
-      LegacyResponses,
-    ]).toEqual([
-      GeneratedAsync,
-      GeneratedAsync.Chat.Completions,
-      GeneratedBrowser,
-      GeneratedChat,
-      GeneratedChat.Completions,
-      GeneratedResponses.Files,
-      GeneratedResponses,
-    ]);
+  it('legacy resource entrypoints re-export generated resources', () => {
+    assert.deepStrictEqual(
+      [
+        LegacyAsync,
+        LegacyAsyncCompletions,
+        LegacyBrowser,
+        LegacyChat,
+        LegacyChatCompletions,
+        LegacyResponseFiles,
+        LegacyResponses,
+      ],
+      [
+        GeneratedAsync,
+        GeneratedAsync.Chat.Completions,
+        GeneratedBrowser,
+        GeneratedChat,
+        GeneratedChat.Completions,
+        GeneratedResponses.Files,
+        GeneratedResponses,
+      ],
+    );
   });
 
   describe('defaultHeaders', () => {
@@ -97,27 +102,27 @@ describe('instantiate client', () => {
       apiKey: 'My API Key',
     });
 
-    test('they are used in the request', async () => {
+    it('they are used in the request', async () => {
       const { req } = await client.buildRequest({ path: '/foo', method: 'post' });
-      expect(req.headers.get('x-my-default-header')).toEqual('2');
+      assert.deepStrictEqual(req.headers.get('x-my-default-header'), '2');
     });
 
-    test('can ignore `undefined` and leave the default', async () => {
+    it('can ignore `undefined` and leave the default', async () => {
       const { req } = await client.buildRequest({
         path: '/foo',
         method: 'post',
         headers: { 'X-My-Default-Header': undefined },
       });
-      expect(req.headers.get('x-my-default-header')).toEqual('2');
+      assert.deepStrictEqual(req.headers.get('x-my-default-header'), '2');
     });
 
-    test('can be removed with `null`', async () => {
+    it('can be removed with `null`', async () => {
       const { req } = await client.buildRequest({
         path: '/foo',
         method: 'post',
         headers: { 'X-My-Default-Header': null },
       });
-      expect(req.headers.has('x-my-default-header')).toBe(false);
+      assert.strictEqual(req.headers.has('x-my-default-header'), false);
     });
   });
   describe('logging', () => {
@@ -149,7 +154,7 @@ describe('instantiate client', () => {
       );
     };
 
-    test('debug logs when log level is debug', async () => {
+    it('debug logs when log level is debug', async () => {
       const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
@@ -165,15 +170,15 @@ describe('instantiate client', () => {
       });
 
       await forceAPIResponseForClient(client);
-      expect(debugMock).toHaveBeenCalled();
+      assert.ok(debugMock.mock.callCount() > 0);
     });
 
-    test('default logLevel is warn', async () => {
+    it('default logLevel is warn', async () => {
       const client = new Perplexity({ apiKey: 'My API Key' });
-      expect(client.logLevel).toBe('warn');
+      assert.strictEqual(client.logLevel, 'warn');
     });
 
-    test('debug logs are skipped when log level is info', async () => {
+    it('debug logs are skipped when log level is info', async () => {
       const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
@@ -189,10 +194,10 @@ describe('instantiate client', () => {
       });
 
       await forceAPIResponseForClient(client);
-      expect(debugMock).not.toHaveBeenCalled();
+      assert.strictEqual(debugMock.mock.callCount(), 0);
     });
 
-    test('debug logs happen with debug env var', async () => {
+    it('debug logs happen with debug env var', async () => {
       const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
@@ -203,13 +208,13 @@ describe('instantiate client', () => {
 
       process.env['PERPLEXITY_LOG'] = 'debug';
       const client = new Perplexity({ logger: logger, apiKey: 'My API Key' });
-      expect(client.logLevel).toBe('debug');
+      assert.strictEqual(client.logLevel, 'debug');
 
       await forceAPIResponseForClient(client);
-      expect(debugMock).toHaveBeenCalled();
+      assert.ok(debugMock.mock.callCount() > 0);
     });
 
-    test('warn when env var level is invalid', async () => {
+    it('warn when env var level is invalid', async () => {
       const warnMock = mock.fn();
       const logger = {
         debug: mock.fn(),
@@ -220,13 +225,17 @@ describe('instantiate client', () => {
 
       process.env['PERPLEXITY_LOG'] = 'not a log level';
       const client = new Perplexity({ logger: logger, apiKey: 'My API Key' });
-      expect(client.logLevel).toBe('warn');
-      expect(warnMock).toHaveBeenCalledWith(
-        'process.env[\'PERPLEXITY_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
+      assert.strictEqual(client.logLevel, 'warn');
+      assert.ok(
+        warnMock.mock.calls.some((call) =>
+          util.isDeepStrictEqual(call.arguments, [
+            'process.env[\'PERPLEXITY_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
+          ]),
+        ),
       );
     });
 
-    test('client log level overrides env var', async () => {
+    it('client log level overrides env var', async () => {
       const debugMock = mock.fn();
       const logger = {
         debug: debugMock,
@@ -243,10 +252,10 @@ describe('instantiate client', () => {
       });
 
       await forceAPIResponseForClient(client);
-      expect(debugMock).not.toHaveBeenCalled();
+      assert.strictEqual(debugMock.mock.callCount(), 0);
     });
 
-    test('no warning logged for invalid env var level + valid client level', async () => {
+    it('no warning logged for invalid env var level + valid client level', async () => {
       const warnMock = mock.fn();
       const logger = {
         debug: mock.fn(),
@@ -261,41 +270,44 @@ describe('instantiate client', () => {
         logLevel: 'debug',
         apiKey: 'My API Key',
       });
-      expect(client.logLevel).toBe('debug');
-      expect(warnMock).not.toHaveBeenCalled();
+      assert.strictEqual(client.logLevel, 'debug');
+      assert.strictEqual(warnMock.mock.callCount(), 0);
     });
   });
 
   describe('defaultQuery', () => {
-    test('with null query params given', () => {
+    it('with null query params given', () => {
       const client = new Perplexity({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
         apiKey: 'My API Key',
       });
-      expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo');
+      assert.deepStrictEqual(client.buildURL('/foo', null), 'http://localhost:5000/foo?apiVersion=foo');
     });
 
-    test('multiple default query params', () => {
+    it('multiple default query params', () => {
       const client = new Perplexity({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         apiKey: 'My API Key',
       });
-      expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo&hello=world');
+      assert.deepStrictEqual(
+        client.buildURL('/foo', null),
+        'http://localhost:5000/foo?apiVersion=foo&hello=world',
+      );
     });
 
-    test('overriding with `undefined`', () => {
+    it('overriding with `undefined`', () => {
       const client = new Perplexity({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
         apiKey: 'My API Key',
       });
-      expect(client.buildURL('/foo', { hello: undefined })).toEqual('http://localhost:5000/foo');
+      assert.deepStrictEqual(client.buildURL('/foo', { hello: undefined }), 'http://localhost:5000/foo');
     });
   });
 
-  test('custom fetch', async () => {
+  it('custom fetch', async () => {
     const client = new Perplexity({
       baseURL: 'http://localhost:5000/',
       apiKey: 'My API Key',
@@ -309,10 +321,10 @@ describe('instantiate client', () => {
     });
 
     const response = await client.get('/foo');
-    expect(response).toEqual({ url: 'http://localhost:5000/foo', custom: true });
+    assert.deepStrictEqual(response, { url: 'http://localhost:5000/foo', custom: true });
   });
 
-  test('explicit global fetch', async () => {
+  it('explicit global fetch', async () => {
     // make sure the global fetch type is assignable to our Fetch type
     const _client = new Perplexity({
       baseURL: 'http://localhost:5000/',
@@ -321,7 +333,7 @@ describe('instantiate client', () => {
     });
   });
 
-  test('custom signal', async () => {
+  it('custom signal', async () => {
     const client = new Perplexity({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       apiKey: 'My API Key',
@@ -341,13 +353,13 @@ describe('instantiate client', () => {
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 200);
 
-    const spy = mock.spyOn(client, 'request');
+    const spy = mock.method(client, 'request');
 
-    await expect(client.get('/foo', { signal: controller.signal })).rejects.toThrowError(APIUserAbortError);
-    expect(spy).toHaveBeenCalledTimes(1);
+    await assert.rejects(client.get('/foo', { signal: controller.signal }), APIUserAbortError);
+    assert.strictEqual(spy.mock.callCount(), 1);
   });
 
-  test('normalized method', async () => {
+  it('normalized method', async () => {
     let capturedRequest: RequestInit | undefined;
     const testFetch = async (url: string | URL | Request, init: RequestInit = {}): Promise<Response> => {
       capturedRequest = init;
@@ -361,81 +373,84 @@ describe('instantiate client', () => {
     });
 
     await client.patch('/foo');
-    expect(capturedRequest?.method).toEqual('PATCH');
+    assert.deepStrictEqual(capturedRequest?.method, 'PATCH');
   });
 
   describe('baseUrl', () => {
-    test('trailing slash', () => {
+    it('trailing slash', () => {
       const client = new Perplexity({ baseURL: 'http://localhost:5000/custom/path/', apiKey: 'My API Key' });
-      expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
+      assert.deepStrictEqual(client.buildURL('/foo', null), 'http://localhost:5000/custom/path/foo');
     });
 
-    test('no trailing slash', () => {
+    it('no trailing slash', () => {
       const client = new Perplexity({ baseURL: 'http://localhost:5000/custom/path', apiKey: 'My API Key' });
-      expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
+      assert.deepStrictEqual(client.buildURL('/foo', null), 'http://localhost:5000/custom/path/foo');
     });
 
     afterEach(() => {
       process.env['PERPLEXITY_BASE_URL'] = undefined;
     });
 
-    test('explicit option', () => {
+    it('explicit option', () => {
       const client = new Perplexity({ baseURL: 'https://example.com', apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://example.com');
+      assert.deepStrictEqual(client.baseURL, 'https://example.com');
     });
 
-    test('env variable', () => {
+    it('env variable', () => {
       process.env['PERPLEXITY_BASE_URL'] = 'https://example.com/from_env';
       const client = new Perplexity({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://example.com/from_env');
+      assert.deepStrictEqual(client.baseURL, 'https://example.com/from_env');
     });
 
-    test('empty env variable', () => {
+    it('empty env variable', () => {
       process.env['PERPLEXITY_BASE_URL'] = ''; // empty
       const client = new Perplexity({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.perplexity.ai');
+      assert.deepStrictEqual(client.baseURL, 'https://api.perplexity.ai');
     });
 
-    test('blank env variable', () => {
+    it('blank env variable', () => {
       process.env['PERPLEXITY_BASE_URL'] = '  '; // blank
       const client = new Perplexity({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.perplexity.ai');
+      assert.deepStrictEqual(client.baseURL, 'https://api.perplexity.ai');
     });
 
-    test('in request options', () => {
+    it('in request options', () => {
       const client = new Perplexity({ apiKey: 'My API Key' });
-      expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
+      assert.deepStrictEqual(
+        client.buildURL('/foo', null, 'http://localhost:5000/option'),
         'http://localhost:5000/option/foo',
       );
     });
 
-    test('in request options overridden by client options', () => {
+    it('in request options overridden by client options', () => {
       const client = new Perplexity({ apiKey: 'My API Key', baseURL: 'http://localhost:5000/client' });
-      expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
+      assert.deepStrictEqual(
+        client.buildURL('/foo', null, 'http://localhost:5000/option'),
         'http://localhost:5000/client/foo',
       );
     });
 
-    test('in request options overridden by env variable', () => {
+    it('in request options overridden by env variable', () => {
       process.env['PERPLEXITY_BASE_URL'] = 'http://localhost:5000/env';
       const client = new Perplexity({ apiKey: 'My API Key' });
-      expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
+      assert.deepStrictEqual(
+        client.buildURL('/foo', null, 'http://localhost:5000/option'),
         'http://localhost:5000/env/foo',
       );
     });
   });
 
-  test('maxRetries option is correctly set', () => {
+  it('maxRetries option is correctly set', () => {
     const client = new Perplexity({ maxRetries: 4, apiKey: 'My API Key' });
-    expect(client.maxRetries).toEqual(4);
+    assert.deepStrictEqual(client.maxRetries, 4);
 
     // default
     const client2 = new Perplexity({ apiKey: 'My API Key' });
-    expect(client2.maxRetries).toEqual(2);
+    assert.deepStrictEqual(client2.maxRetries, 2);
   });
 
   describe('withOptions', () => {
-    test('creates a new client with overridden options', async () => {
+    it('creates a new client with overridden options', async () => {
       const client = new Perplexity({
         baseURL: 'http://localhost:5000/',
         maxRetries: 3,
@@ -448,19 +463,19 @@ describe('instantiate client', () => {
       });
 
       // Verify the new client has updated options
-      expect(newClient.maxRetries).toEqual(5);
-      expect(newClient.baseURL).toEqual('http://localhost:5001/');
+      assert.deepStrictEqual(newClient.maxRetries, 5);
+      assert.deepStrictEqual(newClient.baseURL, 'http://localhost:5001/');
 
       // Verify the original client is unchanged
-      expect(client.maxRetries).toEqual(3);
-      expect(client.baseURL).toEqual('http://localhost:5000/');
+      assert.deepStrictEqual(client.maxRetries, 3);
+      assert.deepStrictEqual(client.baseURL, 'http://localhost:5000/');
 
       // Verify it's a different instance
-      expect(newClient).not.toBe(client);
-      expect(newClient.constructor).toBe(client.constructor);
+      assert.notStrictEqual(newClient, client);
+      assert.strictEqual(newClient.constructor, client.constructor);
     });
 
-    test('inherits options from the parent client', async () => {
+    it('inherits options from the parent client', async () => {
       const client = new Perplexity({
         baseURL: 'http://localhost:5000/',
         defaultHeaders: { 'X-Test-Header': 'test-value' },
@@ -473,13 +488,16 @@ describe('instantiate client', () => {
       });
 
       // Test inherited options remain the same
-      expect(newClient.buildURL('/foo', null)).toEqual('http://localhost:5001/foo?test-param=test-value');
+      assert.deepStrictEqual(
+        newClient.buildURL('/foo', null),
+        'http://localhost:5001/foo?test-param=test-value',
+      );
 
       const { req } = await newClient.buildRequest({ path: '/foo', method: 'get' });
-      expect(req.headers.get('x-test-header')).toEqual('test-value');
+      assert.deepStrictEqual(req.headers.get('x-test-header'), 'test-value');
     });
 
-    test('respects runtime property changes when creating new client', () => {
+    it('respects runtime property changes when creating new client', () => {
       const client = new Perplexity({
         baseURL: 'http://localhost:5000/',
         timeout: 1000,
@@ -496,32 +514,32 @@ describe('instantiate client', () => {
       });
 
       // Verify the new client uses the updated properties, not the original ones
-      expect(newClient.baseURL).toEqual('http://localhost:6000/');
-      expect(newClient.timeout).toEqual(2000);
-      expect(newClient.maxRetries).toEqual(10);
+      assert.deepStrictEqual(newClient.baseURL, 'http://localhost:6000/');
+      assert.deepStrictEqual(newClient.timeout, 2000);
+      assert.deepStrictEqual(newClient.maxRetries, 10);
 
       // Original client should still have its modified properties
-      expect(client.baseURL).toEqual('http://localhost:6000/');
-      expect(client.timeout).toEqual(2000);
-      expect(client.maxRetries).not.toEqual(10);
+      assert.deepStrictEqual(client.baseURL, 'http://localhost:6000/');
+      assert.deepStrictEqual(client.timeout, 2000);
+      assert.notDeepStrictEqual(client.maxRetries, 10);
 
       // Verify URL building uses the updated baseURL
-      expect(newClient.buildURL('/bar', null)).toEqual('http://localhost:6000/bar');
+      assert.deepStrictEqual(newClient.buildURL('/bar', null), 'http://localhost:6000/bar');
     });
   });
 
-  test('with environment variable arguments', () => {
+  it('with environment variable arguments', () => {
     // set options via env var
     process.env['PERPLEXITY_API_KEY'] = 'My API Key';
     const client = new Perplexity();
-    expect(client.apiKey).toBe('My API Key');
+    assert.strictEqual(client.apiKey, 'My API Key');
   });
 
-  test('with overridden environment variable arguments', () => {
+  it('with overridden environment variable arguments', () => {
     // set options via env var
     process.env['PERPLEXITY_API_KEY'] = 'another My API Key';
     const client = new Perplexity({ apiKey: 'My API Key' });
-    expect(client.apiKey).toBe('My API Key');
+    assert.strictEqual(client.apiKey, 'My API Key');
   });
 });
 
@@ -529,17 +547,17 @@ describe('request building', () => {
   const client = new Perplexity({ apiKey: 'My API Key' });
 
   describe('custom headers', () => {
-    test('handles undefined', async () => {
+    it('handles undefined', async () => {
       const { req } = await client.buildRequest({
         path: '/foo',
         method: 'post',
         body: { value: 'hello' },
         headers: { 'X-Foo': 'baz', 'x-foo': 'bar', 'x-Foo': undefined, 'x-baz': 'bam', 'X-Baz': null },
       });
-      expect(req.headers.get('x-foo')).toEqual('bar');
-      expect(req.headers.get('x-Foo')).toEqual('bar');
-      expect(req.headers.get('X-Foo')).toEqual('bar');
-      expect(req.headers.get('x-baz')).toEqual(null);
+      assert.deepStrictEqual(req.headers.get('x-foo'), 'bar');
+      assert.deepStrictEqual(req.headers.get('x-Foo'), 'bar');
+      assert.deepStrictEqual(req.headers.get('X-Foo'), 'bar');
+      assert.deepStrictEqual(req.headers.get('x-baz'), null);
     });
   });
 });
@@ -565,15 +583,15 @@ describe('default encoder', () => {
     }
   }
   for (const jsonValue of [{}, [], { __proto__: null }, new Serializable(), new Collection(['item'])]) {
-    test(`serializes ${util.inspect(jsonValue)} as json`, async () => {
+    it(`serializes ${util.inspect(jsonValue)} as json`, async () => {
       const { req } = await client.buildRequest({
         path: '/foo',
         method: 'post',
         body: jsonValue,
       });
-      expect(req.headers).toBeInstanceOf(Headers);
-      expect(req.headers.get('content-type')).toEqual('application/json');
-      expect(req.body).toBe(JSON.stringify(jsonValue));
+      assert.ok(req.headers instanceof Headers);
+      assert.deepStrictEqual(req.headers.get('content-type'), 'application/json');
+      assert.strictEqual(req.body, JSON.stringify(jsonValue));
     });
   }
 
@@ -588,35 +606,35 @@ describe('default encoder', () => {
     new Response('a\nb\nc\n').body,
     asyncIterable,
   ]) {
-    test(`converts ${util.inspect(streamValue)} to ReadableStream`, async () => {
+    it(`converts ${util.inspect(streamValue)} to ReadableStream`, async () => {
       const { req } = await client.buildRequest({
         path: '/foo',
         method: 'post',
         body: streamValue,
       });
-      expect(req.headers).toBeInstanceOf(Headers);
-      expect(req.headers.get('content-type')).toEqual(null);
-      expect(req.body).toBeInstanceOf(ReadableStream);
-      expect(await new Response(req.body).text()).toBe('a\nb\nc\n');
+      assert.ok(req.headers instanceof Headers);
+      assert.deepStrictEqual(req.headers.get('content-type'), null);
+      assert.ok(req.body instanceof ReadableStream);
+      assert.strictEqual(await new Response(req.body).text(), 'a\nb\nc\n');
     });
   }
 
-  test(`can set content-type for ReadableStream`, async () => {
+  it(`can set content-type for ReadableStream`, async () => {
     const { req } = await client.buildRequest({
       path: '/foo',
       method: 'post',
       body: new Response('a\nb\nc\n').body,
       headers: { 'Content-Type': 'text/plain' },
     });
-    expect(req.headers).toBeInstanceOf(Headers);
-    expect(req.headers.get('content-type')).toEqual('text/plain');
-    expect(req.body).toBeInstanceOf(ReadableStream);
-    expect(await new Response(req.body).text()).toBe('a\nb\nc\n');
+    assert.ok(req.headers instanceof Headers);
+    assert.deepStrictEqual(req.headers.get('content-type'), 'text/plain');
+    assert.ok(req.body instanceof ReadableStream);
+    assert.strictEqual(await new Response(req.body).text(), 'a\nb\nc\n');
   });
 });
 
 describe('retries', () => {
-  test('retry on timeout', async () => {
+  it('retry on timeout', async () => {
     let count = 0;
     const testFetch = async (
       url: string | URL | Request,
@@ -636,18 +654,19 @@ describe('retries', () => {
       fetch: testFetch,
     });
 
-    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
-    expect(count).toEqual(2);
-    expect(
+    assert.deepStrictEqual(await client.request({ path: '/foo', method: 'get' }), { a: 1 });
+    assert.deepStrictEqual(count, 2);
+    assert.deepStrictEqual(
       await client
         .request({ path: '/foo', method: 'get' })
         .asResponse()
         .then((r) => r.text()),
-    ).toEqual(JSON.stringify({ a: 1 }));
-    expect(count).toEqual(3);
+      JSON.stringify({ a: 1 }),
+    );
+    assert.deepStrictEqual(count, 3);
   });
 
-  test('retry on 429 with retry-after', async () => {
+  it('retry on 429 with retry-after', async () => {
     let count = 0;
     const testFetch = async (
       url: string | URL | Request,
@@ -666,18 +685,19 @@ describe('retries', () => {
 
     const client = new Perplexity({ apiKey: 'My API Key', fetch: testFetch });
 
-    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
-    expect(count).toEqual(2);
-    expect(
+    assert.deepStrictEqual(await client.request({ path: '/foo', method: 'get' }), { a: 1 });
+    assert.deepStrictEqual(count, 2);
+    assert.deepStrictEqual(
       await client
         .request({ path: '/foo', method: 'get' })
         .asResponse()
         .then((r) => r.text()),
-    ).toEqual(JSON.stringify({ a: 1 }));
-    expect(count).toEqual(3);
+      JSON.stringify({ a: 1 }),
+    );
+    assert.deepStrictEqual(count, 3);
   });
 
-  test('retry on 429 with retry-after-ms', async () => {
+  it('retry on 429 with retry-after-ms', async () => {
     let count = 0;
     const testFetch = async (
       url: string | URL | Request,
@@ -696,14 +716,15 @@ describe('retries', () => {
 
     const client = new Perplexity({ apiKey: 'My API Key', fetch: testFetch });
 
-    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
-    expect(count).toEqual(2);
-    expect(
+    assert.deepStrictEqual(await client.request({ path: '/foo', method: 'get' }), { a: 1 });
+    assert.deepStrictEqual(count, 2);
+    assert.deepStrictEqual(
       await client
         .request({ path: '/foo', method: 'get' })
         .asResponse()
         .then((r) => r.text()),
-    ).toEqual(JSON.stringify({ a: 1 }));
-    expect(count).toEqual(3);
+      JSON.stringify({ a: 1 }),
+    );
+    assert.deepStrictEqual(count, 3);
   });
 });

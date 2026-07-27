@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+import { afterEach, beforeEach, describe, it } from 'node:test';
 import fs from 'fs';
 import type { ResponseLike } from './to-file.js';
 import { toFile } from '../core/uploads.js';
@@ -15,18 +17,16 @@ function mockResponse({ url, content }: { url: string; content?: Blob }): Respon
 
 describe('toFile', () => {
   it('throws a helpful error for mismatched types', async () => {
-    await expect(
+    await assert.rejects(
       // @ts-expect-error intentionally mismatched type
       toFile({ foo: 'string' }),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Unexpected data type: object; constructor: Object; props: ["foo"]"`,
+      new Error('Unexpected data type: object; constructor: Object; props: ["foo"]'),
     );
 
-    await expect(
+    await assert.rejects(
       // @ts-expect-error intentionally mismatched type
       toFile(new MyClass()),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Unexpected data type: object; constructor: MyClass; props: ["name"]"`,
+      new Error('Unexpected data type: object; constructor: MyClass; props: ["name"]'),
     );
   });
 
@@ -34,33 +34,33 @@ describe('toFile', () => {
     // @ts-expect-error we intentionally do not type support for `string`
     // to help people avoid passing a file path
     const file = await toFile('contents');
-    await expect(file.text()).resolves.toEqual('contents');
+    assert.deepStrictEqual(await file.text(), 'contents');
   });
 
   it('extracts a file name from a Response', async () => {
     const response = mockResponse({ url: 'https://example.com/my/audio.mp3' });
     const file = await toFile(response);
-    expect(file.name).toEqual('audio.mp3');
+    assert.deepStrictEqual(file.name, 'audio.mp3');
   });
 
   it('extracts a file name from a File', async () => {
     const input = new File(['foo'], 'input.jsonl');
     const file = await toFile(input);
-    expect(file.name).toEqual('input.jsonl');
+    assert.deepStrictEqual(file.name, 'input.jsonl');
   });
 
   it('extracts a file name from a ReadStream', async () => {
     const input = fs.createReadStream('src/internal/to-file.test.ts');
     const file = await toFile(input);
-    expect(file.name).toEqual('to-file.test.ts');
+    assert.deepStrictEqual(file.name, 'to-file.test.ts');
   });
 
   it('does not copy File objects', async () => {
     const input = new File(['foo'], 'input.jsonl', { type: 'jsonl' });
     const file = await toFile(input);
-    expect(file).toBe(input);
-    expect(file.name).toEqual('input.jsonl');
-    expect(file.type).toBe('jsonl');
+    assert.strictEqual(file, input);
+    assert.deepStrictEqual(file.name, 'input.jsonl');
+    assert.strictEqual(file.type, 'jsonl');
   });
 
   it('is assignable to File and Blob', async () => {
@@ -86,11 +86,10 @@ describe('missing File error message', () => {
     globalThis.File = prevGlobalFile;
   });
 
-  test('is thrown', async () => {
-    await expect(
+  it('is thrown', async () => {
+    await assert.rejects(
       toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
-    ).rejects.toMatchInlineSnapshot(
-      `[Error: \`File\` is not defined as a global, which is required for file uploads.]`,
+      new Error('`File` is not defined as a global, which is required for file uploads.'),
     );
   });
 });

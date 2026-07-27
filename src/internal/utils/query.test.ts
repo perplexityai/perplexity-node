@@ -1,4 +1,10 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { stringifyQuery } from './query.js';
+
+function assertThrowsWithMessage(block: () => unknown, expected: string): void {
+  assert.throws(block, (error: unknown) => error instanceof Error && error.message.includes(expected));
+}
 
 describe('stringifyQuery', () => {
   for (const [input, expected] of [
@@ -13,13 +19,13 @@ describe('stringifyQuery', () => {
     ],
   ] as const) {
     it(`${JSON.stringify(input)} -> ${expected}`, () => {
-      expect(stringifyQuery(input)).toEqual(expected);
+      assert.deepStrictEqual(stringifyQuery(input), expected);
     });
   }
 
   for (const value of [[], {}, new Date()]) {
     it(`${JSON.stringify(value)} -> <error>`, () => {
-      expect(() => stringifyQuery({ value })).toThrow(`Cannot stringify type ${typeof value}`);
+      assertThrowsWithMessage(() => stringifyQuery({ value }), `Cannot stringify type ${typeof value}`);
     });
   }
 });

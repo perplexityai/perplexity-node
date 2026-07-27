@@ -1,8 +1,10 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { multipartFormRequestOptions, createForm } from './uploads.js';
 import { toFile } from '../core/uploads.js';
 
 describe('form data validation', () => {
-  test('valid values do not error', async () => {
+  it('valid values do not error', async () => {
     await multipartFormRequestOptions(
       {
         body: {
@@ -17,20 +19,22 @@ describe('form data validation', () => {
     );
   });
 
-  test('null', async () => {
-    await expect(() =>
-      multipartFormRequestOptions(
-        {
-          body: {
-            null: null,
+  it('null', async () => {
+    await assert.rejects(
+      () =>
+        multipartFormRequestOptions(
+          {
+            body: {
+              null: null,
+            },
           },
-        },
-        fetch,
-      ),
-    ).rejects.toThrow(TypeError);
+          fetch,
+        ),
+      TypeError,
+    );
   });
 
-  test('undefined is stripped', async () => {
+  it('undefined is stripped', async () => {
     const form = await createForm(
       {
         foo: undefined,
@@ -38,11 +42,11 @@ describe('form data validation', () => {
       },
       fetch,
     );
-    expect(form.has('foo')).toBe(false);
-    expect(form.get('bar')).toBe('baz');
+    assert.strictEqual(form.has('foo'), false);
+    assert.strictEqual(form.get('bar'), 'baz');
   });
 
-  test('nested undefined property is stripped', async () => {
+  it('nested undefined property is stripped', async () => {
     const form = await createForm(
       {
         bar: {
@@ -51,7 +55,7 @@ describe('form data validation', () => {
       },
       fetch,
     );
-    expect(Array.from(form.entries())).toEqual([]);
+    assert.deepStrictEqual(Array.from(form.entries()), []);
 
     const form2 = await createForm(
       {
@@ -62,17 +66,17 @@ describe('form data validation', () => {
       },
       fetch,
     );
-    expect(Array.from(form2.entries())).toEqual([['bar[foo]', 'string']]);
+    assert.deepStrictEqual(Array.from(form2.entries()), [['bar[foo]', 'string']]);
   });
 
-  test('nested undefined array item is stripped', async () => {
+  it('nested undefined array item is stripped', async () => {
     const form = await createForm(
       {
         bar: [undefined, undefined],
       },
       fetch,
     );
-    expect(Array.from(form.entries())).toEqual([]);
+    assert.deepStrictEqual(Array.from(form.entries()), []);
 
     const form2 = await createForm(
       {
@@ -80,6 +84,6 @@ describe('form data validation', () => {
       },
       fetch,
     );
-    expect(Array.from(form2.entries())).toEqual([['bar[]', 'foo']]);
+    assert.deepStrictEqual(Array.from(form2.entries()), [['bar[]', 'foo']]);
   });
 });

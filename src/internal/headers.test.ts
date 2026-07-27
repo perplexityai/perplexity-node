@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { inspect } from 'node:util';
 import { buildHeaders, type HeadersLike, type NullableHeaders } from './headers.js';
 
@@ -81,8 +83,8 @@ describe('buildHeaders', () => {
     [[null], `NullableHeaders { }`],
   ];
   for (const [input, expected] of cases) {
-    test(expected, () => {
-      expect(inspectNullableHeaders(buildHeaders(input))).toEqual(expected);
+    it(expected, () => {
+      assert.deepStrictEqual(inspectNullableHeaders(buildHeaders(input)), expected);
     });
   }
 });

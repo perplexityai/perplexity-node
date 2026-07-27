@@ -14,8 +14,10 @@ ts_library(
 ts_test(
     name = "browser_test",
     srcs = ["sessions.test.ts"],
+    tsconfig_types = ["node"],
     deps = [
         ":browser",
+        "//:node_modules/@types/node",
         "//src",
     ],
 )
