@@ -1,120 +1,74 @@
-# Shared
+# API
 
-Types:
+Endpoint resources and request/response models are generated from Perplexity OpenAPI contract.
+All generated classes and types are exported from package root and available under `API` namespace.
+See [`src/generated/api.ts`](./src/generated/api.ts) for full contract.
 
-- <code><a href="./src/resources/shared.ts">APIPublicSearchResult</a></code>
-- <code><a href="./src/resources/shared.ts">BrowserSessionResponse</a></code>
-- <code><a href="./src/resources/shared.ts">ChatMessageInput</a></code>
-- <code><a href="./src/resources/shared.ts">ChatMessageOutput</a></code>
-- <code><a href="./src/resources/shared.ts">Choice</a></code>
-- <code><a href="./src/resources/shared.ts">ContextualizedEmbeddingObject</a></code>
-- <code><a href="./src/resources/shared.ts">EmbeddingObject</a></code>
-- <code><a href="./src/resources/shared.ts">EmbeddingsUsage</a></code>
-- <code><a href="./src/resources/shared.ts">JsonSchemaFormat</a></code>
-- <code><a href="./src/resources/shared.ts">ResponseFormat</a></code>
-- <code><a href="./src/resources/shared.ts">SearchResult</a></code>
-- <code><a href="./src/resources/shared.ts">UsageInfo</a></code>
-- <code><a href="./src/resources/shared.ts">UserLocation</a></code>
-- <code><a href="./src/resources/shared.ts">WebSearchOptions</a></code>
+## Chat completions
 
-# Chat
+```ts
+client.chat.completions.create(body: ApiChatCompletionsRequestInput)
+  : APIPromise<CompletionResponseOutput>
 
-Types:
+client.chat.completions.create({ ...body, stream: true })
+  : APIPromise<Stream<CompletionResponseOutput>>
+```
 
-- <code><a href="./src/resources/chat/chat.ts">StreamChunk</a></code>
+## Search
 
-## Completions
+```ts
+client.search.create(body: ApiSearchRequestInput)
+  : APIPromise<ApiSearchResponseOutput>
+```
 
-Methods:
+## Responses
 
-- <code title="post /chat/completions">client.chat.completions.<a href="./src/resources/chat/completions.ts">create</a>({ ...params }) -> StreamChunk</code>
+```ts
+client.responses.create(body: ResponsesRequestInput)
+  : APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>
 
-# Search
+client.responses.retrieve(responseID: string)
+  : APIPromise<ResponsesResponseOutput>
 
-Types:
+client.responses.cancel(responseID: string)
+  : APIPromise<{ response_id: string; status: 'cancelling' }>
 
-- <code><a href="./src/resources/search.ts">SearchCreateResponse</a></code>
+client.responses.files.list(responseID: string)
+  : APIPromise<ResponseFileListOutput>
 
-Methods:
+client.responses.files.content(fileID: string, { response_id: string })
+  : APIPromise<Response>
+```
 
-- <code title="post /search">client.search.<a href="./src/resources/search.ts">create</a>({ ...params }) -> SearchCreateResponse</code>
+## Embeddings
 
-# Responses
+```ts
+client.embeddings.create(body: EmbeddingsRequestInput)
+  : APIPromise<EmbeddingsResponseOutput>
 
-Types:
+client.contextualizedEmbeddings.create(body: ContextualizedEmbeddingsRequestInput)
+  : APIPromise<ContextualizedEmbeddingsResponseOutput>
+```
 
-- <code><a href="./src/resources/responses/responses.ts">Annotation</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ContentPart</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ErrorInfo</a></code>
-- <code><a href="./src/resources/responses/responses.ts">FunctionCallOutputItem</a></code>
-- <code><a href="./src/resources/responses/responses.ts">FunctionTool</a></code>
-- <code><a href="./src/resources/responses/responses.ts">InputItem</a></code>
-- <code><a href="./src/resources/responses/responses.ts">OutputItem</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponseFile</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponseFileList</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponseStreamChunk</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponsesCreateParams</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponsesUsage</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponseCreateResponse</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponseRetrieveResponse</a></code>
-- <code><a href="./src/resources/responses/responses.ts">ResponseCancelResponse</a></code>
+## Browser sessions
 
-Methods:
+```ts
+client.browser.sessions.create(body?: CreateBrowserSessionRequestInput)
+  : APIPromise<BrowserSessionResponseOutput>
 
-- <code title="post /v1/responses">client.responses.<a href="./src/resources/responses/responses.ts">create</a>({ ...params }) -> ResponseCreateResponse</code>
-- <code title="get /v1/responses/{response_id}">client.responses.<a href="./src/resources/responses/responses.ts">retrieve</a>(responseID) -> ResponseRetrieveResponse</code>
-- <code title="post /v1/responses/{response_id}/cancel">client.responses.<a href="./src/resources/responses/responses.ts">cancel</a>(responseID) -> ResponseCancelResponse</code>
+client.browser.sessions.delete(sessionID: string)
+  : APIPromise<void>
+```
 
-## Files
+## Async chat completions
 
-Methods:
+```ts
+client.async.chat.completions.create(body: AsyncApiChatCompletionsRequestInput)
+  : APIPromise<AsyncApiChatCompletionsResponseOutput>
 
-- <code title="get /v1/responses/{response_id}/files">client.responses.files.<a href="./src/resources/responses/files.ts">list</a>(responseID) -> ResponseFileList</code>
-- <code title="get /v1/responses/{response_id}/files/{file_id}/content">client.responses.files.<a href="./src/resources/responses/files.ts">content</a>(fileID, { ...params }) -> Response</code>
+client.async.chat.completions.list()
+  : APIPromise<ListAsyncApiChatCompletionsResponseOutput>
 
-# Embeddings
-
-Types:
-
-- <code><a href="./src/resources/embeddings.ts">EmbeddingCreateResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/embeddings">client.embeddings.<a href="./src/resources/embeddings.ts">create</a>({ ...params }) -> EmbeddingCreateResponse</code>
-
-# ContextualizedEmbeddings
-
-Types:
-
-- <code><a href="./src/resources/contextualized-embeddings.ts">ContextualizedEmbeddingCreateResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/contextualizedembeddings">client.contextualizedEmbeddings.<a href="./src/resources/contextualized-embeddings.ts">create</a>({ ...params }) -> ContextualizedEmbeddingCreateResponse</code>
-
-# Browser
-
-## Sessions
-
-Methods:
-
-- <code title="post /v1/browser/sessions">client.browser.sessions.<a href="./src/resources/browser/sessions.ts">create</a>() -> BrowserSessionResponse</code>
-- <code title="delete /v1/browser/sessions/{session_id}">client.browser.sessions.<a href="./src/resources/browser/sessions.ts">delete</a>(sessionID) -> void</code>
-
-# Async
-
-## Chat
-
-### Completions
-
-Types:
-
-- <code><a href="./src/resources/async/chat/completions.ts">CompletionCreateResponse</a></code>
-- <code><a href="./src/resources/async/chat/completions.ts">CompletionListResponse</a></code>
-- <code><a href="./src/resources/async/chat/completions.ts">CompletionGetResponse</a></code>
-
-Methods:
-
-- <code title="post /async/chat/completions">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">create</a>({ ...params }) -> CompletionCreateResponse</code>
-- <code title="get /async/chat/completions">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">list</a>() -> CompletionListResponse</code>
-- <code title="get /async/chat/completions/{api_request}">client.async.chat.completions.<a href="./src/resources/async/chat/completions.ts">get</a>(apiRequest, { ...params }) -> CompletionGetResponse</code>
+client.async.chat.completions.get(apiRequest: string, params?)
+  : APIPromise<AsyncApiChatCompletionsResponseOutput>
+```

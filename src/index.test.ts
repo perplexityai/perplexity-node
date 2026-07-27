@@ -1,7 +1,7 @@
 import { APIPromise } from './core/api-promise.js';
 
 import util from 'node:util';
-import Perplexity, { APIUserAbortError } from './index.js';
+import Perplexity, { APIUserAbortError, ChatResource, type API } from './index.js';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -13,6 +13,46 @@ describe('instantiate client', () => {
 
   afterEach(() => {
     process.env = env;
+  });
+
+  test('generated chat API uses client transport', async () => {
+    const request: API.ApiChatCompletionsRequestInput = {
+      messages: [{ content: 'What is the answer?', role: 'user' }],
+      model: 'sonar',
+    };
+    const expectedResponse: API.CompletionResponseOutput = {
+      choices: [],
+      created: 1,
+      id: 'completion-id',
+      model: 'sonar',
+    };
+    let capturedRequest:
+      | { body: BodyInit | null | undefined; method: string | undefined; url: string }
+      | undefined;
+    const client = new Perplexity({
+      apiKey: 'My API Key',
+      baseURL: 'https://api.example.com',
+      fetch: async (url, init) => {
+        capturedRequest = {
+          body: init?.body,
+          method: init?.method,
+          url: String(url),
+        };
+        return new Response(JSON.stringify(expectedResponse), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      },
+    });
+
+    const response = await client.chat.completions.create(request);
+
+    expect(client.chat).toBeInstanceOf(ChatResource);
+    expect(capturedRequest).toEqual({
+      body: JSON.stringify(request),
+      method: 'POST',
+      url: 'https://api.example.com/chat/completions',
+    });
+    expect(response).toEqual(expectedResponse);
   });
 
   describe('defaultHeaders', () => {

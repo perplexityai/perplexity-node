@@ -17,39 +17,17 @@ import { stringifyQuery } from './internal/utils/query.js';
 import { VERSION } from './version.js';
 import * as Errors from './core/error.js';
 import * as Uploads from './core/uploads.js';
-import * as API from './resources/index.js';
 import { APIPromise } from './core/api-promise.js';
 import {
-  ContextualizedEmbeddingCreateParams,
-  ContextualizedEmbeddingCreateResponse,
-  ContextualizedEmbeddings,
-} from './resources/contextualized-embeddings.js';
-import { EmbeddingCreateParams, EmbeddingCreateResponse, Embeddings } from './resources/embeddings.js';
-import { Search, SearchCreateParams, SearchCreateResponse } from './resources/search.js';
-import { Async } from './resources/async/async.js';
-import { Browser } from './resources/browser/browser.js';
-import { Chat, StreamChunk } from './resources/chat/chat.js';
-import {
-  Annotation,
-  ContentPart,
-  ErrorInfo,
-  FunctionCallOutputItem,
-  FunctionTool,
-  InputItem,
-  OutputItem,
-  ResponseCancelResponse,
-  ResponseCreateParams,
-  ResponseCreateParamsNonStreaming,
-  ResponseCreateParamsStreaming,
-  ResponseCreateResponse,
-  ResponseFile,
-  ResponseFileList,
-  ResponseRetrieveResponse,
-  ResponseStreamChunk,
-  Responses,
-  ResponsesCreateParams,
-  ResponsesUsage,
-} from './resources/responses/responses.js';
+  AsyncResource as Async,
+  BrowserResource as Browser,
+  ChatResource as Chat,
+  ContextualizedEmbeddingsResource as ContextualizedEmbeddings,
+  EmbeddingsResource as Embeddings,
+  ResponsesResource as Responses,
+  SearchResource as Search,
+} from './generated/api.js';
+import type * as Generated from './generated/api.js';
 import { type Fetch } from './internal/builtin-types.js';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers.js';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options.js';
@@ -768,13 +746,13 @@ export class Perplexity {
 
   static toFile = Uploads.toFile;
 
-  chat: API.Chat = new API.Chat(this);
-  search: API.Search = new API.Search(this);
-  responses: API.Responses = new API.Responses(this);
-  embeddings: API.Embeddings = new API.Embeddings(this);
-  contextualizedEmbeddings: API.ContextualizedEmbeddings = new API.ContextualizedEmbeddings(this);
-  browser: API.Browser = new API.Browser(this);
-  async: API.Async = new API.Async(this);
+  chat: Chat = new Chat(this);
+  search: Search = new Search(this);
+  responses: Responses = new Responses(this);
+  embeddings: Embeddings = new Embeddings(this);
+  contextualizedEmbeddings: ContextualizedEmbeddings = new ContextualizedEmbeddings(this);
+  browser: Browser = new Browser(this);
+  async: Async = new Async(this);
 }
 
 Perplexity.Chat = Chat;
@@ -786,66 +764,66 @@ Perplexity.Browser = Browser;
 Perplexity.Async = Async;
 
 export declare namespace Perplexity {
-  export type RequestOptions = Opts.RequestOptions;
+  export type RequestOptions = Generated.RequestOptions;
 
-  export { Chat as Chat, type StreamChunk as StreamChunk };
+  export { Chat as Chat };
+  export type StreamChunk = Generated.CompletionResponseOutput;
 
-  export {
-    Search as Search,
-    type SearchCreateResponse as SearchCreateResponse,
-    type SearchCreateParams as SearchCreateParams,
+  export { Search as Search };
+  export type SearchCreateResponse = Generated.ApiSearchResponseOutput;
+  export type SearchCreateParams = Generated.ApiSearchRequestInput;
+
+  export { Responses as Responses };
+  export type Annotation = Generated.AnnotationOutput;
+  export type ContentPart = Generated.ContentPartOutput;
+  export type ErrorInfo = Generated.ErrorInfoOutput;
+  export type FunctionCallOutputItem = Generated.FunctionCallOutputItemOutput;
+  export type FunctionTool = Generated.FunctionToolInput;
+  export type InputItem = Generated.InputItemInput;
+  export type OutputItem = Generated.OutputItemOutput;
+  export type ResponseFile = Generated.ResponseFileOutput;
+  export type ResponseFileList = Generated.ResponseFileListOutput;
+  export type ResponseStreamChunk = Generated.ResponseStreamEventOutput;
+  export type ResponsesCreateParams = Generated.ResponsesRequestInput;
+  export type ResponsesUsage = Generated.ResponsesUsageOutput;
+  export type ResponseCreateResponse = Generated.ResponsesResponseOutput;
+  export type ResponseRetrieveResponse = Generated.ResponsesResponseOutput;
+  export type ResponseCancelResponse = {
+    response_id: string;
+    status: 'cancelling';
+  };
+  export type ResponseCreateParams = Generated.ResponsesRequestInput;
+  export type ResponseCreateParamsNonStreaming = Omit<Generated.ResponsesRequestInput, 'stream'> & {
+    stream?: false;
+  };
+  export type ResponseCreateParamsStreaming = Omit<Generated.ResponsesRequestInput, 'stream'> & {
+    stream: true;
   };
 
-  export {
-    Responses as Responses,
-    type Annotation as Annotation,
-    type ContentPart as ContentPart,
-    type ErrorInfo as ErrorInfo,
-    type FunctionCallOutputItem as FunctionCallOutputItem,
-    type FunctionTool as FunctionTool,
-    type InputItem as InputItem,
-    type OutputItem as OutputItem,
-    type ResponseFile as ResponseFile,
-    type ResponseFileList as ResponseFileList,
-    type ResponseStreamChunk as ResponseStreamChunk,
-    type ResponsesCreateParams as ResponsesCreateParams,
-    type ResponsesUsage as ResponsesUsage,
-    type ResponseCreateResponse as ResponseCreateResponse,
-    type ResponseRetrieveResponse as ResponseRetrieveResponse,
-    type ResponseCancelResponse as ResponseCancelResponse,
-    type ResponseCreateParams as ResponseCreateParams,
-    type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
-    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
-  };
+  export { Embeddings as Embeddings };
+  export type EmbeddingCreateResponse = Generated.EmbeddingsResponseOutput;
+  export type EmbeddingCreateParams = Generated.EmbeddingsRequestInput;
 
-  export {
-    Embeddings as Embeddings,
-    type EmbeddingCreateResponse as EmbeddingCreateResponse,
-    type EmbeddingCreateParams as EmbeddingCreateParams,
-  };
-
-  export {
-    ContextualizedEmbeddings as ContextualizedEmbeddings,
-    type ContextualizedEmbeddingCreateResponse as ContextualizedEmbeddingCreateResponse,
-    type ContextualizedEmbeddingCreateParams as ContextualizedEmbeddingCreateParams,
-  };
+  export { ContextualizedEmbeddings as ContextualizedEmbeddings };
+  export type ContextualizedEmbeddingCreateResponse = Generated.ContextualizedEmbeddingsResponseOutput;
+  export type ContextualizedEmbeddingCreateParams = Generated.ContextualizedEmbeddingsRequestInput;
 
   export { Browser as Browser };
 
   export { Async as Async };
 
-  export type APIPublicSearchResult = API.APIPublicSearchResult;
-  export type BrowserSessionResponse = API.BrowserSessionResponse;
-  export type ChatMessageInput = API.ChatMessageInput;
-  export type ChatMessageOutput = API.ChatMessageOutput;
-  export type Choice = API.Choice;
-  export type ContextualizedEmbeddingObject = API.ContextualizedEmbeddingObject;
-  export type EmbeddingObject = API.EmbeddingObject;
-  export type EmbeddingsUsage = API.EmbeddingsUsage;
-  export type JsonSchemaFormat = API.JsonSchemaFormat;
-  export type ResponseFormat = API.ResponseFormat;
-  export type SearchResult = API.SearchResult;
-  export type UsageInfo = API.UsageInfo;
-  export type UserLocation = API.UserLocation;
-  export type WebSearchOptions = API.WebSearchOptions;
+  export type APIPublicSearchResult = Generated.SearchResultOutput;
+  export type BrowserSessionResponse = Generated.BrowserSessionResponseOutput;
+  export type ChatMessageInput = Generated.ChatMessageInputInput;
+  export type ChatMessageOutput = Generated.ChatMessageOutputOutput;
+  export type Choice = Generated.ChoiceOutput;
+  export type ContextualizedEmbeddingObject = Generated.ContextualizedEmbeddingObjectOutput;
+  export type EmbeddingObject = Generated.EmbeddingObjectOutput;
+  export type EmbeddingsUsage = Generated.EmbeddingsUsageOutput;
+  export type JsonSchemaFormat = Generated.ResponseFormatJSONSchemaInput;
+  export type ResponseFormat = Generated.ResponseFormatInput;
+  export type SearchResult = Generated.SearchResultOutput;
+  export type UsageInfo = Generated.UsageInfoOutput;
+  export type UserLocation = Generated.UserLocationInput;
+  export type WebSearchOptions = Generated.WebSearchOptionsInput;
 }

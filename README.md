@@ -117,7 +117,14 @@ const academicSearch = await client.search.create({
 We provide support for streaming responses using Server Sent Events (SSE).
 
 ```ts
-import Perplexity from '@perplexity-ai/perplexity_ai';
+import Perplexity, {
+  type ApiChatCompletionsRequestInput,
+  type ApiSearchRequestInput,
+  type ApiSearchResponseOutput,
+  type CompletionResponseOutput,
+  type ResponsesRequestInput,
+  type ResponsesResponseOutput,
+} from '@perplexity-ai/perplexity_ai';
 
 const client = new Perplexity();
 
@@ -146,26 +153,26 @@ const client = new Perplexity({
 });
 
 // Search API types
-const searchParams: Perplexity.Search.SearchCreateParams = {
+const searchParams: ApiSearchRequestInput = {
   query: 'artificial intelligence trends',
   max_results: 5,
   search_mode: 'web',
 };
-const searchResponse: Perplexity.Search.SearchCreateResponse = await client.search.create(searchParams);
+const searchResponse: ApiSearchResponseOutput = await client.search.create(searchParams);
 
 // Responses API types
-const responseParams: Perplexity.ResponseCreateParams = {
+const responseParams: ResponsesRequestInput = {
   input: 'What is the capital of France?',
   model: 'sonar',
 };
-const response: Perplexity.ResponseCreateResponse = await client.responses.create(responseParams);
+const response: ResponsesResponseOutput = await client.responses.create(responseParams);
 
 // Chat Completions types
-const chatParams: Perplexity.Chat.CompletionCreateParams = {
+const chatParams: ApiChatCompletionsRequestInput = {
   messages: [{ role: 'user', content: 'What is the capital of France?' }],
   model: 'sonar',
 };
-const streamChunk: Perplexity.StreamChunk = await client.chat.completions.create(chatParams);
+const completion: CompletionResponseOutput = await client.chat.completions.create(chatParams);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.

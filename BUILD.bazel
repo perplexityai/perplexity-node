@@ -59,12 +59,6 @@ TS_SOURCES = [
     "//src/internal/decoders",
     "//src/internal/utils",
     "//src/lib",
-    "//src/resources",
-    "//src/resources/async",
-    "//src/resources/async/chat",
-    "//src/resources/browser",
-    "//src/resources/chat",
-    "//src/resources/responses",
 ]
 
 TEST_SOURCES = [
