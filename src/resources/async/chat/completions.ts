@@ -1,7 +1,6 @@
 import { Async } from '../../../generated/api.js';
 
-export const Completions = Async.Chat.Completions;
-export type Completions = InstanceType<typeof Completions>;
+export import Completions = Async.Chat.Completions;
 export type CompletionCreateParams = Async.Chat.CompletionCreateParams;
 export type CompletionCreateResponse = Async.Chat.CompletionCreateResponse;
 export type CompletionGetParams = Async.Chat.CompletionGetParams;

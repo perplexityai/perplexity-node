@@ -520,6 +520,11 @@ TypeScript >= 5.0 is supported.
 
 Version 0.38 drops CommonJS and TypeScript 4 support. Use ESM and TypeScript 5 or newer.
 
+Two nested response aliases now match their generated container types:
+
+- `InputItem.InputMessage.ContentPartArray` is the full content array, not one content part.
+- `ResponsesUsage.ToolCallsDetails` is the full per-tool record, not one tool's details.
+
 The following runtimes are supported:
 
 - Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)
