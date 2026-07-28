@@ -1,4 +1,4 @@
-load("//:ts.bzl", "ts_library", "ts_test")
+load("//:ts.bzl", "ts_library")
 
 ts_library(
     name = "browser",
@@ -9,15 +9,4 @@ ts_library(
     ],
     visibility = ["//visibility:public"],
     deps = ["//src/generated"],
-)
-
-ts_test(
-    name = "browser_test",
-    srcs = ["sessions.test.ts"],
-    tsconfig_types = ["node"],
-    deps = [
-        ":browser",
-        "//:node_modules/@types/node",
-        "//src",
-    ],
 )

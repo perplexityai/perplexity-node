@@ -1,4 +1,3 @@
-import { Responses } from '../../generated/api.js';
-
-export import Files = Responses.Files;
-export type FileContentParams = Responses.FileContentParams;
+import * as API from '../../generated/api.js';
+export import Files = API.Responses.Files;
+export type FileContentParams = API.Responses.Files.FileContentParams;

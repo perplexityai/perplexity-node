@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import Perplexity from '../../index.js';
+import Perplexity from '../../../index.js';
 
 const client = new Perplexity({
   apiKey: 'My API Key',

@@ -3,7 +3,7 @@ import { APIPromise } from './core/api-promise.js';
 import assert from 'node:assert/strict';
 import { afterEach, beforeEach, describe, it, mock } from 'node:test';
 import util from 'node:util';
-import Perplexity, { APIUserAbortError, ChatResource, type API } from './index.js';
+import Perplexity, { APIUserAbortError, Chat, type API } from './index.js';
 import {
   Async as GeneratedAsync,
   Browser as GeneratedBrowser,
@@ -31,12 +31,12 @@ describe('instantiate client', () => {
   });
 
   it('generated chat API uses client transport', async () => {
-    const generatedRequest: API.ApiChatCompletionsRequestInput = {
+    const generatedRequest: API.Chat.CompletionCreateParams = {
       messages: [{ content: 'What is the answer?', role: 'user' }],
       model: 'sonar',
     };
     const request: Perplexity.Chat.CompletionCreateParams = generatedRequest;
-    const generatedResponse: API.CompletionResponseOutput = {
+    const generatedResponse: API.Chat.StreamChunk = {
       choices: [],
       created: 1,
       id: 'completion-id',
@@ -63,7 +63,7 @@ describe('instantiate client', () => {
 
     const response = await client.chat.completions.create(request);
 
-    assert.ok(client.chat instanceof ChatResource);
+    assert.ok(client.chat instanceof Chat);
     assert.deepStrictEqual(capturedRequest, {
       body: JSON.stringify(request),
       method: 'POST',

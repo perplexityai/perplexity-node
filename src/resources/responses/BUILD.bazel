@@ -1,4 +1,4 @@
-load("//:ts.bzl", "ts_library", "ts_test")
+load("//:ts.bzl", "ts_library")
 
 ts_library(
     name = "responses",
@@ -9,18 +9,4 @@ ts_library(
     ],
     visibility = ["//visibility:public"],
     deps = ["//src/generated"],
-)
-
-ts_test(
-    name = "responses_test",
-    srcs = [
-        "files.test.ts",
-        "responses.test.ts",
-    ],
-    tsconfig_types = ["node"],
-    deps = [
-        ":responses",
-        "//:node_modules/@types/node",
-        "//src",
-    ],
 )

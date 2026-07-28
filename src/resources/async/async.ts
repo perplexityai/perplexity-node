@@ -1,1 +1,2 @@
-export { Async } from '../../generated/api.js';
+import * as API from '../../generated/api.js';
+export import Async = API.Async;

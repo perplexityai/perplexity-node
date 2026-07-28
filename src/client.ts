@@ -18,7 +18,8 @@ import { VERSION } from './version.js';
 import * as Errors from './core/error.js';
 import * as Uploads from './core/uploads.js';
 import { APIPromise } from './core/api-promise.js';
-import * as API from './generated/api.js';
+import type { SdkTransport } from './generated/api.js';
+import * as API from './resources/index.js';
 import {
   Annotation,
   Async,
@@ -49,11 +50,10 @@ import {
   Search,
   SearchCreateParams,
   SearchCreateResponse,
-  SdkTransport,
   StreamChunk,
-} from './generated/api.js';
-type ResponseCreateParamsNonStreaming = API.Responses.ResponseCreateParamsNonStreaming;
-type ResponseCreateParamsStreaming = API.Responses.ResponseCreateParamsStreaming;
+  ResponseCreateParamsNonStreaming,
+  ResponseCreateParamsStreaming,
+} from './resources/index.js';
 import { type Fetch } from './internal/builtin-types.js';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers.js';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options.js';
