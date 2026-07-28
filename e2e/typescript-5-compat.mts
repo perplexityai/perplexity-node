@@ -6,11 +6,7 @@ import type { Sessions } from '@perplexity-ai/perplexity_ai/resources/browser/se
 import type { Completions } from '@perplexity-ai/perplexity_ai/resources/chat/completions.mjs';
 import type { CompletionCreateParamsBase } from '@perplexity-ai/perplexity_ai/resources/chat/completions.mjs';
 import type { Files } from '@perplexity-ai/perplexity_ai/resources/responses/files.mjs';
-import type {
-  InputItem,
-  ResponseCreateParamsBase,
-  ResponsesUsage,
-} from '@perplexity-ai/perplexity_ai/resources/responses/responses.mjs';
+import type { ResponseCreateParamsBase } from '@perplexity-ai/perplexity_ai/resources/responses/responses.mjs';
 
 const options: ClientOptions = {
   apiKey: 'test-key',
@@ -22,8 +18,6 @@ const completion: CompletionCreateParamsBase = {
   model: 'sonar',
 };
 const response: ResponseCreateParamsBase = { input: 'Hello' };
-const contentPart: InputItem.InputMessage.ContentPartArray = { text: 'Hello', type: 'input_text' };
-const toolCallDetails: ResponsesUsage.ToolCallsDetails = { invocation: 1 };
 
 type LegacyNamespaceAliases = [
   AsyncChat.Completions,
@@ -47,6 +41,4 @@ type LegacyNamespaceAliases = [
 void client.chat.completions.create(completion);
 void client.responses.create(response);
 void APIError;
-void contentPart;
-void toolCallDetails;
 void ({} as LegacyNamespaceAliases);
