@@ -1,0 +1,14 @@
+load("//:ts.bzl", "ts_test")
+
+ts_test(
+    name = "responses_test",
+    srcs = [
+        "files.test.ts",
+        "responses.test.ts",
+    ],
+    tsconfig_types = ["node"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//src",
+    ],
+)

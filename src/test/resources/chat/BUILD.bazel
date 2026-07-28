@@ -1,0 +1,11 @@
+load("//:ts.bzl", "ts_test")
+
+ts_test(
+    name = "chat_test",
+    srcs = ["completions.test.ts"],
+    tsconfig_types = ["node"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//src",
+    ],
+)

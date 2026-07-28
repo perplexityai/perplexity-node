@@ -1,0 +1,15 @@
+load("//:ts.bzl", "ts_test")
+
+ts_test(
+    name = "resources_test",
+    srcs = [
+        "contextualized-embeddings.test.ts",
+        "embeddings.test.ts",
+        "search.test.ts",
+    ],
+    tsconfig_types = ["node"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//src",
+    ],
+)

@@ -81,11 +81,11 @@ TEST_SOURCES = [
     "//src/internal:internal_test_sources",
     "//src/internal/decoders:decoders_test_sources",
     "//src/internal/utils:utils_test_sources",
-    "//src/resources:resources_test_sources",
-    "//src/resources/async/chat:chat_test_sources",
-    "//src/resources/browser:browser_test_sources",
-    "//src/resources/chat:chat_test_sources",
-    "//src/resources/responses:responses_test_sources",
+    "//src/test/resources:resources_test_sources",
+    "//src/test/resources/async/chat:chat_test_sources",
+    "//src/test/resources/browser:browser_test_sources",
+    "//src/test/resources/chat:chat_test_sources",
+    "//src/test/resources/responses:responses_test_sources",
 ]
 
 ts_project(
