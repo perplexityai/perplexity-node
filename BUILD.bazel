@@ -216,5 +216,6 @@ test_suite(
         ":attw",
         ":publint",
         ":tsconfig_tests",
+        "//e2e:typescript_5_compat",
     ],
 )

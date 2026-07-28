@@ -6,6 +6,17 @@ load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS")
 package(default_visibility = ["//visibility:private"])
 
 js_test(
+    name = "typescript_5_compat",
+    data = [
+        "typescript-5-compat.mts",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/typescript-5",
+    ],
+    entry_point = "typescript-5-compat.mjs",
+    visibility = ["//:__pkg__"],
+)
+
+js_test(
     name = "sdk_parity",
     data = [
         ":typecheck",

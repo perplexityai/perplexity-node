@@ -6,7 +6,6 @@ ts_project(
     name = "typecheck",
     srcs = [
         "async-chat-completion.ts",
-        "browser-session.ts",
         "chat-completion.ts",
         "chat-streaming.ts",
         "contextualized-embeddings.ts",
@@ -35,7 +34,6 @@ ts_library(
     name = "examples",
     srcs = [
         "async-chat-completion.ts",
-        "browser-session.ts",
         "chat-completion.ts",
         "chat-streaming.ts",
         "contextualized-embeddings.ts",

@@ -18,6 +18,7 @@ export {
 } from '../../generated/api.js';
 
 export type ResponseCreateParams = API.ResponseCreateParams;
+export type ResponseCreateParamsBase = Omit<ResponseCreateParams, 'stream'>;
 export type ResponsesCreateParams = API.ResponsesCreateParams;
 export type ResponsesUsage = API.ResponsesUsage;
 export type ResponseCreateParamsNonStreaming = API.Responses.ResponseCreateParamsNonStreaming;

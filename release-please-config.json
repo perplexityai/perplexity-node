@@ -7,6 +7,7 @@
   "include-component-in-tag": false,
   "versioning": "prerelease",
   "prerelease": true,
+  "prerelease-type": "beta",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": false,
   "pull-request-header": "Automated Release PR",
