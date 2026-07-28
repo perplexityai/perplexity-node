@@ -514,7 +514,11 @@ We are keen for your feedback; please open an [issue](https://www.github.com/per
 
 ## Requirements
 
-TypeScript >= 4.9 is supported.
+TypeScript >= 5.0 is supported.
+
+### Migrating from 0.37
+
+Version 0.38 drops CommonJS and TypeScript 4 support. Use ESM and TypeScript 5 or newer.
 
 The following runtimes are supported:
 

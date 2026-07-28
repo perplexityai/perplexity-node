@@ -41,6 +41,9 @@ importers:
       typescript:
         specifier: 7.0.2
         version: 7.0.2
+      typescript-5:
+        specifier: npm:typescript@5.6.1-rc
+        version: typescript@5.6.1-rc
 
 packages:
 

@@ -11,7 +11,6 @@ node examples/responses-streaming.ts
 node examples/embeddings.ts
 node examples/contextualized-embeddings.ts
 node examples/async-chat-completion.ts
-node examples/browser-session.ts
 ```
 
 Each file is standalone and follows API shapes documented in [api.md](../api.md).

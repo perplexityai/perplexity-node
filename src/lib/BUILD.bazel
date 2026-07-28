@@ -4,4 +4,5 @@ ts_library(
     name = "lib",
     srcs = ["add-output-text.ts"],
     visibility = ["//visibility:public"],
+    deps = ["//src/generated"],
 )

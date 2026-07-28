@@ -1,9 +1,32 @@
 load("@aspect_rules_js//js:defs.bzl", "js_test")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@npm//:typescript-5/package_json.bzl", typescript_5_bin = "bin")
 load("//:ts.bzl", "ts_test")
 load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS")
 
 package(default_visibility = ["//visibility:private"])
+
+typescript_5_bin.tsc_binary(name = "tsc_5")
+
+ts_project(
+    name = "typescript_5_compat",
+    srcs = ["typescript-5-compat.mts"],
+    no_emit = True,
+    tsc = ":tsc_5",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "NodeNext",
+            moduleResolution = "NodeNext",
+            types = ["node"],
+        ),
+    },
+    visibility = ["//:__pkg__"],
+    deps = [
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/@types/node",
+    ],
+)
 
 js_test(
     name = "sdk_parity",
