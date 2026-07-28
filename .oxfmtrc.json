@@ -5,5 +5,13 @@
   "singleQuote": true,
   "trailingComma": "all",
   "sortPackageJson": false,
-  "ignorePatterns": ["dist/**", "bazel-*/**", "src/generated/**", "CHANGELOG.md", "tsconfig.json"]
+  "ignorePatterns": [
+    "dist/**",
+    "bazel-*/**",
+    "src/generated/**",
+    "src/resources.ts",
+    "src/resources/**",
+    "CHANGELOG.md",
+    "tsconfig.json"
+  ]
 }
