@@ -1,17 +1,10 @@
 import { Chat } from '../../generated/api.js';
 
-export const Completions = Chat.Completions;
-export type Completions = InstanceType<typeof Completions>;
+export import Completions = Chat.Completions;
 export type CompletionCreateParams = Chat.CompletionCreateParams;
 export type CompletionCreateParamsBase = Omit<CompletionCreateParams, 'stream'>;
 export type CompletionCreateParamsNonStreaming = Chat.CompletionCreateParamsNonStreaming;
 export type CompletionCreateParamsStreaming = Chat.CompletionCreateParamsStreaming;
-
-export namespace Completions {
-  export type CompletionCreateParams = Chat.CompletionCreateParams;
-  export type CompletionCreateParamsNonStreaming = Chat.CompletionCreateParamsNonStreaming;
-  export type CompletionCreateParamsStreaming = Chat.CompletionCreateParamsStreaming;
-}
 
 export namespace CompletionCreateParams {
   export type ResponseFormatText = Extract<
