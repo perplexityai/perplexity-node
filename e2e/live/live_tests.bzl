@@ -20,5 +20,8 @@ def live_tests():
                 "//:node_modules/published-sdk",
             ],
             entry_point = name.replace("_", "-") + ".spec.ts",
-            tags = ["live"],
+            tags = [
+                "functional_test",
+                "manual",
+            ],
         )
