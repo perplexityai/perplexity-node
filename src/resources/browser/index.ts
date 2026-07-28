@@ -1,2 +1,2 @@
-export { Browser } from './browser.js';
-export { Sessions, type SessionCreateParams } from './sessions.js';
+export { Browser, type SessionCreateParams } from './browser.js';
+export { Sessions } from './sessions.js';

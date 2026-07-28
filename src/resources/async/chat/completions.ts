@@ -1,37 +1,7 @@
-import { Async } from '../../../generated/api.js';
-
-export import Completions = Async.Chat.Completions;
-export type CompletionCreateParams = Async.Chat.CompletionCreateParams;
-export type CompletionCreateResponse = Async.Chat.CompletionCreateResponse;
-export type CompletionGetParams = Async.Chat.CompletionGetParams;
-export type CompletionGetResponse = Async.Chat.CompletionGetResponse;
-export type CompletionListResponse = Async.Chat.CompletionListResponse;
-
-export namespace CompletionListResponse {
-  export type Request = CompletionListResponse['requests'][number];
-}
-
-export namespace CompletionCreateParams {
-  export type Request = CompletionCreateParams['request'];
-  export namespace Request {
-    export type ResponseFormatText = Extract<NonNullable<Request['response_format']>, { type: 'text' }>;
-    export type ResponseFormatJsonSchema = Extract<
-      NonNullable<Request['response_format']>,
-      { type: 'json_schema' }
-    >;
-    export namespace ResponseFormatJsonSchema {
-      export type JsonSchema = ResponseFormatJsonSchema['json_schema'];
-    }
-    export type ResponseFormatRegex = Extract<NonNullable<Request['response_format']>, { type: 'regex' }>;
-    export namespace ResponseFormatRegex {
-      export type Regex = ResponseFormatRegex['regex'];
-    }
-    export type Tool = NonNullable<Request['tools']>[number];
-    export namespace Tool {
-      export type Function = Tool['function'];
-      export namespace Function {
-        export type Parameters = Function['parameters'];
-      }
-    }
-  }
-}
+import * as API from '../../../generated/api.js';
+export import Completions = API.Async.Chat.Completions;
+export type CompletionCreateParams = API.Async.Chat.Completions.CompletionCreateParams;
+export type CompletionCreateResponse = API.Async.Chat.Completions.CompletionCreateResponse;
+export type CompletionGetParams = API.Async.Chat.Completions.CompletionGetParams;
+export type CompletionGetResponse = API.Async.Chat.Completions.CompletionGetResponse;
+export type CompletionListResponse = API.Async.Chat.Completions.CompletionListResponse;
