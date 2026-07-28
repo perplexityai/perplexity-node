@@ -264,146 +264,163 @@ function createClients() {
   };
 }
 
-describe('live API parity', () => {
-  it('matches published chat completion response contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      max_tokens: 16,
-      messages: [{ content: 'Reply with only the word pong.', role: 'user' as const }],
-      model: 'sonar',
-      temperature: 0,
-    };
+const liveTestShard = process.env['LIVE_TEST_SHARD'];
+const runsShard = (shard: string) => !liveTestShard || liveTestShard === shard;
 
-    await expectMatchingContracts(
-      () => candidate.chat.completions.create(request),
-      () => published.chat.completions.create(request),
-      completionContract,
-    );
-  });
-
-  it('matches published streaming chat contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      max_tokens: 16,
-      messages: [{ content: 'Reply with only the word pong.', role: 'user' as const }],
-      model: 'sonar',
-      stream: true as const,
-      temperature: 0,
-    };
-
-    await expectMatchingContracts(
-      async () => collect(await candidate.chat.completions.create(request)),
-      async () => collect(await published.chat.completions.create(request)),
-      (chunks) => {
-        assert.ok(Array.isArray(chunks));
-        return streamingCompletionContract(chunks);
-      },
-    );
-  });
-
-  it('matches published search response contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      max_results: 1,
-      query: 'Perplexity AI',
-    };
-
-    await expectMatchingContracts(
-      () => candidate.search.create(request),
-      () => published.search.create(request),
-      searchContract,
-    );
-  });
-
-  it('matches published embeddings response contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      dimensions: 128,
-      input: 'Perplexity answers questions.',
-      model: 'pplx-embed-v1-0.6b' as const,
-    };
-
-    await expectMatchingContracts(
-      () => candidate.embeddings.create(request),
-      () => published.embeddings.create(request),
-      embeddingContract,
-    );
-  });
-
-  it('matches published contextualized embeddings response contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      dimensions: 128,
-      input: [['Perplexity answers questions.', 'Its answers include citations.']],
-      model: 'pplx-embed-context-v1-0.6b' as const,
-    };
-
-    await expectMatchingContracts(
-      () => candidate.contextualizedEmbeddings.create(request),
-      () => published.contextualizedEmbeddings.create(request),
-      contextualizedEmbeddingContract,
-    );
-  });
-
-  it('matches published responses API contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      input: 'Reply with only the word pong.',
-      max_output_tokens: 16,
-      preset: 'pro-search',
-    };
-
-    await expectMatchingContracts(
-      () => candidate.responses.create(request),
-      () => published.responses.create(request),
-      responseContract,
-    );
-  });
-
-  it('matches published streaming responses API contract', async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      input: 'Reply with only the word pong.',
-      max_output_tokens: 16,
-      preset: 'pro-search',
-      stream: true as const,
-    };
-
-    await expectMatchingContracts(
-      async () => collect(await candidate.responses.create(request)),
-      async () => collect(await published.responses.create(request)),
-      (events) => {
-        assert.ok(Array.isArray(events));
-        return streamingResponseContract(events);
-      },
-    );
-  });
-
-  it('matches published async chat completion lifecycle', { timeout: 180_000 }, async () => {
-    const { candidate, published } = createClients();
-    const request = {
-      request: {
+if (runsShard('fast')) {
+  describe('live API parity: fast APIs', () => {
+    it('matches published chat completion response contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
         max_tokens: 16,
         messages: [{ content: 'Reply with only the word pong.', role: 'user' as const }],
-        model: 'sonar-deep-research',
-      },
-    };
-    const [candidateInitial, publishedInitial] = await Promise.all([
-      candidate.async.chat.completions.create(request),
-      published.async.chat.completions.create(request),
-    ]);
-    assert.deepStrictEqual(
-      asyncCompletionContract(candidateInitial),
-      asyncCompletionContract(publishedInitial),
-    );
+        model: 'sonar',
+        temperature: 0,
+      };
 
-    const [candidateCompleted, publishedCompleted] = await Promise.all([
-      pollAsyncCompletion(candidateInitial, (id) => candidate.async.chat.completions.get(id)),
-      pollAsyncCompletion(publishedInitial, (id) => published.async.chat.completions.get(id)),
-    ]);
-    assert.deepStrictEqual(
-      asyncCompletionContract(candidateCompleted),
-      asyncCompletionContract(publishedCompleted),
-    );
+      await expectMatchingContracts(
+        () => candidate.chat.completions.create(request),
+        () => published.chat.completions.create(request),
+        completionContract,
+      );
+    });
+
+    it('matches published streaming chat contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        max_tokens: 16,
+        messages: [{ content: 'Reply with only the word pong.', role: 'user' as const }],
+        model: 'sonar',
+        stream: true as const,
+        temperature: 0,
+      };
+
+      await expectMatchingContracts(
+        async () => collect(await candidate.chat.completions.create(request)),
+        async () => collect(await published.chat.completions.create(request)),
+        (chunks) => {
+          assert.ok(Array.isArray(chunks));
+          return streamingCompletionContract(chunks);
+        },
+      );
+    });
+
+    it('matches published search response contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        max_results: 1,
+        query: 'Perplexity AI',
+      };
+
+      await expectMatchingContracts(
+        () => candidate.search.create(request),
+        () => published.search.create(request),
+        searchContract,
+      );
+    });
+
+    it('matches published embeddings response contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        dimensions: 128,
+        input: 'Perplexity answers questions.',
+        model: 'pplx-embed-v1-0.6b' as const,
+      };
+
+      await expectMatchingContracts(
+        () => candidate.embeddings.create(request),
+        () => published.embeddings.create(request),
+        embeddingContract,
+      );
+    });
+
+    it('matches published contextualized embeddings response contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        dimensions: 128,
+        input: [['Perplexity answers questions.', 'Its answers include citations.']],
+        model: 'pplx-embed-context-v1-0.6b' as const,
+      };
+
+      await expectMatchingContracts(
+        () => candidate.contextualizedEmbeddings.create(request),
+        () => published.contextualizedEmbeddings.create(request),
+        contextualizedEmbeddingContract,
+      );
+    });
   });
-});
+}
+
+if (runsShard('responses')) {
+  describe('live API parity: Responses API', () => {
+    it('matches published responses API contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        input: 'Reply with only the word pong.',
+        max_output_tokens: 16,
+        preset: 'pro-search',
+      };
+
+      await expectMatchingContracts(
+        () => candidate.responses.create(request),
+        () => published.responses.create(request),
+        responseContract,
+      );
+    });
+  });
+}
+
+if (runsShard('streaming-responses')) {
+  describe('live API parity: streaming Responses API', () => {
+    it('matches published streaming responses API contract', async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        input: 'Reply with only the word pong.',
+        max_output_tokens: 16,
+        preset: 'pro-search',
+        stream: true as const,
+      };
+
+      await expectMatchingContracts(
+        async () => collect(await candidate.responses.create(request)),
+        async () => collect(await published.responses.create(request)),
+        (events) => {
+          assert.ok(Array.isArray(events));
+          return streamingResponseContract(events);
+        },
+      );
+    });
+  });
+}
+
+if (runsShard('async')) {
+  describe('live API parity: async API', () => {
+    it('matches published async chat completion lifecycle', { timeout: 180_000 }, async () => {
+      const { candidate, published } = createClients();
+      const request = {
+        request: {
+          max_tokens: 16,
+          messages: [{ content: 'Reply with only the word pong.', role: 'user' as const }],
+          model: 'sonar-deep-research',
+        },
+      };
+      const [candidateInitial, publishedInitial] = await Promise.all([
+        candidate.async.chat.completions.create(request),
+        published.async.chat.completions.create(request),
+      ]);
+      assert.deepStrictEqual(
+        asyncCompletionContract(candidateInitial),
+        asyncCompletionContract(publishedInitial),
+      );
+
+      const [candidateCompleted, publishedCompleted] = await Promise.all([
+        pollAsyncCompletion(candidateInitial, (id) => candidate.async.chat.completions.get(id)),
+        pollAsyncCompletion(publishedInitial, (id) => published.async.chat.completions.get(id)),
+      ]);
+      assert.deepStrictEqual(
+        asyncCompletionContract(candidateCompleted),
+        asyncCompletionContract(publishedCompleted),
+      );
+    });
+  });
+}

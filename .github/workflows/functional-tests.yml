@@ -47,4 +47,10 @@ jobs:
       - name: Run functional tests
         env:
           PPLX_API_TOKEN: ${{ secrets.PPLX_API_TOKEN }}
-        run: bazel test //e2e:live --test_env=PPLX_API_TOKEN
+        run: |
+          bazel test \
+            //e2e:live_async \
+            //e2e:live_fast \
+            //e2e:live_responses \
+            //e2e:live_streaming_responses \
+            --test_env=PPLX_API_TOKEN
