@@ -4,6 +4,7 @@ load("@aspect_rules_js//npm:defs.bzl", "npm_link_package", "npm_package")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@jq.bzl//jq:jq.bzl", "jq")
 load("@npm//:@arethetypeswrong/cli/package_json.bzl", attw_bin = "bin")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:publint/package_json.bzl", publint_bin = "bin")
@@ -24,6 +25,13 @@ package(default_visibility = ["//visibility:public"])
 exports_files(["package.json"])
 
 npm_link_all_packages()
+
+jq(
+    name = "publish_package_json",
+    srcs = ["package.json"],
+    out = "_package.json",
+    filter = "del(.devDependencies, .overrides, .packageManager)",
+)
 
 gazelle_binary(
     name = "gazelle_bin",
@@ -131,13 +139,13 @@ npm_package(
         "LICENSE",
         "README.md",
         ":dist",
-        "//npm:package",
+        ":publish_package_json",
     ] + TS_SOURCES,
     out = "package",
     package = "@perplexity-ai/perplexity_ai",
     publishable = True,
     replace_prefixes = {
-        "npm/package.json": "package.json",
+        "_package.json": "package.json",
     },
 )
 
