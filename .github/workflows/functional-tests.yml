@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   functional-tests:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
@@ -47,4 +47,12 @@ jobs:
       - name: Run functional tests
         env:
           PPLX_API_TOKEN: ${{ secrets.PPLX_API_TOKEN }}
-        run: bazel test //e2e:live --test_env=PPLX_API_TOKEN
+        run: |
+          mapfile -t functional_tests < <(
+            bazel query 'attr(tags, functional_test, tests(//e2e/...))' --output=label
+          )
+          if (( ${#functional_tests[@]} == 0 )); then
+            echo 'No functional tests found' >&2
+            exit 1
+          fi
+          bazel test "${functional_tests[@]}" --test_env=PPLX_API_TOKEN

@@ -39,17 +39,6 @@ js_test(
     tags = ["manual"],
 )
 
-js_test(
-    name = "live",
-    data = [
-        ":typecheck",
-        "//:node_modules/@perplexity-ai/perplexity_ai",
-        "//:node_modules/published-sdk",
-    ],
-    entry_point = "live.spec.ts",
-    tags = ["manual"],
-)
-
 ts_project(
     name = "typecheck",
     testonly = True,
@@ -74,10 +63,7 @@ ts_project(
 
 ts_test(
     name = "e2e_test",
-    srcs = [
-        "live.spec.ts",
-        "sdk-parity.spec.ts",
-    ],
+    srcs = ["sdk-parity.spec.ts"],
     tags = ["manual"],
     tsconfig_types = ["node"],
     deps = [
