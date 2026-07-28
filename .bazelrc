@@ -9,3 +9,4 @@ common:windows --host_platform=@gazelle_ts//platforms:local_windows_msvc
 build:linux --linkopt=-no-pie
 
 test --test_output=errors
+test --test_tag_filters=-live
