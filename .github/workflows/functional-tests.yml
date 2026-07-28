@@ -49,8 +49,12 @@ jobs:
           PPLX_API_TOKEN: ${{ secrets.PPLX_API_TOKEN }}
         run: |
           bazel test \
-            //e2e:live_async \
-            //e2e:live_fast \
-            //e2e:live_responses \
-            //e2e:live_streaming_responses \
+            //e2e/live:async_chat_completion \
+            //e2e/live:chat_completion \
+            //e2e/live:contextualized_embeddings \
+            //e2e/live:embeddings \
+            //e2e/live:responses \
+            //e2e/live:search \
+            //e2e/live:streaming_chat \
+            //e2e/live:streaming_responses \
             --test_env=PPLX_API_TOKEN

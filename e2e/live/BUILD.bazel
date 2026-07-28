@@ -1,0 +1,147 @@
+load("@aspect_rules_js//js:defs.bzl", "js_test")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("//:ts.bzl", "ts_library", "ts_test")
+load("//:tsconfig.bzl", "BASE_COMPILER_OPTIONS")
+
+package(default_visibility = ["//visibility:private"])
+
+js_test(
+    name = "async_chat_completion",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "async-chat-completion.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "chat_completion",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "chat-completion.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "contextualized_embeddings",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "contextualized-embeddings.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "embeddings",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "embeddings.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "responses",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "responses.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "search",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "search.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "streaming_chat",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "streaming-chat.spec.ts",
+    tags = ["manual"],
+)
+
+js_test(
+    name = "streaming_responses",
+    data = [
+        ":typecheck",
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/published-sdk",
+    ],
+    entry_point = "streaming-responses.spec.ts",
+    tags = ["manual"],
+)
+
+ts_project(
+    name = "typecheck",
+    testonly = True,
+    srcs = [":live_test_sources"],
+    no_emit = True,
+    tags = ["manual"],
+    tsc = "//:tsc",
+    tsconfig = {
+        "compilerOptions": dict(
+            BASE_COMPILER_OPTIONS,
+            module = "ESNext",
+            moduleResolution = "Bundler",
+            types = ["node"],
+        ),
+    },
+    deps = [
+        "//:node_modules/@perplexity-ai/perplexity_ai",
+        "//:node_modules/@types/node",
+        "//:node_modules/published-sdk",
+    ],
+)
+
+ts_test(
+    name = "live_test",
+    srcs = [
+        "async-chat-completion.spec.ts",
+        "chat-completion.spec.ts",
+        "contextualized-embeddings.spec.ts",
+        "embeddings.spec.ts",
+        "responses.spec.ts",
+        "search.spec.ts",
+        "streaming-chat.spec.ts",
+        "streaming-responses.spec.ts",
+    ],
+    tags = ["manual"],
+    tsconfig_types = ["node"],
+    deps = [
+        ":live",
+        "//:node_modules/@types/node",
+    ],
+)
+
+ts_library(
+    name = "live",
+    srcs = ["helpers.ts"],
+    tsconfig_types = ["node"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/published-sdk",
+    ],
+)
