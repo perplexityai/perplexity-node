@@ -27,7 +27,7 @@ export type ResponseCreateParamsStreaming = API.Responses.ResponseCreateParamsSt
 export namespace InputItem {
   export type InputMessage = API.InputMessageInput;
   export namespace InputMessage {
-    export type ContentPartArray = Extract<InputMessage['content'], readonly unknown[]>;
+    export type ContentPartArray = Extract<InputMessage['content'], readonly unknown[]>[number];
   }
   export type FunctionCallOutputInput = API.FunctionCallOutputInputInput;
   export type FunctionCallInput = API.FunctionCallInputInput;
@@ -113,7 +113,7 @@ export namespace ResponsesCreateParams {
 export namespace ResponsesUsage {
   export type Cost = NonNullable<API.ResponsesUsage['cost']>;
   export type InputTokensDetails = NonNullable<API.ResponsesUsage['input_tokens_details']>;
-  export type ToolCallsDetails = NonNullable<API.ResponsesUsage['tool_calls_details']>;
+  export type ToolCallsDetails = NonNullable<API.ResponsesUsage['tool_calls_details']>[string];
 }
 
 export namespace ResponseCreateParams {

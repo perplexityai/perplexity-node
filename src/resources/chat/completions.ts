@@ -7,6 +7,12 @@ export type CompletionCreateParamsBase = Omit<CompletionCreateParams, 'stream'>;
 export type CompletionCreateParamsNonStreaming = Chat.CompletionCreateParamsNonStreaming;
 export type CompletionCreateParamsStreaming = Chat.CompletionCreateParamsStreaming;
 
+export namespace Completions {
+  export type CompletionCreateParams = Chat.CompletionCreateParams;
+  export type CompletionCreateParamsNonStreaming = Chat.CompletionCreateParamsNonStreaming;
+  export type CompletionCreateParamsStreaming = Chat.CompletionCreateParamsStreaming;
+}
+
 export namespace CompletionCreateParams {
   export type ResponseFormatText = Extract<
     NonNullable<CompletionCreateParams['response_format']>,

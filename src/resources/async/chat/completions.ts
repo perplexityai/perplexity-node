@@ -8,6 +8,14 @@ export type CompletionGetParams = Async.Chat.CompletionGetParams;
 export type CompletionGetResponse = Async.Chat.CompletionGetResponse;
 export type CompletionListResponse = Async.Chat.CompletionListResponse;
 
+export namespace Completions {
+  export type CompletionCreateResponse = Async.Chat.CompletionCreateResponse;
+  export type CompletionListResponse = Async.Chat.CompletionListResponse;
+  export type CompletionGetResponse = Async.Chat.CompletionGetResponse;
+  export type CompletionCreateParams = Async.Chat.CompletionCreateParams;
+  export type CompletionGetParams = Async.Chat.CompletionGetParams;
+}
+
 export namespace CompletionListResponse {
   export type Request = CompletionListResponse['requests'][number];
 }
