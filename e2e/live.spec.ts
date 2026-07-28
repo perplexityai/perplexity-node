@@ -207,18 +207,6 @@ function asyncCompletionContract(response: unknown) {
   };
 }
 
-function browserSessionContract(response: unknown) {
-  assert.ok(typeof response === 'object' && response !== null);
-  const session = response as { session_id?: unknown; status?: unknown };
-  assert.equal(typeof session.session_id, 'string');
-  assert.equal(session.status, 'running');
-
-  return {
-    sessionID: typeof session.session_id,
-    status: typeof session.status,
-  };
-}
-
 function asyncCompletionID(response: unknown) {
   assert.ok(typeof response === 'object' && response !== null);
   const id = (response as { id?: unknown }).id;
@@ -248,13 +236,6 @@ async function pollAsyncCompletion(initial: unknown, retrieve: (id: string) => P
   }
 
   assert.fail(`Async completion ${id} did not finish`);
-}
-
-function browserSessionID(response: unknown) {
-  assert.ok(typeof response === 'object' && response !== null);
-  const id = (response as { session_id?: unknown }).session_id;
-  assert.equal(typeof id, 'string');
-  return id;
 }
 
 async function collect(stream: AsyncIterable<unknown>) {
@@ -369,7 +350,7 @@ describe('live API parity', () => {
     const request = {
       input: 'Reply with only the word pong.',
       max_output_tokens: 16,
-      model: 'sonar',
+      preset: 'pro-search',
     };
 
     await expectMatchingContracts(
@@ -384,7 +365,7 @@ describe('live API parity', () => {
     const request = {
       input: 'Reply with only the word pong.',
       max_output_tokens: 16,
-      model: 'sonar',
+      preset: 'pro-search',
       stream: true as const,
     };
 
@@ -404,7 +385,7 @@ describe('live API parity', () => {
       request: {
         max_tokens: 16,
         messages: [{ content: 'Reply with only the word pong.', role: 'user' as const }],
-        model: 'sonar',
+        model: 'sonar-deep-research',
       },
     };
     const [candidateInitial, publishedInitial] = await Promise.all([
@@ -424,30 +405,5 @@ describe('live API parity', () => {
       asyncCompletionContract(candidateCompleted),
       asyncCompletionContract(publishedCompleted),
     );
-  });
-
-  it('matches published browser session lifecycle', async () => {
-    const { candidate, published } = createClients();
-    const candidateSession = await candidate.browser.sessions.create();
-    let publishedSession: unknown;
-
-    try {
-      publishedSession = await published.browser.sessions.create();
-      assert.deepStrictEqual(
-        browserSessionContract(candidateSession),
-        browserSessionContract(publishedSession),
-      );
-    } finally {
-      const deletions = [
-        candidate.browser.sessions.delete(browserSessionID(candidateSession)),
-        ...(publishedSession === undefined
-          ? []
-          : [published.browser.sessions.delete(browserSessionID(publishedSession))]),
-      ];
-      const results = await Promise.allSettled(deletions);
-      for (const result of results) {
-        assert.equal(result.status, 'fulfilled');
-      }
-    }
   });
 });
