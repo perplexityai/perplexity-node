@@ -6,6 +6,7 @@ ts_library(
         "async.ts",
         "browser.ts",
         "chat.ts",
+        "client.ts",
         "contextualized-embeddings.ts",
         "embeddings.ts",
         "index.ts",
