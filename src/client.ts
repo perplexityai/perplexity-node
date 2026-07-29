@@ -19,41 +19,7 @@ import * as Errors from './core/error.js';
 import * as Uploads from './core/uploads.js';
 import { APIPromise } from './core/api-promise.js';
 import type { SdkTransport } from './generated/api.js';
-import * as API from './resources/index.js';
-import {
-  Annotation,
-  Async,
-  Browser,
-  Chat,
-  ContentPart,
-  ContextualizedEmbeddingCreateParams,
-  ContextualizedEmbeddingCreateResponse,
-  ContextualizedEmbeddings,
-  EmbeddingCreateParams,
-  EmbeddingCreateResponse,
-  Embeddings,
-  ErrorInfo,
-  FunctionCallOutputItem,
-  FunctionTool,
-  InputItem,
-  OutputItem,
-  ResponseCancelResponse,
-  ResponseCreateParams,
-  ResponseCreateResponse,
-  ResponseFile,
-  ResponseFileList,
-  ResponseRetrieveResponse,
-  ResponseStreamChunk,
-  Responses,
-  ResponsesCreateParams,
-  ResponsesUsage,
-  Search,
-  SearchCreateParams,
-  SearchCreateResponse,
-  StreamChunk,
-  ResponseCreateParamsNonStreaming,
-  ResponseCreateParamsStreaming,
-} from './resources/index.js';
+import { clientResourceClasses, createClientResources } from './resources/client.js';
 import { type Fetch } from './internal/builtin-types.js';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers.js';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options.js';
@@ -219,6 +185,7 @@ export class Perplexity implements SdkTransport {
     this._options = options;
 
     this.apiKey = apiKey;
+    Object.assign(this, createClientResources(this));
   }
 
   /**
@@ -771,85 +738,10 @@ export class Perplexity implements SdkTransport {
   static UnprocessableEntityError = Errors.UnprocessableEntityError;
 
   static toFile = Uploads.toFile;
-
-  chat = new Chat(this);
-  search = new Search(this);
-  responses = new Responses(this);
-  embeddings = new Embeddings(this);
-  contextualizedEmbeddings = new ContextualizedEmbeddings(this);
-  browser = new Browser(this);
-  async = new Async(this);
 }
 
-Perplexity.Chat = Chat;
-Perplexity.Search = Search;
-Perplexity.Responses = Responses;
-Perplexity.Embeddings = Embeddings;
-Perplexity.ContextualizedEmbeddings = ContextualizedEmbeddings;
-Perplexity.Browser = Browser;
-Perplexity.Async = Async;
+Object.assign(Perplexity, clientResourceClasses);
 
 export declare namespace Perplexity {
   export type RequestOptions = Opts.RequestOptions;
-
-  export { Chat as Chat, type StreamChunk as StreamChunk };
-
-  export {
-    Search as Search,
-    type SearchCreateResponse as SearchCreateResponse,
-    type SearchCreateParams as SearchCreateParams,
-  };
-
-  export {
-    Responses as Responses,
-    type Annotation as Annotation,
-    type ContentPart as ContentPart,
-    type ErrorInfo as ErrorInfo,
-    type FunctionCallOutputItem as FunctionCallOutputItem,
-    type FunctionTool as FunctionTool,
-    type InputItem as InputItem,
-    type OutputItem as OutputItem,
-    type ResponseFile as ResponseFile,
-    type ResponseFileList as ResponseFileList,
-    type ResponseStreamChunk as ResponseStreamChunk,
-    type ResponsesCreateParams as ResponsesCreateParams,
-    type ResponsesUsage as ResponsesUsage,
-    type ResponseCreateResponse as ResponseCreateResponse,
-    type ResponseRetrieveResponse as ResponseRetrieveResponse,
-    type ResponseCancelResponse as ResponseCancelResponse,
-    type ResponseCreateParams as ResponseCreateParams,
-    type ResponseCreateParamsNonStreaming as ResponseCreateParamsNonStreaming,
-    type ResponseCreateParamsStreaming as ResponseCreateParamsStreaming,
-  };
-
-  export {
-    Embeddings as Embeddings,
-    type EmbeddingCreateResponse as EmbeddingCreateResponse,
-    type EmbeddingCreateParams as EmbeddingCreateParams,
-  };
-
-  export {
-    ContextualizedEmbeddings as ContextualizedEmbeddings,
-    type ContextualizedEmbeddingCreateResponse as ContextualizedEmbeddingCreateResponse,
-    type ContextualizedEmbeddingCreateParams as ContextualizedEmbeddingCreateParams,
-  };
-
-  export { Browser as Browser };
-
-  export { Async as Async };
-
-  export type APIPublicSearchResult = API.APIPublicSearchResult;
-  export type BrowserSessionResponse = API.BrowserSessionResponse;
-  export type ChatMessageInput = API.ChatMessageInput;
-  export type ChatMessageOutput = API.ChatMessageOutput;
-  export type Choice = API.Choice;
-  export type ContextualizedEmbeddingObject = API.ContextualizedEmbeddingObject;
-  export type EmbeddingObject = API.EmbeddingObject;
-  export type EmbeddingsUsage = API.EmbeddingsUsage;
-  export type JsonSchemaFormat = API.JsonSchemaFormat;
-  export type ResponseFormat = API.ResponseFormat;
-  export type SearchResult = API.SearchResult;
-  export type UsageInfo = API.UsageInfo;
-  export type UserLocation = API.UserLocation;
-  export type WebSearchOptions = API.WebSearchOptions;
 }

@@ -73,6 +73,10 @@ describe('instantiate client', () => {
   });
 
   it('legacy resource entrypoints re-export generated resources', () => {
+    assert.strictEqual(Perplexity.Async, GeneratedAsync);
+    assert.strictEqual(Perplexity.Browser, GeneratedBrowser);
+    assert.strictEqual(Perplexity.Chat, GeneratedChat);
+    assert.strictEqual(Perplexity.Responses, GeneratedResponses);
     assert.deepStrictEqual(
       [
         LegacyAsync,
