@@ -6,6 +6,7 @@ Install Node 26 and [Bazelisk](https://github.com/bazelbuild/bazelisk), then
 enable the repository's pinned `pnpm`:
 
 ```sh
+npm install --global corepack@latest
 corepack enable pnpm
 pnpm install --frozen-lockfile
 pnpm lefthook install
@@ -71,17 +72,10 @@ shard:
 PPLX_API_TOKEN=... bazel test //e2e/live:search --test_env=PPLX_API_TOKEN
 ```
 
-Build and inspect the publishable package:
+Build the publishable package:
 
 ```sh
 bazel build //:pkg
-```
-
-To use it from another project:
-
-```sh
-pnpm --dir bazel-bin/package link --global
-pnpm --dir ../my-project link --global @perplexity-ai/perplexity_ai
 ```
 
 ## Release
