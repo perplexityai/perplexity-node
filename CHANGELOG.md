@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.38.1](https://github.com/perplexityai/perplexity-node/compare/v0.38.0...v0.38.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* publish stable GitHub releases ([#83](https://github.com/perplexityai/perplexity-node/issues/83)) ([5f3e9bb](https://github.com/perplexityai/perplexity-node/commit/5f3e9bb0d98a259e355fbfe989742d8ee0496160))
+
+
+### Chores
+
+* sync generated API SDKs ([#82](https://github.com/perplexityai/perplexity-node/issues/82)) ([078165b](https://github.com/perplexityai/perplexity-node/commit/078165ba8826a18abac1ab00679f070e6eafe0f9))
+
 ## [0.38.0](https://github.com/perplexityai/perplexity-node/compare/v0.37.0...v0.38.0) (2026-07-30)
 
 
