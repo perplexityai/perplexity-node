@@ -86,4 +86,3 @@ declare module '../client.js' {
         export type WebSearchOptions = API.WebSearchOptions;
     }
 }
-
