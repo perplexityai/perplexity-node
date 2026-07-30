@@ -1,89 +1,97 @@
-## Setting up the environment
+# Contributing
 
-This repository uses Bazel 9.2, Node 26, and [`pnpm`](https://pnpm.io/installation).
+## Setup
 
-To set up the repository, run:
-
-```sh
-$ corepack enable pnpm
-$ pnpm install
-$ pnpm lefthook install
-$ bazel build //:pkg
-```
-
-This installs dependencies and builds the publishable package at `bazel-bin/package/`.
-
-## Modifying/Adding code
-
-API resources are generated from the OpenAPI specification. Keep manual helpers in `src/lib/`.
-
-Run Gazelle after adding, removing, or changing TypeScript imports. Gazelle owns
-TypeScript sources and dependencies in `BUILD.bazel` files.
+Install Node 26 and [Bazelisk](https://github.com/bazelbuild/bazelisk), then
+enable the repository's pinned `pnpm`:
 
 ```sh
-$ bazel run //:gazelle
+npm install --global corepack@latest
+corepack enable pnpm
+pnpm install --frozen-lockfile
+pnpm lefthook install
+bazel build //:pkg
 ```
 
-## Adding and running examples
+The publishable package is written to `bazel-bin/package/`.
 
-Examples can be added under `examples/`.
+## Make changes
 
-```ts
-// add an example to examples/<your-example>.mts
+Handwritten client, transport, and helper code lives in `src/client.ts`,
+`src/core/`, `src/internal/`, and `src/lib/`. Do not edit `src/generated/`,
+`src/resources.ts`, or `src/resources/`; the code is produced by a private SDK
+codegen pipeline.
 
-#!/usr/bin/env -S node --experimental-transform-types
-…
-```
+Tests live beside handwritten code under `src/test/`. Compatibility and live
+API tests live under `e2e/`.
+
+After changing TypeScript imports or adding files, update BUILD files:
 
 ```sh
-$ chmod +x examples/<your-example>.mts
-# run the example against your api
-$ node --experimental-transform-types examples/<your-example>.mts
+bazel run //:gazelle
 ```
 
-## Using the repository from source
+For a dependency change, update `package.json`, run
+`pnpm install --frozen-lockfile=false`, then run Gazelle. Commit
+`pnpm-lock.yaml` and generated `BUILD.bazel` changes.
 
-To link a local build:
+Use [Conventional Commits](https://www.conventionalcommits.org/), such as
+`fix: handle empty responses` or `feat: add a resource`. Release Please uses
+these commits to choose the next version and build the changelog.
+
+## Test
+
+Run the same main test suite as CI:
 
 ```sh
-$ bazel build //:pkg
-$ pnpm --dir bazel-bin/package link --global
-$ cd ../my-package
-$ pnpm link --global @perplexity-ai/perplexity_ai
+bazel test //...
 ```
 
-## Running tests
+Run core, package, and published-SDK compatibility gates explicitly:
 
 ```sh
-$ bazel test //...
+bazel test //:test //:package_checks //e2e:sdk_parity
 ```
 
-## Linting and formatting
-
-This repository uses [Oxfmt](https://www.npmjs.com/package/oxfmt) and
-[Oxlint](https://www.npmjs.com/package/oxlint) to format and lint the code.
-
-To lint:
+Validate formatting, lint, and generated BUILD files:
 
 ```sh
-$ pnpm lefthook run pre-commit --all-files --force --fail-on-changes
+pnpm lefthook run pre-commit --all-files --force --fail-on-changes
 ```
 
-To format and fix all lint issues automatically:
+Apply formatting and lint fixes:
 
 ```sh
-$ pnpm lefthook run pre-commit --all-files
+pnpm lefthook run pre-commit --all-files
 ```
 
-## Publishing and releases
+Live tests call the production API and require a token. Run only the relevant
+shard:
 
-Changes made to this repository via the automated release PR pipeline should publish to npm automatically. If
-the changes aren't made through the automated pipeline, you may want to make releases manually.
+```sh
+PPLX_API_TOKEN=... bazel test //e2e/live:search --test_env=PPLX_API_TOKEN
+```
 
-### Publish with a GitHub workflow
+Build the publishable package:
 
-You can release to package managers by using [the `Publish NPM` GitHub action](https://www.github.com/perplexityai/perplexity-node/actions/workflows/publish-npm.yml). This requires a setup organization or repository secret to be set up.
+```sh
+bazel build //:pkg
+```
 
-### Publish manually
+## Release
 
-If needed, build the package with `bazel build //:pkg` and publish `bazel-bin/package` with npm.
+Do not bump versions or publish from a development branch.
+
+1. Merge normal PRs into `main`.
+2. Release Please creates or updates a `release: <version>` PR from Conventional
+   Commits.
+3. Review and merge that PR. It updates the changelog and version files, then
+   creates the `v<version>` tag and GitHub release.
+4. The published GitHub release triggers `Publish NPM`, which builds `//:pkg`
+   and publishes it with npm provenance.
+
+Stable versions use the `latest` npm tag. Prerelease versions use their
+prerelease identifier as the npm tag. Release automation requires
+`RELEASE_TOKEN`; npm publishing uses GitHub Actions OIDC and an npm trusted
+publisher for `publish-npm.yml`. For a failed upload, rerun `Publish NPM`
+against the existing release tag; do not create a new version.
