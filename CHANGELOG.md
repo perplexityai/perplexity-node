@@ -1,5 +1,52 @@
 # Changelog
 
+## [0.38.0](https://github.com/perplexityai/perplexity-node/compare/v0.37.0...v0.38.0) (2026-07-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* sync generated TypeScript SDK facade ([#78](https://github.com/perplexityai/perplexity-node/issues/78))
+* align TypeScript aliases with generated API ([#77](https://github.com/perplexityai/perplexity-node/issues/77))
+* prepare TypeScript 5-compatible 0.38 ([#75](https://github.com/perplexityai/perplexity-node/issues/75))
+* drop CommonJS support ([#59](https://github.com/perplexityai/perplexity-node/issues/59))
+
+### Features
+
+* align TypeScript aliases with generated API ([#77](https://github.com/perplexityai/perplexity-node/issues/77)) ([dd81dd7](https://github.com/perplexityai/perplexity-node/commit/dd81dd73095e089a1637a7529cba17318913867a))
+* drop CommonJS support ([#59](https://github.com/perplexityai/perplexity-node/issues/59)) ([b5edee9](https://github.com/perplexityai/perplexity-node/commit/b5edee90ccddd2156a43210cef934664e2591418))
+* prepare TypeScript 5-compatible 0.38 ([#75](https://github.com/perplexityai/perplexity-node/issues/75)) ([a52381c](https://github.com/perplexityai/perplexity-node/commit/a52381c5c52b8b27b4499d2d0a304e866b047ee2))
+* sync generated TypeScript SDK facade ([#78](https://github.com/perplexityai/perplexity-node/issues/78)) ([19ca51f](https://github.com/perplexityai/perplexity-node/commit/19ca51f04c2edf7b7635303943b9b1debc647e4a))
+
+
+### Bug Fixes
+
+* **ci:** allow Release Please commits ([#63](https://github.com/perplexityai/perplexity-node/issues/63)) ([3d3fcc0](https://github.com/perplexityai/perplexity-node/commit/3d3fcc067b7ce4309bf7e3cdf92fb70a22845e11))
+* use supported APIs in live tests ([#74](https://github.com/perplexityai/perplexity-node/issues/74)) ([2d6739f](https://github.com/perplexityai/perplexity-node/commit/2d6739f28ed0bb56be12112833bec7894da54224))
+
+
+### Chores
+
+* migrate tooling to oxc, pnpm, and bazel ([#58](https://github.com/perplexityai/perplexity-node/issues/58)) ([05ad99f](https://github.com/perplexityai/perplexity-node/commit/05ad99f11faa8157072308a61c5ba68a97ff02f5))
+* sync generated API SDKs ([#61](https://github.com/perplexityai/perplexity-node/issues/61)) ([9d910fe](https://github.com/perplexityai/perplexity-node/commit/9d910fe3a64971d19d0d5df01b39362bdf501f99))
+* sync generated API SDKs ([#67](https://github.com/perplexityai/perplexity-node/issues/67)) ([7bf8239](https://github.com/perplexityai/perplexity-node/commit/7bf82392bf4522c640d490e9f60f77638a2bf630))
+
+
+### Documentation
+
+* add coding agent guidance ([#81](https://github.com/perplexityai/perplexity-node/issues/81)) ([ac80835](https://github.com/perplexityai/perplexity-node/commit/ac8083536397e0346b6010c90c7cec3802c8a5b2))
+* document development and release workflow ([#80](https://github.com/perplexityai/perplexity-node/issues/80)) ([7e7ad15](https://github.com/perplexityai/perplexity-node/commit/7e7ad1521ae7bb5a80ee4eda7f4cb07b66ca95b0))
+
+
+### Refactors
+
+* consume generated TypeScript client bindings ([#79](https://github.com/perplexityai/perplexity-node/issues/79)) ([061abdc](https://github.com/perplexityai/perplexity-node/commit/061abdc42d8c7d0a92f819b00a603a64e4763b4a))
+
+
+### Build System
+
+* finish Bazel-native tooling cleanup ([#64](https://github.com/perplexityai/perplexity-node/issues/64)) ([29fd654](https://github.com/perplexityai/perplexity-node/commit/29fd65499df0c27fd913075f23bd524b80d78ab8))
+* inline publish manifest target ([#72](https://github.com/perplexityai/perplexity-node/issues/72)) ([831066d](https://github.com/perplexityai/perplexity-node/commit/831066da4ab7eadbbf80002ba00cdc68821f5fbe))
+
 ## 0.37.0 (2026-07-17)
 
 Full Changelog: [v0.36.0...v0.37.0](https://github.com/perplexityai/perplexity-node/compare/v0.36.0...v0.37.0)
