@@ -1089,7 +1089,9 @@ export type ResponsesRequestInput = {
     skills?: SkillInput[];
     store?: boolean;
     stream?: boolean;
+    temperature?: number;
     tools?: ToolInput[];
+    top_p?: number;
 };
 export type ResponsesRequestOutput = {
     background?: boolean | null;
@@ -1107,7 +1109,9 @@ export type ResponsesRequestOutput = {
     skills?: SkillOutput[];
     store?: boolean;
     stream?: boolean;
+    temperature?: number;
     tools?: ToolOutput[];
+    top_p?: number;
 };
 export type ResponsesResponseInput = {
     background?: boolean;
