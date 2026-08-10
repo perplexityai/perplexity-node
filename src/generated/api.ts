@@ -413,6 +413,20 @@ export type CompletionResponseStatusInput = "PENDING" | "COMPLETED";
 export type CompletionResponseStatusOutput = "PENDING" | "COMPLETED";
 export type CompletionResponseTypeInput = "message" | "info" | "end_of_stream";
 export type CompletionResponseTypeOutput = "message" | "info" | "end_of_stream";
+export type ConnectorToolInput = {
+    allowed_tools?: string[];
+    id: string;
+    server_description?: string;
+    server_label: string;
+    type: "connector";
+};
+export type ConnectorToolOutput = {
+    allowed_tools?: string[];
+    id: string;
+    server_description?: string;
+    server_label: string;
+    type: "connector";
+};
 export type ContentPartInput = {
     annotations?: AnnotationInput[];
     text: string;
@@ -771,6 +785,7 @@ export type ListAsyncApiChatCompletionsResponseOutput = {
 };
 export type McpCallOutputItemInput = {
     arguments: string;
+    connector_id?: string;
     error?: string | null;
     id: string;
     name: string;
@@ -780,6 +795,7 @@ export type McpCallOutputItemInput = {
 };
 export type McpCallOutputItemOutput = {
     arguments: string;
+    connector_id?: string;
     error?: string | null;
     id: string;
     name: string;
@@ -788,6 +804,7 @@ export type McpCallOutputItemOutput = {
     type: "mcp_call";
 };
 export type McpListToolsOutputItemInput = {
+    connector_id?: string;
     error?: string;
     id: string;
     server_label: string;
@@ -795,6 +812,7 @@ export type McpListToolsOutputItemInput = {
     type: "mcp_list_tools";
 };
 export type McpListToolsOutputItemOutput = {
+    connector_id?: string;
     error?: string;
     id: string;
     server_label: string;
@@ -843,8 +861,32 @@ export type MessageOutputItemOutput = {
     status: StatusOutput;
     type: "message";
 };
-export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
-export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
+export type NamespaceToolInput = {
+    description: string;
+    name: string;
+    tools: NamespaceToolDefInput[];
+    type: "namespace";
+};
+export type NamespaceToolOutput = {
+    description: string;
+    name: string;
+    tools: NamespaceToolDefOutput[];
+    type: "namespace";
+};
+export type NamespaceToolDefInput = {
+    description?: string;
+    name: string;
+    parameters?: {} & Record<string, unknown>;
+    type: "function";
+};
+export type NamespaceToolDefOutput = {
+    description?: string;
+    name: string;
+    parameters?: {} & Record<string, unknown>;
+    type: "function";
+};
+export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
+export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
 export type OutputItemAddedEventInput = {
     item: OutputItemInput;
     output_index: number;
@@ -1425,8 +1467,8 @@ export type TextDoneEventOutput = {
     text: string;
     type: "response.output_text.done";
 };
-export type ToolInput = WebSearchToolInput | FetchUrlToolInput | PeopleSearchToolInput | FunctionToolInput | FinanceSearchToolInput | SandboxToolInput | McpToolInput;
-export type ToolOutput = WebSearchToolOutput | FetchUrlToolOutput | PeopleSearchToolOutput | FunctionToolOutput | FinanceSearchToolOutput | SandboxToolOutput | McpToolOutput;
+export type ToolInput = WebSearchToolInput | FetchUrlToolInput | PeopleSearchToolInput | FunctionToolInput | FinanceSearchToolInput | SandboxToolInput | McpToolInput | ConnectorToolInput;
+export type ToolOutput = WebSearchToolOutput | FetchUrlToolOutput | PeopleSearchToolOutput | FunctionToolOutput | FinanceSearchToolOutput | SandboxToolOutput | McpToolOutput | ConnectorToolOutput;
 export type ToolCallInput = {
     function?: ToolCallFunctionInput | null;
     id?: string | null;
@@ -1450,6 +1492,24 @@ export type ToolCallFunctionInput = {
 export type ToolCallFunctionOutput = {
     arguments?: string | null;
     name?: string | null;
+};
+export type ToolSearchOutputItemInput = {
+    arguments?: string;
+    call_id: string | null;
+    execution: string;
+    id: string;
+    status: string;
+    tools: NamespaceToolInput[];
+    type: "tool_search_output";
+};
+export type ToolSearchOutputItemOutput = {
+    arguments?: string;
+    call_id: string | null;
+    execution: string;
+    id: string;
+    status: string;
+    tools: NamespaceToolOutput[];
+    type: "tool_search_output";
 };
 export type ToolSpecInput = {
     function: FunctionSpecInput;
@@ -1764,11 +1824,15 @@ export class ResponsesResource {
     }
     create(body: Omit<ResponsesRequestInput, "stream"> & {
         stream?: false;
-    }, options?: RequestOptions): APIPromise<ResponsesResponseOutput>;
+    }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
+        output_text: string;
+    }>;
     create(body: Omit<ResponsesRequestInput, "stream"> & {
         stream: true;
     }, options?: RequestOptions): APIPromise<Stream<ResponseStreamEventOutput>>;
-    create(body: ResponsesRequestInput, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>;
+    create(body: ResponsesRequestInput, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+        output_text: string;
+    }) | Stream<ResponseStreamEventOutput>>;
     create(body: ResponsesRequestInput, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const promise = this._client.post<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>("/v1/responses", {
             ...options,
@@ -1778,7 +1842,9 @@ export class ResponsesResource {
         if (!body?.stream) {
             return promise._thenUnwrap(response => {
                 if ("object" in response && response.object === "response") {
-                    addOutputText(response as ResponsesResponseOutput);
+                    addOutputText(response as ResponsesResponseOutput & {
+                        output_text: string;
+                    });
                 }
                 return response;
             });
@@ -1857,7 +1923,9 @@ export type JsonSchemaFormat = JSONSchemaFormatInput;
 export type OutputItem = OutputItemOutput;
 export type ResponseCancelResponse = Awaited<ReturnType<ResponsesResource["cancel"]>>;
 export type ResponseCreateParams = ResponsesRequestInput;
-export type ResponseCreateResponse = ResponsesResponseOutput;
+export type ResponseCreateResponse = ResponsesResponseOutput & {
+    output_text: string;
+};
 export type ResponseFile = ResponseFileOutput;
 export type ResponseFileList = ResponseFileListOutput;
 export type ResponseFormat = ResponseFormatInput;
@@ -1948,7 +2016,9 @@ export namespace Responses {
     export type ResponseCreateParamsStreaming = Omit<ResponsesRequestInput, "stream"> & {
         stream: true;
     };
-    export type ResponseCreateResponse = ResponsesResponseOutput;
+    export type ResponseCreateResponse = ResponsesResponseOutput & {
+        output_text: string;
+    };
     export type ResponseFile = ResponseFileOutput;
     export type ResponseFileList = ResponseFileListOutput;
     export type ResponseRetrieveResponse = ResponsesResponseOutput;
