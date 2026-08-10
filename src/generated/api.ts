@@ -804,6 +804,7 @@ export type McpListToolsOutputItemOutput = {
 export type McpToolInput = {
     allowed_tools?: string[];
     authorization?: string;
+    defer_loading?: boolean;
     headers?: {} & Record<string, string>;
     server_label: string;
     server_url: string;
@@ -812,6 +813,7 @@ export type McpToolInput = {
 export type McpToolOutput = {
     allowed_tools?: string[];
     authorization?: string;
+    defer_loading?: boolean;
     headers?: {} & Record<string, string>;
     server_label: string;
     server_url: string;
@@ -1089,7 +1091,9 @@ export type ResponsesRequestInput = {
     skills?: SkillInput[];
     store?: boolean;
     stream?: boolean;
+    temperature?: number;
     tools?: ToolInput[];
+    top_p?: number;
 };
 export type ResponsesRequestOutput = {
     background?: boolean | null;
@@ -1107,7 +1111,9 @@ export type ResponsesRequestOutput = {
     skills?: SkillOutput[];
     store?: boolean;
     stream?: boolean;
+    temperature?: number;
     tools?: ToolOutput[];
+    top_p?: number;
 };
 export type ResponsesResponseInput = {
     background?: boolean;
