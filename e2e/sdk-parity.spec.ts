@@ -37,6 +37,7 @@ interface CapturedRequest {
 }
 
 interface TestCase {
+  expectedCandidateOutput?: unknown;
   expectedOutput?: unknown;
   expectedRequest: {
     authorization: string;
@@ -291,6 +292,10 @@ const cases: TestCase[] = [
     response: sseResponse([responseStreamEvent]),
   },
   {
+    expectedCandidateOutput: {
+      ...responsesResponse,
+      output_text: 'pong',
+    },
     expectedRequest: {
       authorization: 'Bearer parity-token',
       body: undefined,
@@ -465,7 +470,7 @@ describe('published SDK parity', { concurrency: false }, () => {
       assert.deepStrictEqual(published.request, testCase.expectedRequest, 'published request changed');
       assert.deepStrictEqual(
         candidate.output,
-        testCase.expectedOutput ?? published.output,
+        testCase.expectedCandidateOutput ?? testCase.expectedOutput ?? published.output,
         'candidate output changed',
       );
       assert.deepStrictEqual(
