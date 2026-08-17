@@ -649,17 +649,31 @@ export type FunctionCallInputOutput = {
     thought_signature?: string;
     type: "function_call";
 };
+export type FunctionCallOutputImagePartInput = {
+    detail?: ("low" | "high" | "auto") | null;
+    image_url: string;
+    type: "input_image";
+};
+export type FunctionCallOutputImagePartOutput = {
+    detail?: ("low" | "high" | "auto") | null;
+    image_url: string;
+    type: "input_image";
+};
 export type FunctionCallOutputInputInput = {
     call_id: string;
+    id?: string | null;
     name?: string;
-    output: string;
+    output: string | (FunctionCallOutputTextPartInput | FunctionCallOutputImagePartInput)[];
+    status?: ("in_progress" | "completed" | "incomplete") | null;
     thought_signature?: string;
     type: "function_call_output";
 };
 export type FunctionCallOutputInputOutput = {
     call_id: string;
+    id?: string | null;
     name?: string;
-    output: string;
+    output: string | (FunctionCallOutputTextPartOutput | FunctionCallOutputImagePartOutput)[];
+    status?: ("in_progress" | "completed" | "incomplete") | null;
     thought_signature?: string;
     type: "function_call_output";
 };
@@ -680,6 +694,14 @@ export type FunctionCallOutputItemOutput = {
     status: StatusOutput;
     thought_signature?: string;
     type: "function_call";
+};
+export type FunctionCallOutputTextPartInput = {
+    text: string;
+    type: "input_text";
+};
+export type FunctionCallOutputTextPartOutput = {
+    text: string;
+    type: "input_text";
 };
 export type FunctionSpecInput = {
     description: string;
@@ -739,8 +761,8 @@ export type InputContentPartOutput = {
     text?: string;
     type: "input_text" | "input_image";
 };
-export type InputItemInput = InputMessageInput | FunctionCallOutputInputInput | FunctionCallInputInput;
-export type InputItemOutput = InputMessageOutput | FunctionCallOutputInputOutput | FunctionCallInputOutput;
+export type InputItemInput = InputMessageInput | FunctionCallOutputInputInput | FunctionCallInputInput | ReasoningInputItemInput;
+export type InputItemOutput = InputMessageOutput | FunctionCallOutputInputOutput | FunctionCallInputOutput | ReasoningInputItemOutput;
 export type InputMessageInput = {
     content: InputContentInput;
     role: "user" | "assistant" | "system" | "developer";
@@ -935,6 +957,22 @@ export type ReasoningConfigInput = {
 export type ReasoningConfigOutput = {
     effort?: "minimal" | "low" | "medium" | "high" | "xhigh";
 };
+export type ReasoningInputItemInput = {
+    content?: ReasoningTextInputInput[] | null;
+    encrypted_content?: string | null;
+    id?: string | null;
+    status?: "in_progress" | "completed" | "incomplete";
+    summary: ReasoningSummaryInputInput[];
+    type: "reasoning";
+};
+export type ReasoningInputItemOutput = {
+    content?: ReasoningTextInputOutput[] | null;
+    encrypted_content?: string | null;
+    id?: string | null;
+    status?: "in_progress" | "completed" | "incomplete";
+    summary: ReasoningSummaryInputOutput[];
+    type: "reasoning";
+};
 export type ReasoningStartedEventInput = {
     sequence_number: number;
     thought?: string;
@@ -982,6 +1020,22 @@ export type ReasoningStoppedEventOutput = {
     sequence_number: number;
     thought?: string;
     type: "response.reasoning.stopped";
+};
+export type ReasoningSummaryInputInput = {
+    text: string;
+    type: "summary_text";
+};
+export type ReasoningSummaryInputOutput = {
+    text: string;
+    type: "summary_text";
+};
+export type ReasoningTextInputInput = {
+    text: string;
+    type: "reasoning_text";
+};
+export type ReasoningTextInputOutput = {
+    text: string;
+    type: "reasoning_text";
 };
 export type RegexSchemaInput = {
     description?: string | null;
@@ -1851,10 +1905,22 @@ export class ResponsesResource {
         }
         return promise;
     }
-    retrieve(responseID: string, options?: RequestOptions): APIPromise<ResponsesResponseOutput> {
-        return this._client.get<ResponsesResponseOutput>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
+    retrieve(responseID: string, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
+        output_text: string;
+    }> {
+        const promise = this._client.get<ResponsesResponseOutput>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
             ...options
         });
+        return promise._thenUnwrap(response => {
+            if ("object" in response && response.object === "response") {
+                addOutputText(response as ResponsesResponseOutput & {
+                    output_text: string;
+                });
+            }
+            return response;
+        }) as APIPromise<ResponsesResponseOutput & {
+            output_text: string;
+        }>;
     }
 }
 export class SearchResource {
@@ -1929,7 +1995,9 @@ export type ResponseCreateResponse = ResponsesResponseOutput & {
 export type ResponseFile = ResponseFileOutput;
 export type ResponseFileList = ResponseFileListOutput;
 export type ResponseFormat = ResponseFormatInput;
-export type ResponseRetrieveResponse = ResponsesResponseOutput;
+export type ResponseRetrieveResponse = ResponsesResponseOutput & {
+    output_text: string;
+};
 export type ResponsesCreateParams = ResponsesRequestInput;
 export type ResponseStreamChunk = ResponseStreamEventOutput;
 export type ResponsesUsage = ResponsesUsageOutput;
@@ -2021,7 +2089,9 @@ export namespace Responses {
     };
     export type ResponseFile = ResponseFileOutput;
     export type ResponseFileList = ResponseFileListOutput;
-    export type ResponseRetrieveResponse = ResponsesResponseOutput;
+    export type ResponseRetrieveResponse = ResponsesResponseOutput & {
+        output_text: string;
+    };
     export type ResponsesCreateParams = ResponsesRequestInput;
     export type ResponseStreamChunk = ResponseStreamEventOutput;
     export type ResponsesUsage = ResponsesUsageOutput;
