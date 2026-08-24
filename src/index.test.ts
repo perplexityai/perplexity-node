@@ -17,6 +17,7 @@ import { Chat as LegacyChat } from './resources/chat/chat.js';
 import { Completions as LegacyChatCompletions } from './resources/chat/completions.js';
 import { Files as LegacyResponseFiles } from './resources/responses/files.js';
 import { Responses as LegacyResponses } from './resources/responses/responses.js';
+import { VERSION } from './version.js';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -109,6 +110,16 @@ describe('instantiate client', () => {
     it('they are used in the request', async () => {
       const { req } = await client.buildRequest({ path: '/foo', method: 'post' });
       assert.deepStrictEqual(req.headers.get('x-my-default-header'), '2');
+      assert.deepStrictEqual(req.headers.get('x-pplx-integration'), `perplexity-node/${VERSION}`);
+    });
+
+    it('can override the integration attribution header', async () => {
+      const { req } = await client.buildRequest({
+        path: '/foo',
+        method: 'post',
+        headers: { 'X-Pplx-Integration': 'custom-integration/1.0.0' },
+      });
+      assert.deepStrictEqual(req.headers.get('x-pplx-integration'), 'custom-integration/1.0.0');
     });
 
     it('can ignore `undefined` and leave the default', async () => {
