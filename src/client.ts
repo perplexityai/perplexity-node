@@ -647,6 +647,7 @@ export class Perplexity implements SdkTransport {
       {
         Accept: 'application/json',
         'User-Agent': this.getUserAgent(),
+        'X-Pplx-Integration': 'perplexity-node/' + VERSION,
         'X-Source': 'perplexity-node',
         'X-Title': 'Perplexity Node SDK',
       },
