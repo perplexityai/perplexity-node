@@ -961,6 +961,16 @@ export type PeopleSearchToolInput = {
 export type PeopleSearchToolOutput = {
     type: "people_search";
 };
+export type ProfileReferenceInput = {
+    id: string;
+    type: "custom";
+    version?: string;
+};
+export type ProfileReferenceOutput = {
+    id: string;
+    type: "custom";
+    version?: string;
+};
 export type ReasoningConfigInput = {
     effort?: "minimal" | "low" | "medium" | "high" | "xhigh";
 };
@@ -1192,6 +1202,7 @@ export type ResponsesRequestInput = {
     models?: string[];
     preset?: string;
     previous_response_id?: string;
+    profile?: ProfileReferenceInput;
     reasoning?: ReasoningConfigInput;
     response_format?: ResponseFormatInput;
     skills?: SkillInput[];
@@ -1212,6 +1223,7 @@ export type ResponsesRequestOutput = {
     models?: string[];
     preset?: string;
     previous_response_id?: string;
+    profile?: ProfileReferenceOutput;
     reasoning?: ReasoningConfigOutput;
     response_format?: ResponseFormatOutput;
     skills?: SkillOutput[];
