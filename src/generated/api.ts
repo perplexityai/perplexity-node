@@ -495,6 +495,16 @@ export type CreateBrowserSessionRequestInput = {};
 export type CreateBrowserSessionRequestOutput = {};
 export type CurrencyInput = "USD";
 export type CurrencyOutput = "USD";
+export type CustomSkillInput = {
+    id: string;
+    type: "custom";
+    version?: string;
+};
+export type CustomSkillOutput = {
+    id: string;
+    type: "custom";
+    version?: string;
+};
 export type DateInput = string;
 export type DateOutput = string;
 export type DateFiltersInput = {
@@ -1477,8 +1487,8 @@ export type ShareFileOutputItemOutput = {
     type: "share_file";
     url?: string;
 };
-export type SkillInput = BuiltinSkillInput | InlineSkillInput;
-export type SkillOutput = BuiltinSkillOutput | InlineSkillOutput;
+export type SkillInput = BuiltinSkillInput | InlineSkillInput | CustomSkillInput;
+export type SkillOutput = BuiltinSkillOutput | InlineSkillOutput | CustomSkillOutput;
 export type SkillLoadedOutputItemInput = {
     name: string;
     type: "skill_loaded";
