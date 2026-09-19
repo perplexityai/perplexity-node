@@ -972,10 +972,10 @@ export type ProfileReferenceOutput = {
     version?: string;
 };
 export type ReasoningConfigInput = {
-    effort?: "minimal" | "low" | "medium" | "high" | "xhigh";
+    effort?: "none" | "minimal" | "low" | "medium" | "high" | "xhigh";
 };
 export type ReasoningConfigOutput = {
-    effort?: "minimal" | "low" | "medium" | "high" | "xhigh";
+    effort?: "none" | "minimal" | "low" | "medium" | "high" | "xhigh";
 };
 export type ReasoningInputItemInput = {
     content?: ReasoningTextInputInput[] | null;
@@ -1714,6 +1714,7 @@ export type WebSearchToolInput = {
     max_tokens?: number;
     max_tokens_per_page?: number;
     search_context_size?: "low" | "medium" | "high";
+    search_type?: "web" | "fast";
     type: "web_search";
     user_location?: ToolUserLocationInput;
 };
@@ -1722,6 +1723,7 @@ export type WebSearchToolOutput = {
     max_tokens?: number;
     max_tokens_per_page?: number;
     search_context_size?: "low" | "medium" | "high";
+    search_type?: "web" | "fast";
     type: "web_search";
     user_location?: ToolUserLocationOutput;
 };
