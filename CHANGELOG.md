@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.38.6](https://github.com/perplexityai/perplexity-node/compare/v0.38.5...v0.38.6) (2026-09-25)
+
+
+### Chores
+
+* sync generated API SDKs ([#97](https://github.com/perplexityai/perplexity-node/issues/97)) ([cccb44d](https://github.com/perplexityai/perplexity-node/commit/cccb44da0479e2c1d033c937c94c733137aeeda8))
+
 ## [0.38.5](https://github.com/perplexityai/perplexity-node/compare/v0.38.4...v0.38.5) (2026-08-31)
 
 
