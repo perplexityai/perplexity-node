@@ -205,7 +205,7 @@ export type ApiSearchRequestInput = {
     search_language_filter?: string[] | null;
     search_mode?: ("web" | "academic" | "sec") | null;
     search_recency_filter?: ("hour" | "day" | "week" | "month" | "year") | null;
-    search_type?: ("web" | "people") | null;
+    search_type?: ("web" | "fast" | "people") | null;
 };
 export type ApiSearchRequestOutput = {
     country?: string | null;
@@ -223,7 +223,7 @@ export type ApiSearchRequestOutput = {
     search_language_filter?: string[] | null;
     search_mode?: ("web" | "academic" | "sec") | null;
     search_recency_filter?: ("hour" | "day" | "week" | "month" | "year") | null;
-    search_type?: ("web" | "people") | null;
+    search_type?: ("web" | "fast" | "people") | null;
 };
 export type ApiSearchResponseInput = {
     id: string;
@@ -972,10 +972,10 @@ export type ProfileReferenceOutput = {
     version?: string;
 };
 export type ReasoningConfigInput = {
-    effort?: "minimal" | "low" | "medium" | "high" | "xhigh";
+    effort?: "none" | "minimal" | "low" | "medium" | "high" | "xhigh";
 };
 export type ReasoningConfigOutput = {
-    effort?: "minimal" | "low" | "medium" | "high" | "xhigh";
+    effort?: "none" | "minimal" | "low" | "medium" | "high" | "xhigh";
 };
 export type ReasoningInputItemInput = {
     content?: ReasoningTextInputInput[] | null;
@@ -1714,6 +1714,7 @@ export type WebSearchToolInput = {
     max_tokens?: number;
     max_tokens_per_page?: number;
     search_context_size?: "low" | "medium" | "high";
+    search_type?: "web" | "fast";
     type: "web_search";
     user_location?: ToolUserLocationInput;
 };
@@ -1722,6 +1723,7 @@ export type WebSearchToolOutput = {
     max_tokens?: number;
     max_tokens_per_page?: number;
     search_context_size?: "low" | "medium" | "high";
+    search_type?: "web" | "fast";
     type: "web_search";
     user_location?: ToolUserLocationOutput;
 };
