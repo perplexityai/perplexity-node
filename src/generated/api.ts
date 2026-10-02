@@ -583,8 +583,8 @@ export type ErrorInfoOutput = {
     message: string;
     type?: string;
 };
-export type EventTypeInput = "response.created" | "response.in_progress" | "response.completed" | "response.failed" | "response.output_item.added" | "response.output_item.done" | "response.output_text.delta" | "response.output_text.done" | "response.reasoning.started" | "response.reasoning.search_queries" | "response.reasoning.search_results" | "response.reasoning.fetch_url_queries" | "response.reasoning.fetch_url_results" | "response.reasoning.stopped" | "response.skill.loaded";
-export type EventTypeOutput = "response.created" | "response.in_progress" | "response.completed" | "response.failed" | "response.output_item.added" | "response.output_item.done" | "response.output_text.delta" | "response.output_text.done" | "response.reasoning.started" | "response.reasoning.search_queries" | "response.reasoning.search_results" | "response.reasoning.fetch_url_queries" | "response.reasoning.fetch_url_results" | "response.reasoning.stopped" | "response.skill.loaded";
+export type EventTypeInput = "response.created" | "response.in_progress" | "response.completed" | "response.failed" | "response.output_item.added" | "response.output_item.done" | "response.output_text.delta" | "response.output_text.done" | "response.reasoning.started" | "response.reasoning.search_queries" | "response.reasoning.search_results" | "response.reasoning.image_search_queries" | "response.reasoning.image_search_results" | "response.reasoning.fetch_url_queries" | "response.reasoning.fetch_url_results" | "response.reasoning.stopped" | "response.skill.loaded";
+export type EventTypeOutput = "response.created" | "response.in_progress" | "response.completed" | "response.failed" | "response.output_item.added" | "response.output_item.done" | "response.output_text.delta" | "response.output_text.done" | "response.reasoning.started" | "response.reasoning.search_queries" | "response.reasoning.search_results" | "response.reasoning.image_search_queries" | "response.reasoning.image_search_results" | "response.reasoning.fetch_url_queries" | "response.reasoning.fetch_url_results" | "response.reasoning.stopped" | "response.skill.loaded";
 export type ExecutePythonStepDetailsInput = {
     code: string;
     result: string;
@@ -745,6 +745,82 @@ export type HTTPValidationErrorInput = {
 export type HTTPValidationErrorOutput = {
     detail?: ValidationErrorOutput[];
 };
+export type ImageResultInput = {
+    height: number;
+    image_url: string;
+    origin_url: string;
+    title?: string;
+    width: number;
+};
+export type ImageResultOutput = {
+    height: number;
+    image_url: string;
+    origin_url: string;
+    title?: string;
+    width: number;
+};
+export type ImageSearchFiltersInput = {
+    domain_filter?: string[];
+    format_filter?: ("bmp" | "gif" | "jpeg" | "png" | "webp" | "svg")[];
+    safe_search?: boolean;
+};
+export type ImageSearchFiltersOutput = {
+    domain_filter?: string[];
+    format_filter?: ("bmp" | "gif" | "jpeg" | "png" | "webp" | "svg")[];
+    safe_search?: boolean;
+};
+export type ImageSearchQueriesEventInput = {
+    call_id: string;
+    queries: string[];
+    sequence_number: number;
+    thought?: string;
+    type: "response.reasoning.image_search_queries";
+};
+export type ImageSearchQueriesEventOutput = {
+    call_id: string;
+    queries: string[];
+    sequence_number: number;
+    thought?: string;
+    type: "response.reasoning.image_search_queries";
+};
+export type ImageSearchResultsEventInput = {
+    call_id: string;
+    results: ImageResultInput[];
+    sequence_number: number;
+    thought?: string;
+    type: "response.reasoning.image_search_results";
+    usage?: ResponsesUsageInput;
+};
+export type ImageSearchResultsEventOutput = {
+    call_id: string;
+    results: ImageResultOutput[];
+    sequence_number: number;
+    thought?: string;
+    type: "response.reasoning.image_search_results";
+    usage?: ResponsesUsageOutput;
+};
+export type ImageSearchResultsOutputItemInput = {
+    error?: string;
+    queries?: string[];
+    results: ImageResultInput[];
+    type: "image_search_results";
+};
+export type ImageSearchResultsOutputItemOutput = {
+    error?: string;
+    queries?: string[];
+    results: ImageResultOutput[];
+    type: "image_search_results";
+};
+export type ImageSearchToolInput = {
+    filters?: ImageSearchFiltersInput;
+    max_results?: number;
+    type: "image_search";
+};
+export type ImageSearchToolOutput = {
+    filters?: ImageSearchFiltersOutput;
+    max_results?: number;
+    type: "image_search";
+};
 export type InlineSkillInput = {
     description: string;
     instructions: string;
@@ -762,14 +838,20 @@ export type InputOutput = string | InputItemOutput[];
 export type InputContentInput = string | InputContentPartInput[];
 export type InputContentOutput = string | InputContentPartOutput[];
 export type InputContentPartInput = {
+    file_data?: string;
+    file_url?: string;
+    filename?: string;
     image_url?: string;
     text?: string;
-    type: "input_text" | "input_image";
+    type: "input_text" | "input_image" | "input_file";
 };
 export type InputContentPartOutput = {
+    file_data?: string;
+    file_url?: string;
+    filename?: string;
     image_url?: string;
     text?: string;
-    type: "input_text" | "input_image";
+    type: "input_text" | "input_image" | "input_file";
 };
 export type InputItemInput = InputMessageInput | FunctionCallOutputInputInput | FunctionCallInputInput | ReasoningInputItemInput;
 export type InputItemOutput = InputMessageOutput | FunctionCallOutputInputOutput | FunctionCallInputOutput | ReasoningInputItemOutput;
@@ -917,8 +999,8 @@ export type NamespaceToolDefOutput = {
     parameters?: {} & Record<string, unknown>;
     type: "function";
 };
-export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
-export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
+export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | ImageSearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
+export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | ImageSearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
 export type OutputItemAddedEventInput = {
     item: OutputItemInput;
     output_index: number;
@@ -1206,9 +1288,11 @@ export type ResponsesRequestInput = {
     reasoning?: ReasoningConfigInput;
     response_format?: ResponseFormatInput;
     skills?: SkillInput[];
+    step_budget_reminder?: boolean;
     store?: boolean;
     stream?: boolean;
     temperature?: number;
+    tool_choice?: ToolChoiceInput;
     tools?: ToolInput[];
     top_p?: number;
 };
@@ -1227,9 +1311,11 @@ export type ResponsesRequestOutput = {
     reasoning?: ReasoningConfigOutput;
     response_format?: ResponseFormatOutput;
     skills?: SkillOutput[];
+    step_budget_reminder?: boolean;
     store?: boolean;
     stream?: boolean;
     temperature?: number;
+    tool_choice?: ToolChoiceOutput;
     tools?: ToolOutput[];
     top_p?: number;
 };
@@ -1259,8 +1345,8 @@ export type ResponsesResponseOutput = {
     store?: boolean;
     usage?: ResponsesUsageOutput;
 };
-export type ResponseStreamEventInput = ResponseCreatedEventInput | ResponseInProgressEventInput | ResponseCompletedEventInput | ResponseFailedEventInput | OutputItemAddedEventInput | OutputItemDoneEventInput | TextDeltaEventInput | TextDoneEventInput | ReasoningStartedEventInput | SearchQueriesEventInput | SearchResultsEventInput | FetchUrlQueriesEventInput | FetchUrlResultsEventInput | ReasoningStoppedEventInput | ResponseSkillLoadedEventInput;
-export type ResponseStreamEventOutput = ResponseCreatedEventOutput | ResponseInProgressEventOutput | ResponseCompletedEventOutput | ResponseFailedEventOutput | OutputItemAddedEventOutput | OutputItemDoneEventOutput | TextDeltaEventOutput | TextDoneEventOutput | ReasoningStartedEventOutput | SearchQueriesEventOutput | SearchResultsEventOutput | FetchUrlQueriesEventOutput | FetchUrlResultsEventOutput | ReasoningStoppedEventOutput | ResponseSkillLoadedEventOutput;
+export type ResponseStreamEventInput = ResponseCreatedEventInput | ResponseInProgressEventInput | ResponseCompletedEventInput | ResponseFailedEventInput | OutputItemAddedEventInput | OutputItemDoneEventInput | TextDeltaEventInput | TextDoneEventInput | ReasoningStartedEventInput | SearchQueriesEventInput | SearchResultsEventInput | ImageSearchQueriesEventInput | ImageSearchResultsEventInput | FetchUrlQueriesEventInput | FetchUrlResultsEventInput | ReasoningStoppedEventInput | ResponseSkillLoadedEventInput;
+export type ResponseStreamEventOutput = ResponseCreatedEventOutput | ResponseInProgressEventOutput | ResponseCompletedEventOutput | ResponseFailedEventOutput | OutputItemAddedEventOutput | OutputItemDoneEventOutput | TextDeltaEventOutput | TextDoneEventOutput | ReasoningStartedEventOutput | SearchQueriesEventOutput | SearchResultsEventOutput | ImageSearchQueriesEventOutput | ImageSearchResultsEventOutput | FetchUrlQueriesEventOutput | FetchUrlResultsEventOutput | ReasoningStoppedEventOutput | ResponseSkillLoadedEventOutput;
 export type ResponsesUsageInput = {
     cost?: ResponsesCostInput;
     input_tokens: number;
@@ -1543,8 +1629,8 @@ export type TextDoneEventOutput = {
     text: string;
     type: "response.output_text.done";
 };
-export type ToolInput = WebSearchToolInput | FetchUrlToolInput | PeopleSearchToolInput | FunctionToolInput | FinanceSearchToolInput | SandboxToolInput | McpToolInput | ConnectorToolInput;
-export type ToolOutput = WebSearchToolOutput | FetchUrlToolOutput | PeopleSearchToolOutput | FunctionToolOutput | FinanceSearchToolOutput | SandboxToolOutput | McpToolOutput | ConnectorToolOutput;
+export type ToolInput = WebSearchToolInput | ImageSearchToolInput | FetchUrlToolInput | PeopleSearchToolInput | FunctionToolInput | FinanceSearchToolInput | SandboxToolInput | McpToolInput | ConnectorToolInput;
+export type ToolOutput = WebSearchToolOutput | ImageSearchToolOutput | FetchUrlToolOutput | PeopleSearchToolOutput | FunctionToolOutput | FinanceSearchToolOutput | SandboxToolOutput | McpToolOutput | ConnectorToolOutput;
 export type ToolCallInput = {
     function?: ToolCallFunctionInput | null;
     id?: string | null;
@@ -1569,6 +1655,8 @@ export type ToolCallFunctionOutput = {
     arguments?: string | null;
     name?: string | null;
 };
+export type ToolChoiceInput = ("none" | "auto" | "required") | ({} & Record<string, unknown>);
+export type ToolChoiceOutput = ("none" | "auto" | "required") | ({} & Record<string, unknown>);
 export type ToolSearchOutputItemInput = {
     arguments?: string;
     call_id: string | null;
@@ -2008,6 +2096,9 @@ export type EmbeddingsUsage = EmbeddingsUsageOutput;
 export type ErrorInfo = ErrorInfoOutput;
 export type FunctionCallOutputItem = FunctionCallOutputItemOutput;
 export type FunctionTool = FunctionToolInput;
+export type ImageResult = ImageResultOutput;
+export type ImageSearchResultsOutputItem = ImageSearchResultsOutputItemOutput;
+export type ImageSearchTool = ImageSearchToolInput;
 export type InputItem = InputItemInput;
 export type JsonSchemaFormat = JSONSchemaFormatInput;
 export type OutputItem = OutputItemOutput;
@@ -2098,6 +2189,9 @@ export namespace Responses {
     export type FileContentParams = NonNullable<Parameters<ResponsesFilesResource["content"]>[1]>;
     export type FunctionCallOutputItem = FunctionCallOutputItemOutput;
     export type FunctionTool = FunctionToolInput;
+    export type ImageResult = ImageResultOutput;
+    export type ImageSearchResultsOutputItem = ImageSearchResultsOutputItemOutput;
+    export type ImageSearchTool = ImageSearchToolInput;
     export type InputItem = InputItemInput;
     export type OutputItem = OutputItemOutput;
     export type ResponseCancelResponse = Awaited<ReturnType<ResponsesResource["cancel"]>>;
