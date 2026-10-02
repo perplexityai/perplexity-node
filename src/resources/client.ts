@@ -54,6 +54,9 @@ declare module '../client.js' {
         export type FileContentParams = API.Responses.FileContentParams;
         export type FunctionCallOutputItem = API.Responses.FunctionCallOutputItem;
         export type FunctionTool = API.Responses.FunctionTool;
+        export type ImageResult = API.Responses.ImageResult;
+        export type ImageSearchResultsOutputItem = API.Responses.ImageSearchResultsOutputItem;
+        export type ImageSearchTool = API.Responses.ImageSearchTool;
         export type InputItem = API.Responses.InputItem;
         export type OutputItem = API.Responses.OutputItem;
         export type ResponseCancelResponse = API.Responses.ResponseCancelResponse;
