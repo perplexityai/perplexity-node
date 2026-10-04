@@ -235,6 +235,22 @@ export type ApiSearchResponseOutput = {
     results: ApiSearchPageOutput[];
     server_time?: string | null;
 };
+export type ApprovalFilterInput = {
+    read_only?: boolean | null;
+    tool_names?: string[] | null;
+};
+export type ApprovalFilterOutput = {
+    read_only?: boolean | null;
+    tool_names?: string[] | null;
+};
+export type ApprovalFiltersInput = {
+    always?: (ApprovalFilterInput) | null;
+    never?: (ApprovalFilterInput) | null;
+};
+export type ApprovalFiltersOutput = {
+    always?: (ApprovalFilterOutput) | null;
+    never?: (ApprovalFilterOutput) | null;
+};
 export type AsyncApiChatCompletionsRequestInput = {
     idempotency_key?: string | null;
     request: ApiChatCompletionsRequestInput;
@@ -416,6 +432,7 @@ export type CompletionResponseTypeOutput = "message" | "info" | "end_of_stream";
 export type ConnectorToolInput = {
     allowed_tools?: string[];
     id: string;
+    require_approval?: RequireApprovalInput;
     server_description?: string;
     server_label: string;
     type: "connector";
@@ -423,6 +440,7 @@ export type ConnectorToolInput = {
 export type ConnectorToolOutput = {
     allowed_tools?: string[];
     id: string;
+    require_approval?: RequireApprovalOutput;
     server_description?: string;
     server_label: string;
     type: "connector";
@@ -853,8 +871,8 @@ export type InputContentPartOutput = {
     text?: string;
     type: "input_text" | "input_image" | "input_file";
 };
-export type InputItemInput = InputMessageInput | FunctionCallOutputInputInput | FunctionCallInputInput | ReasoningInputItemInput;
-export type InputItemOutput = InputMessageOutput | FunctionCallOutputInputOutput | FunctionCallInputOutput | ReasoningInputItemOutput;
+export type InputItemInput = InputMessageInput | FunctionCallOutputInputInput | FunctionCallInputInput | ReasoningInputItemInput | McpApprovalResponseInputInput | McpApprovalRequestInputInput | McpCallInputInput | McpListToolsInputInput;
+export type InputItemOutput = InputMessageOutput | FunctionCallOutputInputOutput | FunctionCallInputOutput | ReasoningInputItemOutput | McpApprovalResponseInputOutput | McpApprovalRequestInputOutput | McpCallInputOutput | McpListToolsInputOutput;
 export type InputMessageInput = {
     content: InputContentInput;
     role: "user" | "assistant" | "system" | "developer";
@@ -897,7 +915,80 @@ export type ListAsyncApiChatCompletionsResponseOutput = {
     next_token?: string | null;
     requests: AsyncApiChatCompletionsResponseSummaryOutput[];
 };
+export type McpApprovalRequestInputInput = {
+    arguments: string;
+    connector_id?: string;
+    id: string;
+    name: string;
+    server_label: string;
+    thought_signature?: string;
+    type: "mcp_approval_request";
+};
+export type McpApprovalRequestInputOutput = {
+    arguments: string;
+    connector_id?: string;
+    id: string;
+    name: string;
+    server_label: string;
+    thought_signature?: string;
+    type: "mcp_approval_request";
+};
+export type McpApprovalRequestOutputItemInput = {
+    arguments: string;
+    connector_id?: string;
+    id: string;
+    name: string;
+    server_label: string;
+    thought_signature?: string;
+    type: "mcp_approval_request";
+};
+export type McpApprovalRequestOutputItemOutput = {
+    arguments: string;
+    connector_id?: string;
+    id: string;
+    name: string;
+    server_label: string;
+    thought_signature?: string;
+    type: "mcp_approval_request";
+};
+export type McpApprovalResponseInputInput = {
+    approval_request_id: string;
+    approve: boolean;
+    id?: string | null;
+    reason?: string | null;
+    type: "mcp_approval_response";
+};
+export type McpApprovalResponseInputOutput = {
+    approval_request_id: string;
+    approve: boolean;
+    id?: string | null;
+    reason?: string | null;
+    type: "mcp_approval_response";
+};
+export type McpCallInputInput = {
+    approval_request_id?: string | null;
+    arguments: string;
+    connector_id?: string;
+    error?: string | null;
+    id: string;
+    name: string;
+    output?: string;
+    server_label: string;
+    type: "mcp_call";
+};
+export type McpCallInputOutput = {
+    approval_request_id?: string | null;
+    arguments: string;
+    connector_id?: string;
+    error?: string | null;
+    id: string;
+    name: string;
+    output?: string;
+    server_label: string;
+    type: "mcp_call";
+};
 export type McpCallOutputItemInput = {
+    approval_request_id?: string | null;
     arguments: string;
     connector_id?: string;
     error?: string | null;
@@ -908,6 +999,7 @@ export type McpCallOutputItemInput = {
     type: "mcp_call";
 };
 export type McpCallOutputItemOutput = {
+    approval_request_id?: string | null;
     arguments: string;
     connector_id?: string;
     error?: string | null;
@@ -916,6 +1008,20 @@ export type McpCallOutputItemOutput = {
     output?: string;
     server_label: string;
     type: "mcp_call";
+};
+export type McpListToolsInputInput = {
+    error?: string | null;
+    id?: string;
+    server_label?: string;
+    tools?: McpToolDefInput[];
+    type: "mcp_list_tools";
+};
+export type McpListToolsInputOutput = {
+    error?: string | null;
+    id?: string;
+    server_label?: string;
+    tools?: McpToolDefOutput[];
+    type: "mcp_list_tools";
 };
 export type McpListToolsOutputItemInput = {
     connector_id?: string;
@@ -938,6 +1044,7 @@ export type McpToolInput = {
     authorization?: string;
     defer_loading?: boolean;
     headers?: {} & Record<string, string>;
+    require_approval?: RequireApprovalInput;
     server_label: string;
     server_url: string;
     type: "mcp";
@@ -947,16 +1054,23 @@ export type McpToolOutput = {
     authorization?: string;
     defer_loading?: boolean;
     headers?: {} & Record<string, string>;
+    require_approval?: RequireApprovalOutput;
     server_label: string;
     server_url: string;
     type: "mcp";
 };
 export type McpToolDefInput = {
+    annotations?: ({
+        read_only?: boolean;
+    } & Record<string, unknown>) | null;
     description?: string;
     input_schema: {} & Record<string, unknown>;
     name: string;
 };
 export type McpToolDefOutput = {
+    annotations?: ({
+        read_only?: boolean;
+    } & Record<string, unknown>) | null;
     description?: string;
     input_schema: {} & Record<string, unknown>;
     name: string;
@@ -999,8 +1113,8 @@ export type NamespaceToolDefOutput = {
     parameters?: {} & Record<string, unknown>;
     type: "function";
 };
-export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | ImageSearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
-export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | ImageSearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
+export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | ImageSearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | McpApprovalRequestOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
+export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | ImageSearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | McpApprovalRequestOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
 export type OutputItemAddedEventInput = {
     item: OutputItemInput;
     output_index: number;
@@ -1151,6 +1265,8 @@ export type RegexSchemaOutput = {
     regex: string;
     strict?: boolean | null;
 };
+export type RequireApprovalInput = ("always" | "never") | ApprovalFiltersInput;
+export type RequireApprovalOutput = ("always" | "never") | ApprovalFiltersOutput;
 export type ResponseCompletedEventInput = {
     response?: ResponsesResponseInput;
     sequence_number: number;
