@@ -10,6 +10,7 @@ ts_library(
         "contextualized-embeddings.ts",
         "embeddings.ts",
         "index.ts",
+        "models.ts",
         "responses.ts",
         "search.ts",
         "shared.ts",

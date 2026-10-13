@@ -1099,6 +1099,26 @@ export type MessageOutputItemOutput = {
     status: StatusOutput;
     type: "message";
 };
+export type ModelInput = {
+    created: number;
+    id: string;
+    object: "model";
+    owned_by: string;
+};
+export type ModelOutput = {
+    created: number;
+    id: string;
+    object: "model";
+    owned_by: string;
+};
+export type ModelListInput = {
+    data: ModelInput[];
+    object: "list";
+};
+export type ModelListOutput = {
+    data: ModelOutput[];
+    object: "list";
+};
 export type NamespaceToolInput = {
     description: string;
     name: string;
@@ -2126,6 +2146,17 @@ export class EmbeddingsResource {
         });
     }
 }
+export class ModelsResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    list(options?: RequestOptions): APIPromise<ModelListOutput> {
+        return this._client.get<ModelListOutput>("/v1/models", {
+            ...options
+        });
+    }
+}
 export class ResponsesResource {
     private readonly _client: SdkTransport;
     readonly files: ResponsesFilesResource;
@@ -2209,6 +2240,7 @@ export class PerplexitySdk {
     readonly chat: ChatResource;
     readonly contextualizedEmbeddings: ContextualizedEmbeddingsResource;
     readonly embeddings: EmbeddingsResource;
+    readonly models: ModelsResource;
     readonly responses: ResponsesResource;
     readonly search: SearchResource;
     constructor(client: SdkTransport) {
@@ -2217,6 +2249,7 @@ export class PerplexitySdk {
         this.chat = new ChatResource(client);
         this.contextualizedEmbeddings = new ContextualizedEmbeddingsResource(client);
         this.embeddings = new EmbeddingsResource(client);
+        this.models = new ModelsResource(client);
         this.responses = new ResponsesResource(client);
         this.search = new SearchResource(client);
     }
@@ -2230,6 +2263,8 @@ export class Chat extends ChatResource {
 export class ContextualizedEmbeddings extends ContextualizedEmbeddingsResource {
 }
 export class Embeddings extends EmbeddingsResource {
+}
+export class Models extends ModelsResource {
 }
 export class Responses extends ResponsesResource {
 }
@@ -2257,6 +2292,8 @@ export type ImageSearchResultsOutputItem = ImageSearchResultsOutputItemOutput;
 export type ImageSearchTool = ImageSearchToolInput;
 export type InputItem = InputItemInput;
 export type JsonSchemaFormat = JSONSchemaFormatInput;
+export type Model = ModelOutput;
+export type ModelListResponse = Awaited<ReturnType<ModelsResource["list"]>>;
 export type OutputItem = OutputItemOutput;
 export type ResponseCancelResponse = Awaited<ReturnType<ResponsesResource["cancel"]>>;
 export type ResponseCreateParams = ResponsesRequestInput;
@@ -2335,6 +2372,10 @@ export namespace ContextualizedEmbeddings {
 export namespace Embeddings {
     export type EmbeddingCreateParams = EmbeddingsRequestInput;
     export type EmbeddingCreateResponse = EmbeddingsResponseOutput;
+}
+export namespace Models {
+    export type Model = ModelOutput;
+    export type ModelListResponse = Awaited<ReturnType<ModelsResource["list"]>>;
 }
 export namespace Responses {
     export class Files extends ResponsesFilesResource {

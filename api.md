@@ -1,3 +1,14 @@
+# Models
+
+```ts
+import type { Model, ModelListResponse } from '@perplexity-ai/perplexity_ai/resources/models';
+
+const models = await client.models.list();
+```
+
+`client.models.list()` sends `GET /v1/models` and returns a `ModelListResponse`
+containing the models available for the Agent API.
+
 # Shared
 
 Types:
