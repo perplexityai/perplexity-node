@@ -71,6 +71,7 @@ TS_SOURCES = [
     "//src/resources/async",
     "//src/resources/async/chat",
     "//src/resources/browser",
+    "//src/resources/skills",
     "//src/resources/chat",
     "//src/resources/responses",
 ]

@@ -15,6 +15,7 @@ ts_library(
         "responses.ts",
         "search.ts",
         "shared.ts",
+        "skills.ts",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -23,5 +24,6 @@ ts_library(
         "//src/resources/browser",
         "//src/resources/chat",
         "//src/resources/responses",
+        "//src/resources/skills",
     ],
 )

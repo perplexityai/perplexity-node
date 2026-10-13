@@ -1,0 +1,90 @@
+import assert from 'node:assert/strict';
+import { it } from 'node:test';
+import Perplexity, { toFile } from '../../index.js';
+
+it('manages custom skills with multipart ZIP uploads and revision queries', async () => {
+  const bytes = new Uint8Array([0x50, 0x4b, 5, 6, ...new Array<number>(18).fill(0)]);
+  const file = await toFile(bytes, 'bundle.zip', { type: 'application/zip' });
+  const revision = 'rev+a/b=';
+  const skill = { skill_id: 'skill/id', name: 'example', revision };
+  const responses = [
+    skill,
+    { skills: [skill], next_page_token: 'next+a/b=' },
+    skill,
+    skill,
+    { revisions: [{ revision }], next_page_token: null },
+    { download_url: 'https://example.test/bundle.zip', revision },
+    null,
+  ];
+  const methods = ['POST', 'GET', 'GET', 'PUT', 'GET', 'GET', 'DELETE'];
+  const paths = [
+    '/v1/skills',
+    '/v1/skills',
+    '/v1/skills/skill%2Fid',
+    '/v1/skills/skill%2Fid',
+    '/v1/skills/skill%2Fid/revisions',
+    '/v1/skills/skill%2Fid/download',
+    '/v1/skills/skill%2Fid',
+  ];
+  const queries = [
+    {},
+    { limit: '20', page_token: 'next+a/b=' },
+    {},
+    { expected_revision: revision },
+    { limit: '20', page_token: 'next+a/b=' },
+    { revision },
+    { expected_revision: revision },
+  ];
+  let count = 0;
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input, init) => {
+      const index = count++;
+      const request = new Request(input, init);
+      const url = new URL(request.url);
+      assert.equal(request.method, methods[index]);
+      assert.equal(url.pathname, paths[index]);
+      assert.deepEqual(Object.fromEntries(url.searchParams), queries[index]);
+      assert.equal(request.headers.get('authorization'), 'Bearer test');
+      if (request.method === 'POST' || request.method === 'PUT') {
+        assert.match(request.headers.get('content-type')!, /^multipart\/form-data; boundary=/);
+        const form = await request.formData();
+        assert.deepEqual([...form.keys()], ['file']);
+        const uploaded = form.get('file') as File;
+        assert.equal(uploaded.name, 'bundle.zip');
+        assert.equal(uploaded.type, 'application/zip');
+        assert.deepEqual(new Uint8Array(await uploaded.arrayBuffer()), bytes);
+      } else {
+        assert.equal(await request.text(), '');
+      }
+      const body = responses[index];
+      return body
+        ? Response.json(body, { status: index === 0 ? 201 : 200 })
+        : new Response(null, { status: 204 });
+    },
+  });
+  const created = await client.skills.create({ file });
+  assert.equal(created.skill_id, 'skill/id');
+  const page = await client.skills.list({ limit: 20, page_token: 'next+a/b=' });
+  assert.equal(page.skills[0]?.skill_id, created.skill_id);
+  const retrieved = await client.skills.retrieve(created.skill_id);
+  assert.equal(retrieved.revision, revision);
+  assert.ok(retrieved.revision != null);
+  const updated = await client.skills.update(
+    created.skill_id,
+    { file },
+    { expected_revision: retrieved.revision },
+  );
+  assert.equal(updated.revision, revision);
+  const revisions = await client.skills.revisions.list(created.skill_id, {
+    limit: 20,
+    page_token: 'next+a/b=',
+  });
+  assert.equal(revisions.revisions[0]?.revision, revision);
+  const download = await client.skills.download(created.skill_id, { revision });
+  assert.equal(download.download_url, 'https://example.test/bundle.zip');
+  assert.ok(updated.revision != null);
+  assert.equal(await client.skills.delete(created.skill_id, { expected_revision: updated.revision }), null);
+  assert.equal(count, 7);
+});

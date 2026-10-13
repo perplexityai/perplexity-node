@@ -55,6 +55,20 @@ export type SdkTransport = {
   ): APIPromise<ResponseType>;
 };
 
+export function multipartBody(body: Record<string, Blob | undefined>): FormData {
+  const form = new FormData();
+  for (const [name, file] of Object.entries(body)) {
+    if (file === undefined) continue;
+    if (!(file instanceof Blob)) {
+      throw new TypeError(
+        `Multipart field ${name} must be a File or Blob; use toFile for other inputs.`,
+      );
+    }
+    form.append(name, file);
+  }
+  return form;
+}
+
 const legacyRequestOptionKeys = [
   'headers',
   'maxRetries',
