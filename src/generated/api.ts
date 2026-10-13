@@ -2320,22 +2320,65 @@ export class ResponsesResource {
         }
         return promise;
     }
-    retrieve(responseID: string, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
+    retrieve(responseID: string, params?: Omit<{
+        starting_after?: number;
+        stream?: boolean;
+    } & RequestOptions, "stream"> & {
+        stream?: false;
+    }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
-    }> {
-        const promise = this._client.get<ResponsesResponseOutput>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...options
+    }>;
+    retrieve(responseID: string, params: Omit<{
+        starting_after?: number;
+        stream?: boolean;
+    } & RequestOptions, "stream"> & {
+        stream: true;
+    }, options?: RequestOptions): APIPromise<Stream<ResponseStreamEventOutput>>;
+    retrieve(responseID: string, params: Omit<{
+        starting_after?: number;
+        stream?: boolean;
+    } & RequestOptions, "stream"> & {
+        stream: boolean;
+    }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+        output_text: string;
+    }) | Stream<ResponseStreamEventOutput>>;
+    retrieve(responseID: string, params?: RequestOptions & {
+        starting_after?: never;
+    }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
+        output_text: string;
+    }>;
+    retrieve(responseID: string, params?: {
+        starting_after?: number;
+        stream?: boolean;
+    } & RequestOptions, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+        output_text: string;
+    }) | Stream<ResponseStreamEventOutput>>;
+    retrieve(responseID: string, params?: {
+        starting_after?: number;
+        stream?: boolean;
+    } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
+        const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
+            ...params,
+            ...options,
+            query: {
+                starting_after: params?.starting_after,
+                stream: params?.stream,
+                ...params?.query,
+                ...options?.query
+            },
+            stream: params?.stream ?? false
         });
-        return promise._thenUnwrap(response => {
-            if ("object" in response && response.object === "response") {
-                addOutputText(response as ResponsesResponseOutput & {
-                    output_text: string;
-                });
-            }
-            return response;
-        }) as APIPromise<ResponsesResponseOutput & {
-            output_text: string;
-        }>;
+        if (!params?.stream) {
+            return promise._thenUnwrap(response => {
+                if ("object" in response && response.object === "response") {
+                    addOutputText(response as ResponsesResponseOutput & {
+                        output_text: string;
+                    });
+                }
+                return response;
+            });
+        }
+        return promise;
     }
 }
 export class SearchResource {
