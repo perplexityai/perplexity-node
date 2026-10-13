@@ -883,6 +883,16 @@ export type InputMessageOutput = {
     role: "user" | "assistant" | "system" | "developer";
     type?: "message";
 };
+export type InputTokensDetailsInput = {
+    cache_creation_input_tokens?: number;
+    cache_read_input_tokens?: number;
+    cached_tokens: number;
+};
+export type InputTokensDetailsOutput = {
+    cache_creation_input_tokens?: number;
+    cache_read_input_tokens?: number;
+    cached_tokens: number;
+};
 export type JSONSchemaInput = {
     description?: string | null;
     name?: string | null;
@@ -1138,6 +1148,12 @@ export type OutputItemDoneEventOutput = {
     output_index: number;
     sequence_number: number;
     type: "response.output_item.done";
+};
+export type OutputTokensDetailsInput = {
+    reasoning_tokens: number;
+};
+export type OutputTokensDetailsOutput = {
+    reasoning_tokens: number;
 };
 export type ParameterSpecInput = {
     additional_properties?: boolean | null;
@@ -1783,29 +1799,17 @@ export type ToolCallFunctionOutput = {
 };
 export type ToolCallTokenUsageInput = {
     input_tokens: number;
-    input_tokens_details: {
-        cache_creation_input_tokens?: number;
-        cache_read_input_tokens?: number;
-        cached_tokens: number;
-    };
+    input_tokens_details: InputTokensDetailsInput;
     model?: string;
     output_tokens: number;
-    output_tokens_details: {
-        reasoning_tokens: number;
-    };
+    output_tokens_details: OutputTokensDetailsInput;
 };
 export type ToolCallTokenUsageOutput = {
     input_tokens: number;
-    input_tokens_details: {
-        cache_creation_input_tokens?: number;
-        cache_read_input_tokens?: number;
-        cached_tokens: number;
-    };
+    input_tokens_details: InputTokensDetailsOutput;
     model?: string;
     output_tokens: number;
-    output_tokens_details: {
-        reasoning_tokens: number;
-    };
+    output_tokens_details: OutputTokensDetailsOutput;
 };
 export type ToolChoiceInput = ("none" | "auto" | "required") | ({} & Record<string, unknown>);
 export type ToolChoiceOutput = ("none" | "auto" | "required") | ({} & Record<string, unknown>);
