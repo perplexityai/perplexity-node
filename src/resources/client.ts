@@ -5,6 +5,7 @@ export interface ClientResources {
     readonly browser: API.Browser;
     readonly chat: API.Chat;
     readonly contextualizedEmbeddings: API.ContextualizedEmbeddings;
+    readonly decisions: API.Decisions;
     readonly embeddings: API.Embeddings;
     readonly models: API.Models;
     readonly responses: API.Responses;
@@ -15,6 +16,7 @@ export const clientResourceClasses = {
     Browser: API.Browser,
     Chat: API.Chat,
     ContextualizedEmbeddings: API.ContextualizedEmbeddings,
+    Decisions: API.Decisions,
     Embeddings: API.Embeddings,
     Models: API.Models,
     Responses: API.Responses,
@@ -26,6 +28,7 @@ export function createClientResources(client: SdkTransport): ClientResources {
         browser: new API.Browser(client),
         chat: new API.Chat(client),
         contextualizedEmbeddings: new API.ContextualizedEmbeddings(client),
+        decisions: new API.Decisions(client),
         embeddings: new API.Embeddings(client),
         models: new API.Models(client),
         responses: new API.Responses(client),
@@ -47,6 +50,11 @@ declare module '../client.js' {
         export import ContextualizedEmbeddings = API.ContextualizedEmbeddings;
         export type ContextualizedEmbeddingCreateParams = API.ContextualizedEmbeddings.ContextualizedEmbeddingCreateParams;
         export type ContextualizedEmbeddingCreateResponse = API.ContextualizedEmbeddings.ContextualizedEmbeddingCreateResponse;
+        export import Decisions = API.Decisions;
+        export type DecisionAnswer = API.Decisions.DecisionAnswer;
+        export type DecisionCreateParams = API.Decisions.DecisionCreateParams;
+        export type DecisionCreateResponse = API.Decisions.DecisionCreateResponse;
+        export type DecisionQuestion = API.Decisions.DecisionQuestion;
         export import Embeddings = API.Embeddings;
         export type EmbeddingCreateParams = API.Embeddings.EmbeddingCreateParams;
         export type EmbeddingCreateResponse = API.Embeddings.EmbeddingCreateResponse;

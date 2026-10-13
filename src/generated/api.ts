@@ -539,6 +539,110 @@ export type DateFiltersOutput = {
     search_before_date_filter?: DateOutput;
     search_recency_filter?: SearchRecencyFilterOutput;
 };
+export type DecisionAnswerInput = DecisionNoulAnswerInput | DecisionScoreAnswerInput | DecisionChoiceAnswerInput;
+export type DecisionAnswerOutput = DecisionNoulAnswerOutput | DecisionScoreAnswerOutput | DecisionChoiceAnswerOutput;
+export type DecisionChoiceAnswerInput = {
+    choice: string;
+    confidence: number;
+    probabilities: {} & Record<string, number>;
+    type: "choice";
+};
+export type DecisionChoiceAnswerOutput = {
+    choice: string;
+    confidence: number;
+    probabilities: {} & Record<string, number>;
+    type: "choice";
+};
+export type DecisionChoiceQuestionInput = {
+    criteria: {} & Record<string, string | ({} & Record<string, unknown>) | unknown[] | null>;
+    instructions?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    type: "choice";
+};
+export type DecisionChoiceQuestionOutput = {
+    criteria: {} & Record<string, string | ({} & Record<string, unknown>) | unknown[] | null>;
+    instructions?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    type: "choice";
+};
+export type DecisionNoulAnswerInput = {
+    noul: number;
+    type: "noul";
+};
+export type DecisionNoulAnswerOutput = {
+    noul: number;
+    type: "noul";
+};
+export type DecisionNoulCriteriaInput = {
+    false?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    true?: string | ({} & Record<string, unknown>) | unknown[] | null;
+} | null;
+export type DecisionNoulCriteriaOutput = {
+    false?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    true?: string | ({} & Record<string, unknown>) | unknown[] | null;
+} | null;
+export type DecisionNoulQuestionInput = {
+    criteria?: DecisionNoulCriteriaInput;
+    instructions?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    type: "noul";
+};
+export type DecisionNoulQuestionOutput = {
+    criteria?: DecisionNoulCriteriaOutput;
+    instructions?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    type: "noul";
+};
+export type DecisionQuestionInput = DecisionNoulQuestionInput | DecisionChoiceQuestionInput | DecisionScoreQuestionInput;
+export type DecisionQuestionOutput = DecisionNoulQuestionOutput | DecisionChoiceQuestionOutput | DecisionScoreQuestionOutput;
+export type DecisionScoreAnswerInput = {
+    confidence: number;
+    legend: {} & Record<string, string | ({} & Record<string, unknown>) | unknown[]>;
+    probabilities: {} & Record<string, number>;
+    score: number;
+    type: "score";
+};
+export type DecisionScoreAnswerOutput = {
+    confidence: number;
+    legend: {} & Record<string, string | ({} & Record<string, unknown>) | unknown[]>;
+    probabilities: {} & Record<string, number>;
+    score: number;
+    type: "score";
+};
+export type DecisionScoreQuestionInput = {
+    criteria: (string | ({} & Record<string, unknown>) | unknown[])[];
+    instructions?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    type: "score";
+};
+export type DecisionScoreQuestionOutput = {
+    criteria: (string | ({} & Record<string, unknown>) | unknown[])[];
+    instructions?: string | ({} & Record<string, unknown>) | unknown[] | null;
+    type: "score";
+};
+export type DecisionsRequestInput = {
+    model: string;
+    questions: {} & Record<string, DecisionQuestionInput>;
+    state: string | ({} & Record<string, unknown>) | unknown[];
+};
+export type DecisionsRequestOutput = {
+    model: string;
+    questions: {} & Record<string, DecisionQuestionOutput>;
+    state: string | ({} & Record<string, unknown>) | unknown[];
+};
+export type DecisionsResponseInput = {
+    answers: {} & Record<string, DecisionAnswerInput>;
+    model: string;
+    usage: DecisionUsageInput;
+};
+export type DecisionsResponseOutput = {
+    answers: {} & Record<string, DecisionAnswerOutput>;
+    model: string;
+    usage: DecisionUsageOutput;
+};
+export type DecisionUsageInput = {
+    input_tokens: number;
+    output_tokens: number;
+};
+export type DecisionUsageOutput = {
+    input_tokens: number;
+    output_tokens: number;
+};
 export type EmbeddingObjectInput = {
     embedding?: string;
     index?: number;
@@ -2134,6 +2238,18 @@ export class ContextualizedEmbeddingsResource {
         });
     }
 }
+export class DecisionsResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    create(body: DecisionsRequestInput, options?: RequestOptions): APIPromise<DecisionsResponseOutput> {
+        return this._client.post<DecisionsResponseOutput>("/v1/decisions", {
+            ...options,
+            body: body
+        });
+    }
+}
 export class EmbeddingsResource {
     private readonly _client: SdkTransport;
     constructor(client: SdkTransport) {
@@ -2239,6 +2355,7 @@ export class PerplexitySdk {
     readonly browser: BrowserResource;
     readonly chat: ChatResource;
     readonly contextualizedEmbeddings: ContextualizedEmbeddingsResource;
+    readonly decisions: DecisionsResource;
     readonly embeddings: EmbeddingsResource;
     readonly models: ModelsResource;
     readonly responses: ResponsesResource;
@@ -2248,6 +2365,7 @@ export class PerplexitySdk {
         this.browser = new BrowserResource(client);
         this.chat = new ChatResource(client);
         this.contextualizedEmbeddings = new ContextualizedEmbeddingsResource(client);
+        this.decisions = new DecisionsResource(client);
         this.embeddings = new EmbeddingsResource(client);
         this.models = new ModelsResource(client);
         this.responses = new ResponsesResource(client);
@@ -2261,6 +2379,8 @@ export class Browser extends BrowserResource {
 export class Chat extends ChatResource {
 }
 export class ContextualizedEmbeddings extends ContextualizedEmbeddingsResource {
+}
+export class Decisions extends DecisionsResource {
 }
 export class Embeddings extends EmbeddingsResource {
 }
@@ -2280,6 +2400,10 @@ export type ContentPart = ContentPartOutput;
 export type ContextualizedEmbeddingCreateParams = ContextualizedEmbeddingsRequestInput;
 export type ContextualizedEmbeddingCreateResponse = ContextualizedEmbeddingsResponseOutput;
 export type ContextualizedEmbeddingObject = ContextualizedEmbeddingObjectOutput;
+export type DecisionAnswer = DecisionAnswerOutput;
+export type DecisionCreateParams = DecisionsRequestInput;
+export type DecisionCreateResponse = Awaited<ReturnType<DecisionsResource["create"]>>;
+export type DecisionQuestion = DecisionQuestionInput;
 export type EmbeddingCreateParams = EmbeddingsRequestInput;
 export type EmbeddingCreateResponse = EmbeddingsResponseOutput;
 export type EmbeddingObject = EmbeddingObjectOutput;
@@ -2368,6 +2492,12 @@ export namespace Chat {
 export namespace ContextualizedEmbeddings {
     export type ContextualizedEmbeddingCreateParams = ContextualizedEmbeddingsRequestInput;
     export type ContextualizedEmbeddingCreateResponse = ContextualizedEmbeddingsResponseOutput;
+}
+export namespace Decisions {
+    export type DecisionAnswer = DecisionAnswerOutput;
+    export type DecisionCreateParams = DecisionsRequestInput;
+    export type DecisionCreateResponse = Awaited<ReturnType<DecisionsResource["create"]>>;
+    export type DecisionQuestion = DecisionQuestionInput;
 }
 export namespace Embeddings {
     export type EmbeddingCreateParams = EmbeddingsRequestInput;

@@ -4,6 +4,7 @@ ts_test(
     name = "resources_test",
     srcs = [
         "contextualized-embeddings.test.ts",
+        "decisions.test.ts",
         "embeddings.test.ts",
         "models.test.ts",
         "search.test.ts",
@@ -12,5 +13,6 @@ ts_test(
     deps = [
         "//:node_modules/@types/node",
         "//src",
+        "//src/resources",
     ],
 )
