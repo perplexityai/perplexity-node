@@ -106,7 +106,7 @@ it('rejects empty and dot path parameters before sending a request', () => {
     /cannot be used as a path parameter/,
   );
   assert.throws(
-    () => client.skills.retrieve(Number.NaN as unknown as string),
+    () => client.skills.retrieve(1.5 as unknown as string),
     /cannot be used as a path parameter/,
   );
   for (const id of ['', '.', '..']) {
