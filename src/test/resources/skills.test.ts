@@ -6,7 +6,7 @@ it('manages custom skills with multipart ZIP uploads and revision queries', asyn
   const bytes = new Uint8Array([0x50, 0x4b, 5, 6, ...new Array<number>(18).fill(0)]);
   const file = await toFile(bytes, 'bundle.zip', { type: 'application/zip' });
   const revision = 'rev+a/b=';
-  const skill = { skill_id: 'skill/id', name: 'example', revision, latest_revision: revision };
+  const skill = { skill_id: 'skill/id', name: 'example', revision: 'rev-old', latest_revision: revision };
   const responses = [
     skill,
     { skills: [skill], next_page_token: 'next+a/b=' },
@@ -69,20 +69,21 @@ it('manages custom skills with multipart ZIP uploads and revision queries', asyn
   const page = await client.skills.list({ limit: 20, page_token: 'next+a/b=' });
   assert.equal(page.skills[0]?.skill_id, created.skill_id);
   const retrieved = await client.skills.retrieve(created.skill_id);
-  assert.equal(retrieved.revision, revision);
+  assert.equal(retrieved.revision, 'rev-old');
+  assert.equal(retrieved.latest_revision, revision);
   assert.ok(retrieved.latest_revision != null);
   const updated = await client.skills.update(
     created.skill_id,
     { file },
     { expected_revision: retrieved.latest_revision },
   );
-  assert.equal(updated.revision, revision);
+  assert.equal(updated.latest_revision, revision);
   const revisions = await client.skills.revisions.list(created.skill_id, {
     limit: 20,
     page_token: 'next+a/b=',
   });
   assert.equal(revisions.revisions[0]?.revision, revision);
-  const download = await client.skills.download(created.skill_id, { revision });
+  const download = await client.skills.download(created.skill_id, { revision: retrieved.latest_revision });
   assert.equal(download.download_url, 'https://example.test/bundle.zip');
   assert.ok(updated.latest_revision != null);
   assert.equal(
