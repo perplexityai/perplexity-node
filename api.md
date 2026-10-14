@@ -138,8 +138,8 @@ Methods:
 # Skills
 
 Upload custom Skill ZIP bundles with a `File` or `Blob`; `toFile` normalizes byte
-buffers and other supported upload sources. Updates and deletion require the
-current `expected_revision`. Pass `next_page_token` as `page_token` to fetch another page.
+buffers and other supported upload sources. Updates and deletion require
+`expected_revision` set to the Skill's current `latest_revision`. Pass `next_page_token` as `page_token` to fetch another page.
 
 ```ts
 import Perplexity, { toFile } from '@perplexity-ai/perplexity_ai';
@@ -149,12 +149,12 @@ const file = await toFile(zipBytes, 'bundle.zip', { type: 'application/zip' });
 let skill = await client.skills.create({ file });
 const page = await client.skills.list({ limit: 20 });
 skill = await client.skills.retrieve(skill.skill_id);
-if (skill.revision == null) throw new Error('A current revision is required to update');
-skill = await client.skills.update(skill.skill_id, { file }, { expected_revision: skill.revision });
-if (skill.revision == null) throw new Error('A current revision is required to delete');
+if (skill.latest_revision == null) throw new Error('A current revision is required to update');
+skill = await client.skills.update(skill.skill_id, { file }, { expected_revision: skill.latest_revision });
+if (skill.latest_revision == null) throw new Error('A current revision is required to delete');
 const revisions = await client.skills.revisions.list(skill.skill_id);
 const download = await client.skills.download(skill.skill_id, { revision: skill.revision });
-await client.skills.delete(skill.skill_id, { expected_revision: skill.revision });
+await client.skills.delete(skill.skill_id, { expected_revision: skill.latest_revision });
 ```
 
 `download` returns a signed URL and revision; it does not fetch the ZIP.
