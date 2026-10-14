@@ -89,57 +89,38 @@ export function ownParameter(value: object | null | undefined, name: string): un
 
 export function ownBoolean(value: object | null | undefined, name: string): boolean | undefined {
   const flag = ownParameter(value, name);
-  return typeof flag === 'boolean' ? flag : undefined;
+  if (flag === undefined || flag === null) return undefined;
+  if (typeof flag !== 'boolean') throw new TypeError(`${name} must be a boolean`);
+  return flag;
 }
 
-// Own, non-null values of the named parameters. `null` counts as not set.
-export function ownQuery(
-  value: object | null | undefined,
-  names: readonly string[],
-): Record<string, unknown> {
-  const query: Record<string, unknown> = {};
-  for (const name of names) {
-    const item = ownParameter(value, name);
-    if (item !== undefined && item !== null) query[name] = item;
+// A stream cursor: a non-negative safe integer, or undefined when not set.
+export function ownCursor(value: object | null | undefined, name: string): number | undefined {
+  const cursor = ownParameter(value, name);
+  if (cursor === undefined || cursor === null) return undefined;
+  if (typeof cursor !== 'number' || !Number.isSafeInteger(cursor) || cursor < 0) {
+    throw new TypeError(`${name} must be a non-negative integer`);
   }
-  return query;
-}
-
-// An argument that sets a stream cursor is reconnect parameters only.
-function isReconnectParameters(value: object, cursorNames: readonly string[]): boolean {
-  return cursorNames.some((name) => ownValue(value, name) != null);
-}
-
-function isCursor(value: unknown): boolean {
-  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+  return cursor;
 }
 
 // Reads transport settings from the legacy `(id, options)` call form. Routing
 // fields (method, path, body, defaultBaseURL) are never copied. Streaming needs
-// the typed reconnect form, so `stream: true` is rejected unless every cursor is
-// a non-negative integer.
+// the typed reconnect form, and an argument with a cursor is reconnect
+// parameters only. `cursor` and `stream` are the caller's values, read once.
 export function legacyRequestOptions(
   value: object | null | undefined,
-  cursorNames: readonly string[],
-  stream?: boolean,
+  cursor: number | undefined,
+  stream: boolean | undefined,
 ): RequestOptions {
   const options: Record<string, unknown> = {};
   if (!value) return options as RequestOptions;
-  for (const name of cursorNames) {
-    const cursor = ownValue(value, name);
-    if (cursor != null && !isCursor(cursor)) {
-      throw new TypeError(`${name} must be a non-negative integer`);
-    }
-  }
-  if (
-    stream === true &&
-    (cursorNames.length === 0 || !cursorNames.every((name) => isCursor(ownValue(value, name))))
-  ) {
+  if (stream === true && cursor === undefined) {
     throw new TypeError(
-      `stream: true requires ${cursorNames.join(', ')}; use retrieve(id, { stream: true, ${cursorNames.join(', ')} })`,
+      'stream: true requires starting_after; use retrieve(id, { stream: true, starting_after })',
     );
   }
-  if (isReconnectParameters(value, cursorNames)) return options as RequestOptions;
+  if (cursor !== undefined) return options as RequestOptions;
   for (const key of legacyRequestOptionKeys) {
     if (Object.prototype.hasOwnProperty.call(value, key)) options[key] = ownValue(value, key);
   }
@@ -159,15 +140,16 @@ export function legacyRequestOptions(
   return options as RequestOptions;
 }
 
+// The legacy argument's own query, without the typed-only names.
 export function legacyQuery(
   value: object | null | undefined,
-  cursorNames: readonly string[],
+  typedNames: readonly string[],
+  cursor: number | undefined,
 ): object | undefined {
-  if (!value || isReconnectParameters(value, cursorNames)) return undefined;
+  if (!value || cursor !== undefined) return undefined;
   const query = ownValue(value, 'query');
   if (!query || typeof query !== 'object') return undefined;
-  // The typed stream flag is applied after every query spread.
-  return Object.fromEntries(Object.entries(query).filter(([name]) => name !== 'stream'));
+  return Object.fromEntries(Object.entries(query).filter(([name]) => !typedNames.includes(name)));
 }
 
 export function normalizeHeaders(

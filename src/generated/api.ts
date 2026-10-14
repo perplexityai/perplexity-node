@@ -1,4 +1,4 @@
-import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownQuery, normalizeHeaders } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -2358,13 +2358,14 @@ export class ResponsesResource {
         stream?: boolean;
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const streamFlag = ownBoolean(params, "stream");
+        const cursor = ownCursor(params, "starting_after");
         const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...legacyRequestOptions(params, ["starting_after"], streamFlag),
+            ...legacyRequestOptions(params, cursor, streamFlag),
             ...options,
             query: {
-                ...legacyQuery(params, ["starting_after"]),
+                ...legacyQuery(params, ["starting_after", "stream"], cursor),
                 ...options?.query,
-                ...ownQuery(params, ["starting_after"]),
+                starting_after: cursor,
                 stream: streamFlag
             },
             stream: streamFlag === true

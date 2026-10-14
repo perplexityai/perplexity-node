@@ -123,13 +123,13 @@ it('keeps the stream flag and cursor from typed reconnect parameters', async () 
   assert.ok(stream instanceof Stream);
 });
 
-it('keeps legacy query parameters on plain retrieve', async () => {
+it('drops stream cursor values from a legacy query', async () => {
   const client = new Perplexity({
     apiKey: 'test',
     baseURL: 'https://example.test',
     fetch: async (input, init) => {
       const url = new URL(new Request(input, init).url);
-      assert.deepEqual(Object.fromEntries(url.searchParams), { starting_after: '5' });
+      assert.deepEqual(Object.fromEntries(url.searchParams), { custom: 'kept' });
       return Response.json({
         id: 'resp-1',
         object: 'response',
@@ -140,7 +140,9 @@ it('keeps legacy query parameters on plain retrieve', async () => {
       });
     },
   });
-  const response = await client.responses.retrieve('resp-1', { query: { starting_after: 5 } });
+  const response = await client.responses.retrieve('resp-1', {
+    query: { starting_after: 5, custom: 'kept' },
+  });
   assert.equal(response.id, 'resp-1');
 });
 
@@ -158,7 +160,7 @@ it('requires starting_after before resuming a stream', () => {
   );
 });
 
-it('copies allowlisted legacy fetch options and strips the legacy stream query', async () => {
+it('copies allowlisted legacy fetch options and drops legacy stream query values', async () => {
   const client = new Perplexity({
     apiKey: 'test',
     baseURL: 'https://example.test',
@@ -166,7 +168,7 @@ it('copies allowlisted legacy fetch options and strips the legacy stream query',
     fetch: async (input, init) => {
       assert.equal(init?.cache, 'no-store');
       const url = new URL(new Request(input, init).url);
-      assert.deepEqual(Object.fromEntries(url.searchParams), { starting_after: '5' });
+      assert.deepEqual(Object.fromEntries(url.searchParams), {});
       return Response.json({
         id: 'resp-1',
         object: 'response',
@@ -216,4 +218,19 @@ it('rejects invalid stream cursors before sending a request', () => {
       /starting_after must be a non-negative integer/,
     );
   }
+});
+
+it('rejects non-boolean stream flags before sending a request', () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input) => {
+      throw new Error(`unexpected request to ${String(input)}`);
+    },
+  });
+  const params = { stream: 'true', starting_after: 1 } as unknown as {
+    stream: true;
+    starting_after: number;
+  };
+  assert.throws(() => client.responses.retrieve('resp-1', params), TypeError);
 });
