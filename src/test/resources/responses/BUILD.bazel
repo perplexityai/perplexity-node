@@ -5,6 +5,7 @@ ts_test(
     srcs = [
         "cache-usage.test.ts",
         "files.test.ts",
+        "reconnect.test.ts",
         "responses.test.ts",
     ],
     tsconfig_types = ["node"],
