@@ -2181,7 +2181,7 @@ export class ChatCompletionsResource {
         return this._client.post<CompletionResponseOutput | Stream<CompletionResponseOutput>>("/chat/completions", {
             ...options,
             body: body,
-            stream: body?.stream ?? false
+            stream: body?.stream === true
         });
     }
 }
@@ -2306,9 +2306,9 @@ export class ResponsesResource {
         const promise = this._client.post<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>("/v1/responses", {
             ...options,
             body: body,
-            stream: body?.stream ?? false
+            stream: body?.stream === true
         });
-        if (!body?.stream) {
+        if (body?.stream !== true) {
             return promise._thenUnwrap(response => {
                 if ("object" in response && response.object === "response") {
                     addOutputText(response as ResponsesResponseOutput & {
@@ -2328,10 +2328,10 @@ export class ResponsesResource {
     }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
     }>;
-    retrieve(responseID: string, params: Omit<{
+    retrieve(responseID: string, params: Omit<Required<{
         starting_after?: number;
         stream?: boolean;
-    }, "stream"> & {
+    }>, "stream"> & {
         stream: true;
     }, options?: RequestOptions): APIPromise<Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params: Omit<{
@@ -2361,14 +2361,14 @@ export class ResponsesResource {
             ...legacyRequestOptions(params, ["starting_after", "stream"]),
             ...options,
             query: {
-                ...legacyQuery(params, ["starting_after", "stream"]),
                 starting_after: params?.starting_after,
                 stream: params?.stream,
+                ...legacyQuery(params, ["starting_after", "stream"]),
                 ...options?.query
             },
-            stream: params?.stream ?? false
+            stream: params?.stream === true
         });
-        if (!params?.stream) {
+        if (params?.stream !== true) {
             return promise._thenUnwrap(response => {
                 if ("object" in response && response.object === "response") {
                     addOutputText(response as ResponsesResponseOutput & {

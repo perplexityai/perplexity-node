@@ -134,3 +134,38 @@ it('keeps the stream flag and cursor from typed reconnect parameters', async () 
   const stream = await client.responses.retrieve('resp-1', params);
   assert.ok(stream instanceof Stream);
 });
+
+it('keeps legacy query parameters on plain retrieve', async () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input, init) => {
+      const url = new URL(new Request(input, init).url);
+      assert.deepEqual(Object.fromEntries(url.searchParams), { starting_after: '5' });
+      return Response.json({
+        id: 'resp-1',
+        object: 'response',
+        created_at: 0,
+        model: 'openai/gpt-5.4',
+        status: 'completed',
+        output: [],
+      });
+    },
+  });
+  const response = await client.responses.retrieve('resp-1', { query: { starting_after: 5 } });
+  assert.equal(response.id, 'resp-1');
+});
+
+it('requires starting_after before resuming a stream', () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input) => {
+      throw new Error(`unexpected request to ${String(input)}`);
+    },
+  });
+  assert.throws(
+    () => client.responses.retrieve('resp-1', { stream: true }),
+    /stream: true requires starting_after/,
+  );
+});

@@ -62,27 +62,40 @@ const legacyRequestOptionKeys = [
   'signal',
   'idempotencyKey',
 ] as const;
-const unsafeFetchOptionKeys = new Set([
-  'body',
-  'dispatcher',
-  'duplex',
-  'headers',
-  'method',
-  'signal',
-]);
+// Standard RequestInit settings that cannot change the method, body, headers,
+// destination or transport of a request.
+const legacyFetchOptionKeys = [
+  'cache',
+  'credentials',
+  'integrity',
+  'keepalive',
+  'mode',
+  'priority',
+  'redirect',
+  'referrer',
+  'referrerPolicy',
+] as const;
 
+function ownValue(value: object, key: string): unknown {
+  return Object.prototype.hasOwnProperty.call(value, key)
+    ? (value as Record<string, unknown>)[key]
+    : undefined;
+}
+
+// An argument that sets a query parameter other than `stream` is parameters
+// only. `stream` alone stays in the legacy form because RequestOptions has it.
 function legacyOptionsArgument(
   value: object | null | undefined,
   queryNames: readonly string[],
-): Record<string, unknown> | undefined {
+): object | undefined {
   if (!value) return undefined;
-  const record = value as Record<string, unknown>;
-  return queryNames.some((name) => record[name] !== undefined) ? undefined : record;
+  return queryNames.some((name) => name !== 'stream' && ownValue(value, name) !== undefined)
+    ? undefined
+    : value;
 }
 
-// Reads transport settings from the legacy `(id, options)` call form. An
-// argument that sets any operation query parameter is parameters only, and
-// routing fields (method, path, body, defaultBaseURL) are never copied.
+// Reads transport settings from the legacy `(id, options)` call form. Routing
+// fields (method, path, body, defaultBaseURL) are never copied.
 export function legacyRequestOptions(
   value: object | null | undefined,
   queryNames: readonly string[],
@@ -90,14 +103,22 @@ export function legacyRequestOptions(
   const options: Record<string, unknown> = {};
   const legacy = legacyOptionsArgument(value, queryNames);
   if (!legacy) return options as RequestOptions;
-  for (const key of legacyRequestOptionKeys) {
-    if (Object.prototype.hasOwnProperty.call(legacy, key)) options[key] = legacy[key];
+  if (queryNames.includes('stream') && ownValue(legacy, 'stream') === true) {
+    const cursors = queryNames.filter((name) => name !== 'stream').join(', ');
+    throw new TypeError(`stream: true requires ${cursors}`);
   }
-  const fetchOptions = legacy['fetchOptions'];
+  for (const key of legacyRequestOptionKeys) {
+    if (Object.prototype.hasOwnProperty.call(legacy, key)) options[key] = ownValue(legacy, key);
+  }
+  const fetchOptions = ownValue(legacy, 'fetchOptions');
   if (fetchOptions && typeof fetchOptions === 'object') {
-    options['fetchOptions'] = Object.fromEntries(
-      Object.entries(fetchOptions).filter(([key]) => !unsafeFetchOptionKeys.has(key)),
-    );
+    const safe: Record<string, unknown> = {};
+    for (const key of legacyFetchOptionKeys) {
+      if (Object.prototype.hasOwnProperty.call(fetchOptions, key)) {
+        safe[key] = ownValue(fetchOptions, key);
+      }
+    }
+    options['fetchOptions'] = safe;
   }
   return options as RequestOptions;
 }
@@ -106,8 +127,11 @@ export function legacyQuery(
   value: object | null | undefined,
   queryNames: readonly string[],
 ): object | undefined {
-  const query = legacyOptionsArgument(value, queryNames)?.['query'];
-  return query && typeof query === 'object' ? query : undefined;
+  const legacy = legacyOptionsArgument(value, queryNames);
+  const query = legacy && ownValue(legacy, 'query');
+  if (!query || typeof query !== 'object') return undefined;
+  // The stream flag must match the transport mode, so it is never taken from a raw query.
+  return Object.fromEntries(Object.entries(query).filter(([name]) => name !== 'stream'));
 }
 
 export function normalizeHeaders(
