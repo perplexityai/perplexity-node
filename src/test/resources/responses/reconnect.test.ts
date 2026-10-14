@@ -88,31 +88,19 @@ it('does not take routing fields from retrieve parameters', async () => {
   assert.equal(response.id, 'resp-1');
 });
 
-it('does not take routing fields from legacy fetch options', async () => {
+it('rejects routing fields in legacy fetch options', () => {
   const client = new Perplexity({
     apiKey: 'test',
     baseURL: 'https://example.test',
     maxRetries: 0,
-    fetch: async (input, init) => {
-      const request = new Request(input, init);
-      assert.equal(request.method, 'GET');
-      assert.equal(request.url, 'https://example.test/v1/responses/resp-1');
-      assert.equal(request.headers.get('authorization'), 'Bearer test');
-      return Response.json({
-        id: 'resp-1',
-        object: 'response',
-        created_at: 0,
-        model: 'openai/gpt-5.4',
-        status: 'completed',
-        output: [],
-      });
+    fetch: async (input) => {
+      throw new Error(`unexpected request to ${String(input)}`);
     },
   });
-  const params = {
-    fetchOptions: { method: 'DELETE', headers: {}, body: 'x' },
-  } as unknown as { headers: Record<string, string> };
-  const response = await client.responses.retrieve('resp-1', params);
-  assert.equal(response.id, 'resp-1');
+  for (const fetchOptions of [{ method: 'DELETE' }, { headers: {} }, { body: 'x' }]) {
+    const params = { fetchOptions } as unknown as { headers: Record<string, string> };
+    assert.throws(() => client.responses.retrieve('resp-1', params), TypeError);
+  }
 });
 
 it('keeps the stream flag and cursor from typed reconnect parameters', async () => {
@@ -194,4 +182,13 @@ it('copies allowlisted legacy fetch options and strips the legacy stream query',
     query: { starting_after: 5, stream: true },
   });
   assert.equal(response.id, 'resp-1');
+});
+
+it('does not type stream reconnection without a cursor or with request options', () => {
+  const client = new Perplexity({ apiKey: 'test', baseURL: 'https://example.test' });
+  const typeOnly = (): void => {
+    // @ts-expect-error stream reconnection needs starting_after and takes options separately
+    void client.responses.retrieve('resp-1', { stream: true, timeout: 1000 });
+  };
+  assert.equal(typeof typeOnly, 'function');
 });

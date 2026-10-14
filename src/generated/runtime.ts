@@ -82,6 +82,16 @@ function ownValue(value: object, key: string): unknown {
     : undefined;
 }
 
+// Reads an operation parameter only when the caller set it directly.
+export function ownParameter(value: object | null | undefined, name: string): unknown {
+  return value ? ownValue(value, name) : undefined;
+}
+
+export function ownBoolean(value: object | null | undefined, name: string): boolean | undefined {
+  const flag = ownParameter(value, name);
+  return typeof flag === 'boolean' ? flag : undefined;
+}
+
 // An argument that sets a query parameter other than `stream` is parameters
 // only. `stream` alone stays in the legacy form because RequestOptions has it.
 function legacyOptionsArgument(
@@ -104,8 +114,13 @@ export function legacyRequestOptions(
   const legacy = legacyOptionsArgument(value, queryNames);
   if (!legacy) return options as RequestOptions;
   if (queryNames.includes('stream') && ownValue(legacy, 'stream') === true) {
-    const cursors = queryNames.filter((name) => name !== 'stream').join(', ');
-    throw new TypeError(`stream: true requires ${cursors}`);
+    const cursors = queryNames.filter((name) => name !== 'stream');
+    const query = ownValue(legacy, 'query');
+    const hasCursor =
+      !!query &&
+      typeof query === 'object' &&
+      cursors.every((name) => ownValue(query, name) !== undefined);
+    if (!hasCursor) throw new TypeError(`stream: true requires ${cursors.join(', ')}`);
   }
   for (const key of legacyRequestOptionKeys) {
     if (Object.prototype.hasOwnProperty.call(legacy, key)) options[key] = ownValue(legacy, key);
@@ -113,10 +128,13 @@ export function legacyRequestOptions(
   const fetchOptions = ownValue(legacy, 'fetchOptions');
   if (fetchOptions && typeof fetchOptions === 'object') {
     const safe: Record<string, unknown> = {};
-    for (const key of legacyFetchOptionKeys) {
-      if (Object.prototype.hasOwnProperty.call(fetchOptions, key)) {
-        safe[key] = ownValue(fetchOptions, key);
+    for (const key of Object.keys(fetchOptions)) {
+      if (!(legacyFetchOptionKeys as readonly string[]).includes(key)) {
+        throw new TypeError(
+          `fetchOptions.${key} is not supported in the second argument; pass it in the third (request options) argument`,
+        );
       }
+      safe[key] = ownValue(fetchOptions, key);
     }
     options['fetchOptions'] = safe;
   }
@@ -130,7 +148,7 @@ export function legacyQuery(
   const legacy = legacyOptionsArgument(value, queryNames);
   const query = legacy && ownValue(legacy, 'query');
   if (!query || typeof query !== 'object') return undefined;
-  // The stream flag must match the transport mode, so it is never taken from a raw query.
+  // The generated call applies the typed stream flag after every query spread.
   return Object.fromEntries(Object.entries(query).filter(([name]) => name !== 'stream'));
 }
 
