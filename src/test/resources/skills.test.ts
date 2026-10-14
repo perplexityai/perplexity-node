@@ -93,7 +93,7 @@ it('manages custom skills with multipart ZIP uploads and revision queries', asyn
   assert.equal(count, 7);
 });
 
-it('rejects dot segments in path parameters before sending a request', () => {
+it('rejects empty and dot path parameters before sending a request', () => {
   const client = new Perplexity({
     apiKey: 'test',
     baseURL: 'https://example.test',
@@ -101,7 +101,7 @@ it('rejects dot segments in path parameters before sending a request', () => {
       throw new Error(`unexpected request to ${String(input)}`);
     },
   });
-  for (const id of ['.', '..']) {
+  for (const id of ['', '.', '..']) {
     assert.throws(() => client.skills.retrieve(id), /cannot be used as a path parameter/);
     assert.throws(
       () => client.skills.delete(id, { expected_revision: 'rev' }),
