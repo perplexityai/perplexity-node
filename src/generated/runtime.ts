@@ -55,9 +55,15 @@ export type SdkTransport = {
   ): APIPromise<ResponseType>;
 };
 
-export function multipartBody(body: Record<string, Blob | undefined>): FormData {
+// Builds form data from the schema's fields only; other keys are not sent.
+export function multipartBody(
+  body: Record<string, Blob | undefined>,
+  fields: readonly string[],
+): FormData {
   const form = new FormData();
-  for (const [name, file] of Object.entries(body)) {
+  for (const name of fields) {
+    if (!Object.prototype.hasOwnProperty.call(body, name)) continue;
+    const file = body[name];
     if (file === undefined) continue;
     if (!(file instanceof Blob)) {
       throw new TypeError(

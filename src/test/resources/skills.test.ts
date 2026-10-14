@@ -105,10 +105,7 @@ it('rejects empty and dot path parameters before sending a request', () => {
     () => client.skills.retrieve(undefined as unknown as string),
     /cannot be used as a path parameter/,
   );
-  assert.throws(
-    () => client.skills.retrieve(1.5 as unknown as string),
-    /cannot be used as a path parameter/,
-  );
+  assert.throws(() => client.skills.retrieve(1.5 as unknown as string), /cannot be used as a path parameter/);
   for (const id of ['', '.', '..']) {
     assert.throws(() => client.skills.retrieve(id), /cannot be used as a path parameter/);
     assert.throws(
@@ -131,4 +128,20 @@ it('rejects non-Blob multipart inputs before sending a request', async () => {
     async () => client.skills.create({ file: 'bundle.zip' as unknown as Blob }),
     /Multipart field file must be a File or Blob/,
   );
+});
+
+it('sends only schema fields in multipart uploads', async () => {
+  let fields: string[] = [];
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input, init) => {
+      const form = await new Request(input, init).formData();
+      fields = [...form.keys()];
+      return Response.json({ skill_id: 'skill-1', name: 'example', revision: 'rev', latest_revision: 'rev' });
+    },
+  });
+  const file = new File([new Uint8Array([1])], 'bundle.zip', { type: 'application/zip' });
+  await client.skills.create({ file, extra: file } as unknown as { file: Blob });
+  assert.deepEqual(fields, ['file']);
 });
