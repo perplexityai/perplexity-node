@@ -6,7 +6,7 @@ it('manages custom skills with multipart ZIP uploads and revision queries', asyn
   const bytes = new Uint8Array([0x50, 0x4b, 5, 6, ...new Array<number>(18).fill(0)]);
   const file = await toFile(bytes, 'bundle.zip', { type: 'application/zip' });
   const revision = 'rev+a/b=';
-  const skill = { skill_id: 'skill/id', name: 'example', revision };
+  const skill = { skill_id: 'skill/id', name: 'example', revision, latest_revision: revision };
   const responses = [
     skill,
     { skills: [skill], next_page_token: 'next+a/b=' },
@@ -70,11 +70,11 @@ it('manages custom skills with multipart ZIP uploads and revision queries', asyn
   assert.equal(page.skills[0]?.skill_id, created.skill_id);
   const retrieved = await client.skills.retrieve(created.skill_id);
   assert.equal(retrieved.revision, revision);
-  assert.ok(retrieved.revision != null);
+  assert.ok(retrieved.latest_revision != null);
   const updated = await client.skills.update(
     created.skill_id,
     { file },
-    { expected_revision: retrieved.revision },
+    { expected_revision: retrieved.latest_revision },
   );
   assert.equal(updated.revision, revision);
   const revisions = await client.skills.revisions.list(created.skill_id, {
@@ -84,7 +84,10 @@ it('manages custom skills with multipart ZIP uploads and revision queries', asyn
   assert.equal(revisions.revisions[0]?.revision, revision);
   const download = await client.skills.download(created.skill_id, { revision });
   assert.equal(download.download_url, 'https://example.test/bundle.zip');
-  assert.ok(updated.revision != null);
-  assert.equal(await client.skills.delete(created.skill_id, { expected_revision: updated.revision }), null);
+  assert.ok(updated.latest_revision != null);
+  assert.equal(
+    await client.skills.delete(created.skill_id, { expected_revision: updated.latest_revision }),
+    null,
+  );
   assert.equal(count, 7);
 });

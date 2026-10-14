@@ -153,7 +153,7 @@ if (skill.latest_revision == null) throw new Error('A current revision is requir
 skill = await client.skills.update(skill.skill_id, { file }, { expected_revision: skill.latest_revision });
 if (skill.latest_revision == null) throw new Error('A current revision is required to delete');
 const revisions = await client.skills.revisions.list(skill.skill_id);
-const download = await client.skills.download(skill.skill_id, { revision: skill.revision });
+const download = await client.skills.download(skill.skill_id, { revision: skill.latest_revision });
 await client.skills.delete(skill.skill_id, { expected_revision: skill.latest_revision });
 ```
 
