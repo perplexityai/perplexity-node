@@ -168,6 +168,9 @@ export function legacyQuery(
 }
 
 export function pathSegment(value: unknown): string {
+  if (typeof value !== 'string' && typeof value !== 'number') {
+    throw new TypeError(`Value of type ${typeof value} cannot be used as a path parameter`);
+  }
   const text = String(value);
   if (text === '' || text === '.' || text === '..') {
     throw new TypeError(`Value "${text}" cannot be used as a path parameter`);
