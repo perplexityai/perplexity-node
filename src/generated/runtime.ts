@@ -110,23 +110,36 @@ function isReconnectParameters(value: object, cursorNames: readonly string[]): b
   return cursorNames.some((name) => ownValue(value, name) != null);
 }
 
+function isCursor(value: unknown): boolean {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+}
+
 // Reads transport settings from the legacy `(id, options)` call form. Routing
-// fields (method, path, body, defaultBaseURL) are never copied.
+// fields (method, path, body, defaultBaseURL) are never copied. Streaming needs
+// the typed reconnect form, so `stream: true` is rejected unless every cursor is
+// a non-negative integer.
 export function legacyRequestOptions(
   value: object | null | undefined,
   cursorNames: readonly string[],
+  stream?: boolean,
 ): RequestOptions {
   const options: Record<string, unknown> = {};
-  if (!value || isReconnectParameters(value, cursorNames)) return options as RequestOptions;
-  if (ownValue(value, 'stream') === true) {
-    const query = ownValue(value, 'query');
-    const hasCursor =
-      cursorNames.length > 0 &&
-      !!query &&
-      typeof query === 'object' &&
-      cursorNames.every((name) => ownValue(query, name) != null);
-    if (!hasCursor) throw new TypeError(`stream: true requires ${cursorNames.join(', ')}`);
+  if (!value) return options as RequestOptions;
+  for (const name of cursorNames) {
+    const cursor = ownValue(value, name);
+    if (cursor != null && !isCursor(cursor)) {
+      throw new TypeError(`${name} must be a non-negative integer`);
+    }
   }
+  if (
+    stream === true &&
+    (cursorNames.length === 0 || !cursorNames.every((name) => isCursor(ownValue(value, name))))
+  ) {
+    throw new TypeError(
+      `stream: true requires ${cursorNames.join(', ')}; use retrieve(id, { stream: true, ${cursorNames.join(', ')} })`,
+    );
+  }
+  if (isReconnectParameters(value, cursorNames)) return options as RequestOptions;
   for (const key of legacyRequestOptionKeys) {
     if (Object.prototype.hasOwnProperty.call(value, key)) options[key] = ownValue(value, key);
   }

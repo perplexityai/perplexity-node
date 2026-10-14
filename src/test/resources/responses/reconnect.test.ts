@@ -184,13 +184,36 @@ it('copies allowlisted legacy fetch options and strips the legacy stream query',
   assert.equal(response.id, 'resp-1');
 });
 
-it('does not type legacy stream options as a JSON response', () => {
-  const client = new Perplexity({ apiKey: 'test', baseURL: 'https://example.test' });
-  const typeOnly = (): void => {
-    const pending = client.responses.retrieve('resp-1', { stream: true, timeout: 1000 });
-    // @ts-expect-error the result may be a Stream, so it is not typed as JSON only
-    const json: Promise<{ output_text: string }> = pending;
-    void json;
-  };
-  assert.equal(typeof typeOnly, 'function');
+it('rejects legacy stream options even with a cursor in the legacy query', () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input) => {
+      throw new Error(`unexpected request to ${String(input)}`);
+    },
+  });
+  assert.throws(
+    () => client.responses.retrieve('resp-1', { stream: true, timeout: 1000 }),
+    /stream: true requires starting_after/,
+  );
+  assert.throws(
+    () => client.responses.retrieve('resp-1', { stream: true, query: { starting_after: 3 } }),
+    /stream: true requires starting_after/,
+  );
+});
+
+it('rejects invalid stream cursors before sending a request', () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input) => {
+      throw new Error(`unexpected request to ${String(input)}`);
+    },
+  });
+  for (const starting_after of [-1, 1.5, Number.NaN]) {
+    assert.throws(
+      () => client.responses.retrieve('resp-1', { stream: true, starting_after }),
+      /starting_after must be a non-negative integer/,
+    );
+  }
 });

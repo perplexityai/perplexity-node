@@ -2342,17 +2342,11 @@ export class ResponsesResource {
     }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
         output_text: string;
     }) | Stream<ResponseStreamEventOutput>>;
-    retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path" | "stream"> & {
+    retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path"> & {
         starting_after?: never;
-        stream?: false;
     }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
     }>;
-    retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path"> & {
-        starting_after?: never;
-    }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
-        output_text: string;
-    }) | Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params?: {
         starting_after?: number;
         stream?: boolean;
@@ -2365,7 +2359,7 @@ export class ResponsesResource {
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const streamFlag = ownBoolean(params, "stream");
         const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...legacyRequestOptions(params, ["starting_after"]),
+            ...legacyRequestOptions(params, ["starting_after"], streamFlag),
             ...options,
             query: {
                 ...legacyQuery(params, ["starting_after"]),
