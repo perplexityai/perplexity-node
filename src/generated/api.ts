@@ -1,4 +1,4 @@
-import { addOutputText, normalizeHeaders } from "./runtime.js";
+import { addOutputText, legacyRequestOptions, normalizeHeaders } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -2358,7 +2358,7 @@ export class ResponsesResource {
         stream?: boolean;
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...params,
+            ...legacyRequestOptions(params),
             ...options,
             query: {
                 starting_after: params?.starting_after,

@@ -55,6 +55,27 @@ export type SdkTransport = {
   ): APIPromise<ResponseType>;
 };
 
+const legacyRequestOptionKeys = [
+  'headers',
+  'maxRetries',
+  'timeout',
+  'fetchOptions',
+  'signal',
+  'idempotencyKey',
+] as const;
+
+// Copies only per-request transport settings from a legacy options argument.
+// Routing fields such as method, path, body and defaultBaseURL are never taken
+// from operation parameters.
+export function legacyRequestOptions(value: object | null | undefined): RequestOptions {
+  const options: Record<string, unknown> = {};
+  if (!value) return options as RequestOptions;
+  for (const key of legacyRequestOptionKeys) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) options[key] = (value as Record<string, unknown>)[key];
+  }
+  return options as RequestOptions;
+}
+
 export function normalizeHeaders(
   headers: HeadersLike | undefined,
 ): Record<string, HeaderValue | readonly HeaderValue[]> {
