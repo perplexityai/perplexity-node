@@ -1,4 +1,4 @@
-import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownParameter, normalizeHeaders } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownQuery, normalizeHeaders } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -2344,9 +2344,15 @@ export class ResponsesResource {
     }) | Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path" | "stream"> & {
         starting_after?: never;
+        stream?: false;
     }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
     }>;
+    retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path"> & {
+        starting_after?: never;
+    }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+        output_text: string;
+    }) | Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params?: {
         starting_after?: number;
         stream?: boolean;
@@ -2357,18 +2363,19 @@ export class ResponsesResource {
         starting_after?: number;
         stream?: boolean;
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
+        const streamFlag = ownBoolean(params, "stream");
         const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...legacyRequestOptions(params, ["starting_after", "stream"]),
+            ...legacyRequestOptions(params, ["starting_after"]),
             ...options,
             query: {
-                starting_after: ownParameter(params, "starting_after"),
-                ...legacyQuery(params, ["starting_after", "stream"]),
+                ...legacyQuery(params, ["starting_after"]),
                 ...options?.query,
-                stream: ownBoolean(params, "stream")
+                ...ownQuery(params, ["starting_after"]),
+                stream: streamFlag
             },
-            stream: ownParameter(params, "stream") === true
+            stream: streamFlag === true
         });
-        if (ownParameter(params, "stream") !== true) {
+        if (streamFlag !== true) {
             return promise._thenUnwrap(response => {
                 if ("object" in response && response.object === "response") {
                     addOutputText(response as ResponsesResponseOutput & {

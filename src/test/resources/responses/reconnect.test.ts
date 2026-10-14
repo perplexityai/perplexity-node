@@ -184,11 +184,13 @@ it('copies allowlisted legacy fetch options and strips the legacy stream query',
   assert.equal(response.id, 'resp-1');
 });
 
-it('does not type stream reconnection without a cursor or with request options', () => {
+it('does not type legacy stream options as a JSON response', () => {
   const client = new Perplexity({ apiKey: 'test', baseURL: 'https://example.test' });
   const typeOnly = (): void => {
-    // @ts-expect-error stream reconnection needs starting_after and takes options separately
-    void client.responses.retrieve('resp-1', { stream: true, timeout: 1000 });
+    const pending = client.responses.retrieve('resp-1', { stream: true, timeout: 1000 });
+    // @ts-expect-error the result may be a Stream, so it is not typed as JSON only
+    const json: Promise<{ output_text: string }> = pending;
+    void json;
   };
   assert.equal(typeof typeOnly, 'function');
 });

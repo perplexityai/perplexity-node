@@ -92,40 +92,45 @@ export function ownBoolean(value: object | null | undefined, name: string): bool
   return typeof flag === 'boolean' ? flag : undefined;
 }
 
-// An argument that sets a query parameter other than `stream` is parameters
-// only. `stream` alone stays in the legacy form because RequestOptions has it.
-function legacyOptionsArgument(
+// Own, non-null values of the named parameters. `null` counts as not set.
+export function ownQuery(
   value: object | null | undefined,
-  queryNames: readonly string[],
-): object | undefined {
-  if (!value) return undefined;
-  return queryNames.some((name) => name !== 'stream' && ownValue(value, name) !== undefined)
-    ? undefined
-    : value;
+  names: readonly string[],
+): Record<string, unknown> {
+  const query: Record<string, unknown> = {};
+  for (const name of names) {
+    const item = ownParameter(value, name);
+    if (item !== undefined && item !== null) query[name] = item;
+  }
+  return query;
+}
+
+// An argument that sets a stream cursor is reconnect parameters only.
+function isReconnectParameters(value: object, cursorNames: readonly string[]): boolean {
+  return cursorNames.some((name) => ownValue(value, name) != null);
 }
 
 // Reads transport settings from the legacy `(id, options)` call form. Routing
 // fields (method, path, body, defaultBaseURL) are never copied.
 export function legacyRequestOptions(
   value: object | null | undefined,
-  queryNames: readonly string[],
+  cursorNames: readonly string[],
 ): RequestOptions {
   const options: Record<string, unknown> = {};
-  const legacy = legacyOptionsArgument(value, queryNames);
-  if (!legacy) return options as RequestOptions;
-  if (queryNames.includes('stream') && ownValue(legacy, 'stream') === true) {
-    const cursors = queryNames.filter((name) => name !== 'stream');
-    const query = ownValue(legacy, 'query');
+  if (!value || isReconnectParameters(value, cursorNames)) return options as RequestOptions;
+  if (ownValue(value, 'stream') === true) {
+    const query = ownValue(value, 'query');
     const hasCursor =
+      cursorNames.length > 0 &&
       !!query &&
       typeof query === 'object' &&
-      cursors.every((name) => ownValue(query, name) !== undefined);
-    if (!hasCursor) throw new TypeError(`stream: true requires ${cursors.join(', ')}`);
+      cursorNames.every((name) => ownValue(query, name) != null);
+    if (!hasCursor) throw new TypeError(`stream: true requires ${cursorNames.join(', ')}`);
   }
   for (const key of legacyRequestOptionKeys) {
-    if (Object.prototype.hasOwnProperty.call(legacy, key)) options[key] = ownValue(legacy, key);
+    if (Object.prototype.hasOwnProperty.call(value, key)) options[key] = ownValue(value, key);
   }
-  const fetchOptions = ownValue(legacy, 'fetchOptions');
+  const fetchOptions = ownValue(value, 'fetchOptions');
   if (fetchOptions && typeof fetchOptions === 'object') {
     const safe: Record<string, unknown> = {};
     for (const key of Object.keys(fetchOptions)) {
@@ -143,12 +148,12 @@ export function legacyRequestOptions(
 
 export function legacyQuery(
   value: object | null | undefined,
-  queryNames: readonly string[],
+  cursorNames: readonly string[],
 ): object | undefined {
-  const legacy = legacyOptionsArgument(value, queryNames);
-  const query = legacy && ownValue(legacy, 'query');
+  if (!value || isReconnectParameters(value, cursorNames)) return undefined;
+  const query = ownValue(value, 'query');
   if (!query || typeof query !== 'object') return undefined;
-  // The generated call applies the typed stream flag after every query spread.
+  // The typed stream flag is applied after every query spread.
   return Object.fromEntries(Object.entries(query).filter(([name]) => name !== 'stream'));
 }
 
