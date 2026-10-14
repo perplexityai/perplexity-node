@@ -12,5 +12,6 @@ ts_test(
     deps = [
         "//:node_modules/@types/node",
         "//src",
+        "//src/core",
     ],
 )
