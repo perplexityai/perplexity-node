@@ -1,4 +1,4 @@
-import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders, multipartBody } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders, multipartBody, pathSegment } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -2189,7 +2189,7 @@ export class AsyncChatCompletionsResource {
         "x-usage-tier"?: string;
         "x-user-id"?: string;
     }, options?: RequestOptions): APIPromise<AsyncApiChatCompletionsResponseOutput> {
-        return this._client.get<AsyncApiChatCompletionsResponseOutput>(`/async/chat/completions/${encodeURIComponent(String(apiRequest))}`, {
+        return this._client.get<AsyncApiChatCompletionsResponseOutput>(`/async/chat/completions/${pathSegment(apiRequest)}`, {
             ...options,
             query: {
                 local_mode: params?.local_mode,
@@ -2230,7 +2230,7 @@ export class BrowserSessionsResource {
         });
     }
     delete(sessionID: string, options?: RequestOptions): APIPromise<void> {
-        return this._client.delete<void>(`/v1/browser/sessions/${encodeURIComponent(String(sessionID))}`, {
+        return this._client.delete<void>(`/v1/browser/sessions/${pathSegment(sessionID)}`, {
             ...options,
             headers: {
                 "Accept": "*/*",
@@ -2267,7 +2267,7 @@ export class ResponsesFilesResource {
     content(fileID: string, params: {
         response_id: string;
     }, options?: RequestOptions): APIPromise<Response> {
-        return this._client.get<Response>(`/v1/responses/${encodeURIComponent(String(params.response_id))}/files/${encodeURIComponent(String(fileID))}/content`, {
+        return this._client.get<Response>(`/v1/responses/${pathSegment(params.response_id)}/files/${pathSegment(fileID)}/content`, {
             ...options,
             headers: {
                 "Accept": "application/octet-stream",
@@ -2277,7 +2277,7 @@ export class ResponsesFilesResource {
         });
     }
     list(responseID: string, options?: RequestOptions): APIPromise<ResponseFileListOutput> {
-        return this._client.get<ResponseFileListOutput>(`/v1/responses/${encodeURIComponent(String(responseID))}/files`, {
+        return this._client.get<ResponseFileListOutput>(`/v1/responses/${pathSegment(responseID)}/files`, {
             ...options
         });
     }
@@ -2291,7 +2291,7 @@ export class SkillsRevisionsResource {
         limit?: number;
         page_token?: string;
     }, options?: RequestOptions): APIPromise<SkillRevisionListOutput> {
-        return this._client.get<SkillRevisionListOutput>(`/v1/skills/${encodeURIComponent(String(skillID))}/revisions`, {
+        return this._client.get<SkillRevisionListOutput>(`/v1/skills/${pathSegment(skillID)}/revisions`, {
             ...options,
             query: {
                 limit: params?.limit,
@@ -2380,7 +2380,7 @@ export class ResponsesResource {
         return this._client.post<{
             response_id: string;
             status: "cancelling";
-        }>(`/v1/responses/${encodeURIComponent(String(responseID))}/cancel`, {
+        }>(`/v1/responses/${pathSegment(responseID)}/cancel`, {
             ...options
         });
     }
@@ -2452,7 +2452,7 @@ export class ResponsesResource {
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const streamFlag = ownBoolean(params, "stream");
         const cursor = ownCursor(params, "starting_after");
-        const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
+        const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${pathSegment(responseID)}`, {
             ...legacyRequestOptions(params, cursor, streamFlag),
             ...options,
             query: {
@@ -2498,13 +2498,13 @@ export class SkillsResource {
     create(body: SkillBundleInput, options?: RequestOptions): APIPromise<ManagedSkillOutput> {
         return this._client.post<ManagedSkillOutput>("/v1/skills", {
             ...options,
-            body: multipartBody(body)
+            body: multipartBody(body, ["file"])
         });
     }
     delete(skillID: string, params: {
         expected_revision: string;
     }, options?: RequestOptions): APIPromise<void> {
-        return this._client.delete<void>(`/v1/skills/${encodeURIComponent(String(skillID))}`, {
+        return this._client.delete<void>(`/v1/skills/${pathSegment(skillID)}`, {
             ...options,
             query: {
                 expected_revision: params.expected_revision,
@@ -2519,7 +2519,7 @@ export class SkillsResource {
     download(skillID: string, params?: {
         revision?: string;
     }, options?: RequestOptions): APIPromise<SkillDownloadOutput> {
-        return this._client.get<SkillDownloadOutput>(`/v1/skills/${encodeURIComponent(String(skillID))}/download`, {
+        return this._client.get<SkillDownloadOutput>(`/v1/skills/${pathSegment(skillID)}/download`, {
             ...options,
             query: {
                 revision: params?.revision,
@@ -2543,7 +2543,7 @@ export class SkillsResource {
     retrieve(skillID: string, params?: {
         revision?: string;
     }, options?: RequestOptions): APIPromise<ManagedSkillOutput> {
-        return this._client.get<ManagedSkillOutput>(`/v1/skills/${encodeURIComponent(String(skillID))}`, {
+        return this._client.get<ManagedSkillOutput>(`/v1/skills/${pathSegment(skillID)}`, {
             ...options,
             query: {
                 revision: params?.revision,
@@ -2554,9 +2554,9 @@ export class SkillsResource {
     update(skillID: string, body: SkillBundleInput, params: {
         expected_revision: string;
     }, options?: RequestOptions): APIPromise<ManagedSkillOutput> {
-        return this._client.put<ManagedSkillOutput>(`/v1/skills/${encodeURIComponent(String(skillID))}`, {
+        return this._client.put<ManagedSkillOutput>(`/v1/skills/${pathSegment(skillID)}`, {
             ...options,
-            body: multipartBody(body),
+            body: multipartBody(body, ["file"]),
             query: {
                 expected_revision: params.expected_revision,
                 ...options?.query

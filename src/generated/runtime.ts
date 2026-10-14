@@ -167,6 +167,14 @@ export function legacyQuery(
   return Object.fromEntries(Object.entries(query).filter(([name]) => !typedNames.includes(name)));
 }
 
+export function pathSegment(value: unknown): string {
+  const text = String(value);
+  if (text === '' || text === '.' || text === '..') {
+    throw new TypeError(`Value "${text}" cannot be used as a path parameter`);
+  }
+  return encodeURIComponent(text);
+}
+
 export function normalizeHeaders(
   headers: HeadersLike | undefined,
 ): Record<string, HeaderValue | readonly HeaderValue[]> {
