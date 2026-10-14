@@ -114,3 +114,17 @@ it('rejects empty and dot path parameters before sending a request', () => {
     assert.throws(() => client.responses.retrieve(id), /cannot be used as a path parameter/);
   }
 });
+
+it('rejects non-Blob multipart inputs before sending a request', async () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    fetch: async (input) => {
+      throw new Error(`unexpected request to ${String(input)}`);
+    },
+  });
+  await assert.rejects(
+    async () => client.skills.create({ file: 'bundle.zip' as unknown as Blob }),
+    /Multipart field file must be a File or Blob/,
+  );
+});
