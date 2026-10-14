@@ -169,3 +169,29 @@ it('requires starting_after before resuming a stream', () => {
     /stream: true requires starting_after/,
   );
 });
+
+it('copies allowlisted legacy fetch options and strips the legacy stream query', async () => {
+  const client = new Perplexity({
+    apiKey: 'test',
+    baseURL: 'https://example.test',
+    maxRetries: 0,
+    fetch: async (input, init) => {
+      assert.equal(init?.cache, 'no-store');
+      const url = new URL(new Request(input, init).url);
+      assert.deepEqual(Object.fromEntries(url.searchParams), { starting_after: '5' });
+      return Response.json({
+        id: 'resp-1',
+        object: 'response',
+        created_at: 0,
+        model: 'openai/gpt-5.4',
+        status: 'completed',
+        output: [],
+      });
+    },
+  });
+  const response = await client.responses.retrieve('resp-1', {
+    fetchOptions: { cache: 'no-store' },
+    query: { starting_after: 5, stream: true },
+  });
+  assert.equal(response.id, 'resp-1');
+});
