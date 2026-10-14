@@ -59,21 +59,55 @@ const legacyRequestOptionKeys = [
   'headers',
   'maxRetries',
   'timeout',
-  'fetchOptions',
   'signal',
   'idempotencyKey',
 ] as const;
+const unsafeFetchOptionKeys = new Set([
+  'body',
+  'dispatcher',
+  'duplex',
+  'headers',
+  'method',
+  'signal',
+]);
 
-// Copies only per-request transport settings from a legacy options argument.
-// Routing fields such as method, path, body and defaultBaseURL are never taken
-// from operation parameters.
-export function legacyRequestOptions(value: object | null | undefined): RequestOptions {
+function legacyOptionsArgument(
+  value: object | null | undefined,
+  queryNames: readonly string[],
+): Record<string, unknown> | undefined {
+  if (!value) return undefined;
+  const record = value as Record<string, unknown>;
+  return queryNames.some((name) => record[name] !== undefined) ? undefined : record;
+}
+
+// Reads transport settings from the legacy `(id, options)` call form. An
+// argument that sets any operation query parameter is parameters only, and
+// routing fields (method, path, body, defaultBaseURL) are never copied.
+export function legacyRequestOptions(
+  value: object | null | undefined,
+  queryNames: readonly string[],
+): RequestOptions {
   const options: Record<string, unknown> = {};
-  if (!value) return options as RequestOptions;
+  const legacy = legacyOptionsArgument(value, queryNames);
+  if (!legacy) return options as RequestOptions;
   for (const key of legacyRequestOptionKeys) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) options[key] = (value as Record<string, unknown>)[key];
+    if (Object.prototype.hasOwnProperty.call(legacy, key)) options[key] = legacy[key];
+  }
+  const fetchOptions = legacy['fetchOptions'];
+  if (fetchOptions && typeof fetchOptions === 'object') {
+    options['fetchOptions'] = Object.fromEntries(
+      Object.entries(fetchOptions).filter(([key]) => !unsafeFetchOptionKeys.has(key)),
+    );
   }
   return options as RequestOptions;
+}
+
+export function legacyQuery(
+  value: object | null | undefined,
+  queryNames: readonly string[],
+): object | undefined {
+  const query = legacyOptionsArgument(value, queryNames)?.['query'];
+  return query && typeof query === 'object' ? query : undefined;
 }
 
 export function normalizeHeaders(

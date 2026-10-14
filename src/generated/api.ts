@@ -1,4 +1,4 @@
-import { addOutputText, legacyRequestOptions, normalizeHeaders } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, normalizeHeaders } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -2323,7 +2323,7 @@ export class ResponsesResource {
     retrieve(responseID: string, params?: Omit<{
         starting_after?: number;
         stream?: boolean;
-    } & RequestOptions, "stream"> & {
+    }, "stream"> & {
         stream?: false;
     }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
@@ -2331,18 +2331,18 @@ export class ResponsesResource {
     retrieve(responseID: string, params: Omit<{
         starting_after?: number;
         stream?: boolean;
-    } & RequestOptions, "stream"> & {
+    }, "stream"> & {
         stream: true;
     }, options?: RequestOptions): APIPromise<Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params: Omit<{
         starting_after?: number;
         stream?: boolean;
-    } & RequestOptions, "stream"> & {
+    }, "stream"> & {
         stream: boolean;
     }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
         output_text: string;
     }) | Stream<ResponseStreamEventOutput>>;
-    retrieve(responseID: string, params?: RequestOptions & {
+    retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path"> & {
         starting_after?: never;
     }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
@@ -2350,7 +2350,7 @@ export class ResponsesResource {
     retrieve(responseID: string, params?: {
         starting_after?: number;
         stream?: boolean;
-    } & RequestOptions, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+    }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
         output_text: string;
     }) | Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params?: {
@@ -2358,12 +2358,12 @@ export class ResponsesResource {
         stream?: boolean;
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...legacyRequestOptions(params),
+            ...legacyRequestOptions(params, ["starting_after", "stream"]),
             ...options,
             query: {
+                ...legacyQuery(params, ["starting_after", "stream"]),
                 starting_after: params?.starting_after,
                 stream: params?.stream,
-                ...params?.query,
                 ...options?.query
             },
             stream: params?.stream ?? false
