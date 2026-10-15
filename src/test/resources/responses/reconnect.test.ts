@@ -161,12 +161,15 @@ it('requires starting_after before resuming a stream', () => {
 });
 
 it('copies allowlisted legacy fetch options and drops legacy stream query values', async () => {
+  const dispatcher = { dispatch() {} };
+  const fetchOptions = { cache: 'no-store' as const, dispatcher };
   const client = new Perplexity({
     apiKey: 'test',
     baseURL: 'https://example.test',
     maxRetries: 0,
     fetch: async (input, init) => {
       assert.equal(init?.cache, 'no-store');
+      assert.equal((init as RequestInit & { dispatcher?: unknown })?.dispatcher, dispatcher);
       const url = new URL(new Request(input, init).url);
       assert.deepEqual(Object.fromEntries(url.searchParams), {});
       return Response.json({
@@ -180,7 +183,7 @@ it('copies allowlisted legacy fetch options and drops legacy stream query values
     },
   });
   const response = await client.responses.retrieve('resp-1', {
-    fetchOptions: { cache: 'no-store' },
+    fetchOptions,
     query: { starting_after: 5, stream: true },
   });
   assert.equal(response.id, 'resp-1');

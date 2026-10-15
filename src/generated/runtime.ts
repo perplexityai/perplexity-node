@@ -62,11 +62,12 @@ const legacyRequestOptionKeys = [
   'signal',
   'idempotencyKey',
 ] as const;
-// Standard RequestInit settings that cannot change the method, body, headers,
-// destination or transport of a request.
+// Preserve legacy fetch settings without allowing request fields to override
+// the generated method, body, or headers.
 const legacyFetchOptionKeys = [
   'cache',
   'credentials',
+  'dispatcher',
   'integrity',
   'keepalive',
   'mode',
