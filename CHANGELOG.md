@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.39.0](https://github.com/perplexityai/perplexity-node/compare/v0.38.8...v0.39.0) (2026-10-15)
+
+
+### Features
+
+* add Agent model catalog ([0e67ccb](https://github.com/perplexityai/perplexity-node/commit/0e67ccbc1812aa610e958733361982611deebed2))
+* add Decisions API ([3795f06](https://github.com/perplexityai/perplexity-node/commit/3795f06ea165c9e131474faae2852b417a4efb55))
+* **api:** add custom Skill management ([1bce8e5](https://github.com/perplexityai/perplexity-node/commit/1bce8e55e7e72eb34019d027532879b35b9eede2))
+
+
+### Bug Fixes
+
+* support Agent cache controls and extraction usage ([9967ea8](https://github.com/perplexityai/perplexity-node/commit/9967ea8f54cfad1255c8241c61e6e8a9d63deafe))
+* type background response stream reconnection ([2d5bb13](https://github.com/perplexityai/perplexity-node/commit/2d5bb135adc16d9d1cbeba49f9f2e77fcbf92aff))
+
 ## [0.38.8](https://github.com/perplexityai/perplexity-node/compare/v0.38.7...v0.38.8) (2026-10-07)
 
 
