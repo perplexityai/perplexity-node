@@ -6,6 +6,7 @@ export interface ClientResources {
     readonly chat: API.Chat;
     readonly contextualizedEmbeddings: API.ContextualizedEmbeddings;
     readonly embeddings: API.Embeddings;
+    readonly models: API.Models;
     readonly responses: API.Responses;
     readonly search: API.Search;
 }
@@ -15,6 +16,7 @@ export const clientResourceClasses = {
     Chat: API.Chat,
     ContextualizedEmbeddings: API.ContextualizedEmbeddings,
     Embeddings: API.Embeddings,
+    Models: API.Models,
     Responses: API.Responses,
     Search: API.Search
 };
@@ -25,6 +27,7 @@ export function createClientResources(client: SdkTransport): ClientResources {
         chat: new API.Chat(client),
         contextualizedEmbeddings: new API.ContextualizedEmbeddings(client),
         embeddings: new API.Embeddings(client),
+        models: new API.Models(client),
         responses: new API.Responses(client),
         search: new API.Search(client)
     };
@@ -47,6 +50,9 @@ declare module '../client.js' {
         export import Embeddings = API.Embeddings;
         export type EmbeddingCreateParams = API.Embeddings.EmbeddingCreateParams;
         export type EmbeddingCreateResponse = API.Embeddings.EmbeddingCreateResponse;
+        export import Models = API.Models;
+        export type Model = API.Models.Model;
+        export type ModelListResponse = API.Models.ModelListResponse;
         export import Responses = API.Responses;
         export type Annotation = API.Responses.Annotation;
         export type ContentPart = API.Responses.ContentPart;
