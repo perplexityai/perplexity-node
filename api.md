@@ -94,6 +94,20 @@ Methods:
 - <code title="get /v1/responses/{response_id}">client.responses.<a href="./src/resources/responses/responses.ts">retrieve</a>(responseID) -> ResponseRetrieveResponse</code>
 - <code title="post /v1/responses/{response_id}/cancel">client.responses.<a href="./src/resources/responses/responses.ts">cancel</a>(responseID) -> ResponseCancelResponse</code>
 
+To reconnect to a background response's event stream, supply the last event
+sequence number received:
+
+```ts
+const stream = await client.responses.retrieve(responseID, {
+  stream: true,
+  starting_after: lastSequenceNumber,
+});
+```
+
+Streaming retrieval requires `starting_after`. If the API returns HTTP 400 because
+the cursor has expired, call `client.responses.retrieve(responseID)` without
+streaming parameters to obtain the current JSON snapshot.
+
 ## Files
 
 Methods:

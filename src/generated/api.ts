@@ -1,4 +1,4 @@
-import { addOutputText, normalizeHeaders } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -2181,7 +2181,7 @@ export class ChatCompletionsResource {
         return this._client.post<CompletionResponseOutput | Stream<CompletionResponseOutput>>("/chat/completions", {
             ...options,
             body: body,
-            stream: body?.stream ?? false
+            stream: body?.stream === true
         });
     }
 }
@@ -2306,9 +2306,9 @@ export class ResponsesResource {
         const promise = this._client.post<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>("/v1/responses", {
             ...options,
             body: body,
-            stream: body?.stream ?? false
+            stream: body?.stream === true
         });
-        if (!body?.stream) {
+        if (body?.stream !== true) {
             return promise._thenUnwrap(response => {
                 if ("object" in response && response.object === "response") {
                     addOutputText(response as ResponsesResponseOutput & {
@@ -2320,22 +2320,67 @@ export class ResponsesResource {
         }
         return promise;
     }
-    retrieve(responseID: string, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
+    retrieve(responseID: string, params?: Omit<{
+        starting_after?: number;
+        stream?: boolean;
+    }, "stream"> & {
+        stream?: false;
+    }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
-    }> {
-        const promise = this._client.get<ResponsesResponseOutput>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
-            ...options
+    }>;
+    retrieve(responseID: string, params: Omit<Required<{
+        starting_after?: number;
+        stream?: boolean;
+    }>, "stream"> & {
+        stream: true;
+    }, options?: RequestOptions): APIPromise<Stream<ResponseStreamEventOutput>>;
+    retrieve(responseID: string, params: Omit<Required<{
+        starting_after?: number;
+        stream?: boolean;
+    }>, "stream"> & {
+        stream: boolean;
+    }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+        output_text: string;
+    }) | Stream<ResponseStreamEventOutput>>;
+    retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path"> & {
+        starting_after?: never;
+    }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
+        output_text: string;
+    }>;
+    retrieve(responseID: string, params?: {
+        starting_after?: number;
+        stream?: boolean;
+    }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
+        output_text: string;
+    }) | Stream<ResponseStreamEventOutput>>;
+    retrieve(responseID: string, params?: {
+        starting_after?: number;
+        stream?: boolean;
+    } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
+        const streamFlag = ownBoolean(params, "stream");
+        const cursor = ownCursor(params, "starting_after");
+        const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
+            ...legacyRequestOptions(params, cursor, streamFlag),
+            ...options,
+            query: {
+                ...legacyQuery(params, ["starting_after", "stream"], cursor),
+                ...options?.query,
+                starting_after: cursor,
+                stream: streamFlag
+            },
+            stream: streamFlag === true
         });
-        return promise._thenUnwrap(response => {
-            if ("object" in response && response.object === "response") {
-                addOutputText(response as ResponsesResponseOutput & {
-                    output_text: string;
-                });
-            }
-            return response;
-        }) as APIPromise<ResponsesResponseOutput & {
-            output_text: string;
-        }>;
+        if (streamFlag !== true) {
+            return promise._thenUnwrap(response => {
+                if ("object" in response && response.object === "response") {
+                    addOutputText(response as ResponsesResponseOutput & {
+                        output_text: string;
+                    });
+                }
+                return response;
+            });
+        }
+        return promise;
     }
 }
 export class SearchResource {
