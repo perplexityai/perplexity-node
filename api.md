@@ -9,6 +9,24 @@ const models = await client.models.list();
 `client.models.list()` sends `GET /v1/models` and returns a `ModelListResponse`
 containing the models available for the Agent API.
 
+# Decisions
+
+```ts
+import type {
+  DecisionCreateParams,
+  DecisionCreateResponse,
+} from '@perplexity-ai/perplexity_ai/resources/decisions';
+
+const response = await client.decisions.create({
+  model: 'pplx-decider-v1.1-27b',
+  state: 'The battery stopped charging.',
+  questions: { defect: { type: 'noul', instructions: 'Does this report a defect?' } },
+});
+```
+
+`client.decisions.create(...)` sends `POST /v1/decisions` and returns a
+`DecisionCreateResponse` with named `noul`, `choice`, or `score` answers.
+
 # Shared
 
 Types:
