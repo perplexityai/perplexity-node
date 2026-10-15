@@ -876,12 +876,22 @@ export type InputItemOutput = InputMessageOutput | FunctionCallOutputInputOutput
 export type InputMessageInput = {
     content: InputContentInput;
     role: "user" | "assistant" | "system" | "developer";
-    type: "message";
+    type?: "message";
 };
 export type InputMessageOutput = {
     content: InputContentOutput;
     role: "user" | "assistant" | "system" | "developer";
-    type: "message";
+    type?: "message";
+};
+export type InputTokensDetailsInput = {
+    cache_creation_input_tokens?: number;
+    cache_read_input_tokens?: number;
+    cached_tokens: number;
+};
+export type InputTokensDetailsOutput = {
+    cache_creation_input_tokens?: number;
+    cache_read_input_tokens?: number;
+    cached_tokens: number;
 };
 export type JSONSchemaInput = {
     description?: string | null;
@@ -1138,6 +1148,12 @@ export type OutputItemDoneEventOutput = {
     output_index: number;
     sequence_number: number;
     type: "response.output_item.done";
+};
+export type OutputTokensDetailsInput = {
+    reasoning_tokens: number;
+};
+export type OutputTokensDetailsOutput = {
+    reasoning_tokens: number;
 };
 export type ParameterSpecInput = {
     additional_properties?: boolean | null;
@@ -1401,8 +1417,10 @@ export type ResponsesRequestInput = {
     preset?: string;
     previous_response_id?: string;
     profile?: ProfileReferenceInput;
+    prompt_cache_key?: string;
     reasoning?: ReasoningConfigInput;
     response_format?: ResponseFormatInput;
+    service_tier?: "auto" | "default" | "flex" | "priority" | "fast";
     skills?: SkillInput[];
     store?: boolean;
     stream?: boolean;
@@ -1423,8 +1441,10 @@ export type ResponsesRequestOutput = {
     preset?: string;
     previous_response_id?: string;
     profile?: ProfileReferenceOutput;
+    prompt_cache_key?: string;
     reasoning?: ReasoningConfigOutput;
     response_format?: ResponseFormatOutput;
+    service_tier?: "auto" | "default" | "flex" | "priority" | "fast";
     skills?: SkillOutput[];
     store?: boolean;
     stream?: boolean;
@@ -1442,6 +1462,8 @@ export type ResponsesResponseInput = {
     object: ResponsesObjectTypeInput;
     output: OutputItemInput[];
     previous_response_id?: string | null;
+    prompt_cache_key?: string | null;
+    service_tier?: string;
     status: StatusInput;
     store?: boolean;
     usage?: ResponsesUsageInput;
@@ -1455,6 +1477,8 @@ export type ResponsesResponseOutput = {
     object: ResponsesObjectTypeOutput;
     output: OutputItemOutput[];
     previous_response_id?: string | null;
+    prompt_cache_key?: string | null;
+    service_tier?: string;
     status: StatusOutput;
     store?: boolean;
     usage?: ResponsesUsageOutput;
@@ -1756,10 +1780,14 @@ export type ToolCallOutput = {
     type?: "function" | null;
 };
 export type ToolCallDetailsInput = {
+    cost_usd?: number;
     invocation?: number;
+    token_usage?: ToolCallTokenUsageInput[];
 };
 export type ToolCallDetailsOutput = {
+    cost_usd?: number;
     invocation?: number;
+    token_usage?: ToolCallTokenUsageOutput[];
 };
 export type ToolCallFunctionInput = {
     arguments?: string | null;
@@ -1768,6 +1796,20 @@ export type ToolCallFunctionInput = {
 export type ToolCallFunctionOutput = {
     arguments?: string | null;
     name?: string | null;
+};
+export type ToolCallTokenUsageInput = {
+    input_tokens: number;
+    input_tokens_details: InputTokensDetailsInput;
+    model?: string;
+    output_tokens: number;
+    output_tokens_details: OutputTokensDetailsInput;
+};
+export type ToolCallTokenUsageOutput = {
+    input_tokens: number;
+    input_tokens_details: InputTokensDetailsOutput;
+    model?: string;
+    output_tokens: number;
+    output_tokens_details: OutputTokensDetailsOutput;
 };
 export type ToolChoiceInput = ("none" | "auto" | "required") | ({} & Record<string, unknown>);
 export type ToolChoiceOutput = ("none" | "auto" | "required") | ({} & Record<string, unknown>);
