@@ -1,4 +1,4 @@
-import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders, multipartBody, pathSegment } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -1029,6 +1029,24 @@ export type ListAsyncApiChatCompletionsResponseOutput = {
     next_token?: string | null;
     requests: AsyncApiChatCompletionsResponseSummaryOutput[];
 };
+export type ManagedSkillInput = {
+    created_at?: string;
+    description?: string;
+    latest_revision?: string;
+    name?: string;
+    revision?: string;
+    skill_id: string;
+    updated_at?: string;
+};
+export type ManagedSkillOutput = {
+    created_at?: string;
+    description?: string;
+    latest_revision?: string;
+    name?: string;
+    revision?: string;
+    skill_id: string;
+    updated_at?: string;
+};
 export type McpApprovalRequestInputInput = {
     arguments: string;
     connector_id?: string;
@@ -1849,6 +1867,30 @@ export type ShareFileOutputItemOutput = {
 };
 export type SkillInput = BuiltinSkillInput | InlineSkillInput | CustomSkillInput;
 export type SkillOutput = BuiltinSkillOutput | InlineSkillOutput | CustomSkillOutput;
+export type SkillBundleInput = {
+    file: Blob;
+};
+export type SkillBundleOutput = {
+    file: string;
+};
+export type SkillDownloadInput = {
+    download_url: string;
+    name?: string;
+    revision?: string;
+};
+export type SkillDownloadOutput = {
+    download_url: string;
+    name?: string;
+    revision?: string;
+};
+export type SkillListInput = {
+    next_page_token?: string;
+    skills: SkillSummaryInput[];
+};
+export type SkillListOutput = {
+    next_page_token?: string;
+    skills: SkillSummaryOutput[];
+};
 export type SkillLoadedOutputItemInput = {
     name: string;
     type: "skill_loaded";
@@ -1856,6 +1898,38 @@ export type SkillLoadedOutputItemInput = {
 export type SkillLoadedOutputItemOutput = {
     name: string;
     type: "skill_loaded";
+};
+export type SkillRevisionInput = {
+    created_at?: string;
+    name?: string;
+    revision: string;
+};
+export type SkillRevisionOutput = {
+    created_at?: string;
+    name?: string;
+    revision: string;
+};
+export type SkillRevisionListInput = {
+    next_page_token?: string;
+    revisions: SkillRevisionInput[];
+};
+export type SkillRevisionListOutput = {
+    next_page_token?: string;
+    revisions: SkillRevisionOutput[];
+};
+export type SkillSummaryInput = {
+    created_at?: string;
+    name?: string;
+    revision?: string;
+    skill_id: string;
+    updated_at?: string;
+};
+export type SkillSummaryOutput = {
+    created_at?: string;
+    name?: string;
+    revision?: string;
+    skill_id: string;
+    updated_at?: string;
 };
 export type StatusInput = "completed" | "failed" | "in_progress" | "queued" | "cancelled" | "requires_action";
 export type StatusOutput = "completed" | "failed" | "in_progress" | "queued" | "cancelled" | "requires_action";
@@ -2115,7 +2189,7 @@ export class AsyncChatCompletionsResource {
         "x-usage-tier"?: string;
         "x-user-id"?: string;
     }, options?: RequestOptions): APIPromise<AsyncApiChatCompletionsResponseOutput> {
-        return this._client.get<AsyncApiChatCompletionsResponseOutput>(`/async/chat/completions/${encodeURIComponent(String(apiRequest))}`, {
+        return this._client.get<AsyncApiChatCompletionsResponseOutput>(`/async/chat/completions/${pathSegment(apiRequest)}`, {
             ...options,
             query: {
                 local_mode: params?.local_mode,
@@ -2156,7 +2230,7 @@ export class BrowserSessionsResource {
         });
     }
     delete(sessionID: string, options?: RequestOptions): APIPromise<void> {
-        return this._client.delete<void>(`/v1/browser/sessions/${encodeURIComponent(String(sessionID))}`, {
+        return this._client.delete<void>(`/v1/browser/sessions/${pathSegment(sessionID)}`, {
             ...options,
             headers: {
                 "Accept": "*/*",
@@ -2193,7 +2267,7 @@ export class ResponsesFilesResource {
     content(fileID: string, params: {
         response_id: string;
     }, options?: RequestOptions): APIPromise<Response> {
-        return this._client.get<Response>(`/v1/responses/${encodeURIComponent(String(params.response_id))}/files/${encodeURIComponent(String(fileID))}/content`, {
+        return this._client.get<Response>(`/v1/responses/${pathSegment(params.response_id)}/files/${pathSegment(fileID)}/content`, {
             ...options,
             headers: {
                 "Accept": "application/octet-stream",
@@ -2203,8 +2277,27 @@ export class ResponsesFilesResource {
         });
     }
     list(responseID: string, options?: RequestOptions): APIPromise<ResponseFileListOutput> {
-        return this._client.get<ResponseFileListOutput>(`/v1/responses/${encodeURIComponent(String(responseID))}/files`, {
+        return this._client.get<ResponseFileListOutput>(`/v1/responses/${pathSegment(responseID)}/files`, {
             ...options
+        });
+    }
+}
+export class SkillsRevisionsResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    list(skillID: string, params?: {
+        limit?: number;
+        page_token?: string;
+    }, options?: RequestOptions): APIPromise<SkillRevisionListOutput> {
+        return this._client.get<SkillRevisionListOutput>(`/v1/skills/${pathSegment(skillID)}/revisions`, {
+            ...options,
+            query: {
+                limit: params?.limit,
+                page_token: params?.page_token,
+                ...options?.query
+            }
         });
     }
 }
@@ -2287,7 +2380,7 @@ export class ResponsesResource {
         return this._client.post<{
             response_id: string;
             status: "cancelling";
-        }>(`/v1/responses/${encodeURIComponent(String(responseID))}/cancel`, {
+        }>(`/v1/responses/${pathSegment(responseID)}/cancel`, {
             ...options
         });
     }
@@ -2359,7 +2452,7 @@ export class ResponsesResource {
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
         const streamFlag = ownBoolean(params, "stream");
         const cursor = ownCursor(params, "starting_after");
-        const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${encodeURIComponent(String(responseID))}`, {
+        const promise = this._client.get<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>>(`/v1/responses/${pathSegment(responseID)}`, {
             ...legacyRequestOptions(params, cursor, streamFlag),
             ...options,
             query: {
@@ -2395,6 +2488,82 @@ export class SearchResource {
         });
     }
 }
+export class SkillsResource {
+    private readonly _client: SdkTransport;
+    readonly revisions: SkillsRevisionsResource;
+    constructor(client: SdkTransport) {
+        this._client = client;
+        this.revisions = new SkillsRevisionsResource(client);
+    }
+    create(body: SkillBundleInput, options?: RequestOptions): APIPromise<ManagedSkillOutput> {
+        return this._client.post<ManagedSkillOutput>("/v1/skills", {
+            ...options,
+            body: multipartBody(body, ["file"])
+        });
+    }
+    delete(skillID: string, params: {
+        expected_revision: string;
+    }, options?: RequestOptions): APIPromise<void> {
+        return this._client.delete<void>(`/v1/skills/${pathSegment(skillID)}`, {
+            ...options,
+            query: {
+                expected_revision: params.expected_revision,
+                ...options?.query
+            },
+            headers: {
+                "Accept": "*/*",
+                ...normalizeHeaders(options?.headers)
+            }
+        });
+    }
+    download(skillID: string, params?: {
+        revision?: string;
+    }, options?: RequestOptions): APIPromise<SkillDownloadOutput> {
+        return this._client.get<SkillDownloadOutput>(`/v1/skills/${pathSegment(skillID)}/download`, {
+            ...options,
+            query: {
+                revision: params?.revision,
+                ...options?.query
+            }
+        });
+    }
+    list(params?: {
+        limit?: number;
+        page_token?: string;
+    }, options?: RequestOptions): APIPromise<SkillListOutput> {
+        return this._client.get<SkillListOutput>("/v1/skills", {
+            ...options,
+            query: {
+                limit: params?.limit,
+                page_token: params?.page_token,
+                ...options?.query
+            }
+        });
+    }
+    retrieve(skillID: string, params?: {
+        revision?: string;
+    }, options?: RequestOptions): APIPromise<ManagedSkillOutput> {
+        return this._client.get<ManagedSkillOutput>(`/v1/skills/${pathSegment(skillID)}`, {
+            ...options,
+            query: {
+                revision: params?.revision,
+                ...options?.query
+            }
+        });
+    }
+    update(skillID: string, body: SkillBundleInput, params: {
+        expected_revision: string;
+    }, options?: RequestOptions): APIPromise<ManagedSkillOutput> {
+        return this._client.put<ManagedSkillOutput>(`/v1/skills/${pathSegment(skillID)}`, {
+            ...options,
+            body: multipartBody(body, ["file"]),
+            query: {
+                expected_revision: params.expected_revision,
+                ...options?.query
+            }
+        });
+    }
+}
 export class PerplexitySdk {
     readonly async: AsyncResource;
     readonly browser: BrowserResource;
@@ -2405,6 +2574,7 @@ export class PerplexitySdk {
     readonly models: ModelsResource;
     readonly responses: ResponsesResource;
     readonly search: SearchResource;
+    readonly skills: SkillsResource;
     constructor(client: SdkTransport) {
         this.async = new AsyncResource(client);
         this.browser = new BrowserResource(client);
@@ -2415,6 +2585,7 @@ export class PerplexitySdk {
         this.models = new ModelsResource(client);
         this.responses = new ResponsesResource(client);
         this.search = new SearchResource(client);
+        this.skills = new SkillsResource(client);
     }
 }
 export class Async extends AsyncResource {
@@ -2434,6 +2605,8 @@ export class Models extends ModelsResource {
 export class Responses extends ResponsesResource {
 }
 export class Search extends SearchResource {
+}
+export class Skills extends SkillsResource {
 }
 export type Annotation = AnnotationOutput;
 export type APIPublicSearchResult = ApiPublicSearchResultOutput;
@@ -2461,6 +2634,7 @@ export type ImageSearchResultsOutputItem = ImageSearchResultsOutputItemOutput;
 export type ImageSearchTool = ImageSearchToolInput;
 export type InputItem = InputItemInput;
 export type JsonSchemaFormat = JSONSchemaFormatInput;
+export type ManagedSkill = ManagedSkillOutput;
 export type Model = ModelOutput;
 export type ModelListResponse = Awaited<ReturnType<ModelsResource["list"]>>;
 export type OutputItem = OutputItemOutput;
@@ -2481,6 +2655,11 @@ export type ResponsesUsage = ResponsesUsageOutput;
 export type SearchCreateParams = ApiSearchRequestInput;
 export type SearchCreateResponse = ApiSearchResponseOutput;
 export type SearchResult = SearchResultOutput;
+export type SkillDownloadResponse = SkillDownloadOutput;
+export type SkillListResponse = SkillListOutput;
+export type SkillRevision = SkillRevisionOutput;
+export type SkillRevisionListResponse = SkillRevisionListOutput;
+export type SkillUploadParams = SkillBundleInput;
 export type StreamChunk = CompletionResponseOutput;
 export type UsageInfo = UsageInfoOutput;
 export type UserLocation = UserLocationInput;
@@ -2592,4 +2771,18 @@ export namespace Responses {
 export namespace Search {
     export type SearchCreateParams = ApiSearchRequestInput;
     export type SearchCreateResponse = ApiSearchResponseOutput;
+}
+export namespace Skills {
+    export class Revisions extends SkillsRevisionsResource {
+    }
+    export type ManagedSkill = ManagedSkillOutput;
+    export type SkillDownloadResponse = SkillDownloadOutput;
+    export type SkillListResponse = SkillListOutput;
+    export type SkillRevision = SkillRevisionOutput;
+    export type SkillRevisionListResponse = SkillRevisionListOutput;
+    export type SkillUploadParams = SkillBundleInput;
+    export namespace Revisions {
+        export type SkillRevision = SkillRevisionOutput;
+        export type SkillRevisionListResponse = SkillRevisionListOutput;
+    }
 }

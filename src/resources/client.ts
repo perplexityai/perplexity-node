@@ -10,6 +10,7 @@ export interface ClientResources {
     readonly models: API.Models;
     readonly responses: API.Responses;
     readonly search: API.Search;
+    readonly skills: API.Skills;
 }
 export const clientResourceClasses = {
     Async: API.Async,
@@ -20,7 +21,8 @@ export const clientResourceClasses = {
     Embeddings: API.Embeddings,
     Models: API.Models,
     Responses: API.Responses,
-    Search: API.Search
+    Search: API.Search,
+    Skills: API.Skills
 };
 export function createClientResources(client: SdkTransport): ClientResources {
     return {
@@ -32,7 +34,8 @@ export function createClientResources(client: SdkTransport): ClientResources {
         embeddings: new API.Embeddings(client),
         models: new API.Models(client),
         responses: new API.Responses(client),
-        search: new API.Search(client)
+        search: new API.Search(client),
+        skills: new API.Skills(client)
     };
 }
 declare module '../client.js' {
@@ -87,6 +90,13 @@ declare module '../client.js' {
         export import Search = API.Search;
         export type SearchCreateParams = API.Search.SearchCreateParams;
         export type SearchCreateResponse = API.Search.SearchCreateResponse;
+        export import Skills = API.Skills;
+        export type ManagedSkill = API.Skills.ManagedSkill;
+        export type SkillDownloadResponse = API.Skills.SkillDownloadResponse;
+        export type SkillListResponse = API.Skills.SkillListResponse;
+        export type SkillRevision = API.Skills.SkillRevision;
+        export type SkillRevisionListResponse = API.Skills.SkillRevisionListResponse;
+        export type SkillUploadParams = API.Skills.SkillUploadParams;
         export type APIPublicSearchResult = API.APIPublicSearchResult;
         export type BrowserSessionResponse = API.BrowserSessionResponse;
         export type ChatMessageInput = API.ChatMessageInput;

@@ -55,6 +55,26 @@ export type SdkTransport = {
   ): APIPromise<ResponseType>;
 };
 
+// Builds form data from the schema's fields only; other keys are not sent.
+export function multipartBody(
+  body: Record<string, Blob | undefined>,
+  fields: readonly string[],
+): FormData {
+  const form = new FormData();
+  for (const name of fields) {
+    if (!Object.prototype.hasOwnProperty.call(body, name)) continue;
+    const file = body[name];
+    if (file === undefined) continue;
+    if (!(file instanceof Blob)) {
+      throw new TypeError(
+        `Multipart field ${name} must be a File or Blob; use toFile for other inputs.`,
+      );
+    }
+    form.append(name, file);
+  }
+  return form;
+}
+
 const legacyRequestOptionKeys = [
   'headers',
   'maxRetries',
@@ -151,6 +171,17 @@ export function legacyQuery(
   const query = ownValue(value, 'query');
   if (!query || typeof query !== 'object') return undefined;
   return Object.fromEntries(Object.entries(query).filter(([name]) => !typedNames.includes(name)));
+}
+
+export function pathSegment(value: unknown): string {
+  if (typeof value !== 'string' && (typeof value !== 'number' || !Number.isSafeInteger(value))) {
+    throw new TypeError(`Value of type ${typeof value} cannot be used as a path parameter`);
+  }
+  const text = String(value);
+  if (text === '' || text === '.' || text === '..') {
+    throw new TypeError(`Value "${text}" cannot be used as a path parameter`);
+  }
+  return encodeURIComponent(text);
 }
 
 export function normalizeHeaders(
