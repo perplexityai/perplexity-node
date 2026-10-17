@@ -1,4 +1,4 @@
-import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, normalizeHeaders, multipartBody, pathSegment } from "./runtime.js";
+import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, ownParameter, normalizeHeaders, multipartBody, pathSegment } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type AdvisorResultOutputItemInput = {
@@ -1564,6 +1564,7 @@ export type ResponsesRequestInput = {
     response_format?: ResponseFormatInput;
     service_tier?: "auto" | "default" | "flex" | "priority" | "fast";
     skills?: SkillInput[];
+    step_budget_reminder?: boolean;
     store?: boolean;
     stream?: boolean;
     temperature?: number;
@@ -1588,6 +1589,7 @@ export type ResponsesRequestOutput = {
     response_format?: ResponseFormatOutput;
     service_tier?: "auto" | "default" | "flex" | "priority" | "fast";
     skills?: SkillOutput[];
+    step_budget_reminder?: boolean;
     store?: boolean;
     stream?: boolean;
     temperature?: number;
@@ -2414,6 +2416,7 @@ export class ResponsesResource {
         return promise;
     }
     retrieve(responseID: string, params?: Omit<{
+        format?: "default" | "short";
         starting_after?: number;
         stream?: boolean;
     }, "stream"> & {
@@ -2422,12 +2425,14 @@ export class ResponsesResource {
         output_text: string;
     }>;
     retrieve(responseID: string, params: Omit<Required<{
+        format?: "default" | "short";
         starting_after?: number;
         stream?: boolean;
     }>, "stream"> & {
         stream: true;
     }, options?: RequestOptions): APIPromise<Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params: Omit<Required<{
+        format?: "default" | "short";
         starting_after?: number;
         stream?: boolean;
     }>, "stream"> & {
@@ -2436,17 +2441,20 @@ export class ResponsesResource {
         output_text: string;
     }) | Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params?: Omit<RequestOptions, "__binaryResponse" | "body" | "defaultBaseURL" | "method" | "path"> & {
+        format?: never;
         starting_after?: never;
     }, options?: RequestOptions): APIPromise<ResponsesResponseOutput & {
         output_text: string;
     }>;
     retrieve(responseID: string, params?: {
+        format?: "default" | "short";
         starting_after?: number;
         stream?: boolean;
     }, options?: RequestOptions): APIPromise<(ResponsesResponseOutput & {
         output_text: string;
     }) | Stream<ResponseStreamEventOutput>>;
     retrieve(responseID: string, params?: {
+        format?: "default" | "short";
         starting_after?: number;
         stream?: boolean;
     } & RequestOptions, options?: RequestOptions): APIPromise<ResponsesResponseOutput | Stream<ResponseStreamEventOutput>> {
@@ -2456,10 +2464,11 @@ export class ResponsesResource {
             ...legacyRequestOptions(params, cursor, streamFlag),
             ...options,
             query: {
-                ...legacyQuery(params, ["starting_after", "stream"], cursor),
+                ...legacyQuery(params, ["format", "starting_after", "stream"], cursor),
                 ...options?.query,
                 starting_after: cursor,
-                stream: streamFlag
+                stream: streamFlag,
+                format: ownParameter(params, "format")
             },
             stream: streamFlag === true
         });
