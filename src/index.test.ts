@@ -402,6 +402,20 @@ describe('instantiate client', () => {
       assert.deepStrictEqual(client.buildURL('/foo', null), 'http://localhost:5000/custom/path/foo');
     });
 
+    it('query parameters', () => {
+      for (const baseURL of [
+        'http://localhost:5000/custom/path?key=x',
+        'http://localhost:5000/custom/path/?key=x',
+      ]) {
+        const client = new Perplexity({ baseURL, apiKey: 'My API Key' });
+        assert.deepStrictEqual(client.buildURL('/foo', null), 'http://localhost:5000/custom/path/foo?key=x');
+        assert.deepStrictEqual(
+          client.buildURL('/foo?bar=1', { key: 'y', baz: 2 }),
+          'http://localhost:5000/custom/path/foo?key=y&bar=1&baz=2',
+        );
+      }
+    });
+
     afterEach(() => {
       process.env['PERPLEXITY_BASE_URL'] = undefined;
     });

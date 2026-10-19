@@ -256,12 +256,17 @@ export class Perplexity implements SdkTransport {
     defaultBaseURL?: string | undefined,
   ): string {
     const baseURL = (!this.#baseURLOverridden() && defaultBaseURL) || this.baseURL;
+    // Join paths without the base query so it cannot absorb the request path.
+    const baseQueryIndex = baseURL.indexOf('?');
+    const basePath = baseQueryIndex === -1 ? baseURL : baseURL.slice(0, baseQueryIndex);
+    const baseQuery =
+      isAbsoluteURL(path) || baseQueryIndex === -1 ? {} : Object.fromEntries(new URL(baseURL).searchParams);
     const url = isAbsoluteURL(path)
       ? new URL(path)
-      : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
+      : new URL(basePath + (basePath.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    const pathQuery = Object.fromEntries(url.searchParams);
+    const pathQuery = { ...baseQuery, ...Object.fromEntries(url.searchParams) };
     if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
       query = { ...pathQuery, ...defaultQuery, ...query };
     }
