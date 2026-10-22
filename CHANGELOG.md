@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.0](https://github.com/perplexityai/perplexity-node/compare/v0.40.0...v0.41.0) (2026-10-22)
+
+
+### Features
+
+* **api:** add effort to Responses, deprecate preset ([5ccd333](https://github.com/perplexityai/perplexity-node/commit/5ccd333f5b20546e5484ae2732b7218ca8c170ee))
+
 ## [0.40.0](https://github.com/perplexityai/perplexity-node/compare/v0.39.1...v0.40.0) (2026-10-22)
 
 
