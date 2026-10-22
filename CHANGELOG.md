@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.40.0](https://github.com/perplexityai/perplexity-node/compare/v0.39.1...v0.40.0) (2026-10-22)
+
+
+### Features
+
+* add batches and files resources ([#118](https://github.com/perplexityai/perplexity-node/issues/118)) ([a785e56](https://github.com/perplexityai/perplexity-node/commit/a785e56a53c9067a6197aa906f775fe4e3e41b96))
+
+
+### Bug Fixes
+
+* preserve base URL query parameters when joining paths ([#114](https://github.com/perplexityai/perplexity-node/issues/114)) ([bcd378c](https://github.com/perplexityai/perplexity-node/commit/bcd378cff341d6af024290c3dd0f505330b56b21))
+
 ## [0.39.1](https://github.com/perplexityai/perplexity-node/compare/v0.39.0...v0.39.1) (2026-10-19)
 
 
