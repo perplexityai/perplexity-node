@@ -57,8 +57,9 @@ export type SdkTransport = {
 
 // Builds form data from the schema's fields only; other keys are not sent.
 export function multipartBody(
-  body: Record<string, Blob | undefined>,
+  body: Record<string, Blob | string | undefined>,
   fields: readonly string[],
+  textFields: readonly string[] = [],
 ): FormData {
   const form = new FormData();
   for (const name of fields) {
@@ -71,6 +72,15 @@ export function multipartBody(
       );
     }
     form.append(name, file);
+  }
+  for (const name of textFields) {
+    if (!Object.prototype.hasOwnProperty.call(body, name)) continue;
+    const value = body[name];
+    if (value === undefined) continue;
+    if (typeof value !== 'string') {
+      throw new TypeError(`Multipart field ${name} must be a string.`);
+    }
+    form.append(name, value);
   }
   return form;
 }

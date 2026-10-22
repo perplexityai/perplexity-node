@@ -1,26 +1,6 @@
 import { addOutputText, legacyQuery, legacyRequestOptions, ownBoolean, ownCursor, ownParameter, normalizeHeaders, multipartBody, pathSegment } from "./runtime.js";
 import type { APIPromise, RequestOptions, SdkTransport, Stream } from "./runtime.js";
 export type { APIPromise, HeaderValue, HeadersLike, RequestOptions, SdkTransport, Stream } from "./runtime.js";
-export type AdvisorResultOutputItemInput = {
-    advice?: string;
-    arguments?: string;
-    call_id: string;
-    error_code?: string;
-    error_message?: string;
-    question?: string;
-    status: StatusInput;
-    type: "advisor_result";
-};
-export type AdvisorResultOutputItemOutput = {
-    advice?: string;
-    arguments?: string;
-    call_id: string;
-    error_code?: string;
-    error_message?: string;
-    question?: string;
-    status: StatusOutput;
-    type: "advisor_result";
-};
 export type AnnotationInput = {
     end_index?: number;
     start_index?: number;
@@ -301,6 +281,128 @@ export type AsyncApiChatCompletionsResponseSummaryOutput = {
 };
 export type AsyncProcessingStatusInput = "CREATED" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 export type AsyncProcessingStatusOutput = "CREATED" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
+export type BatchInput = {
+    cancelled_at?: number | null;
+    cancelling_at?: number | null;
+    completed_at?: number | null;
+    completion_window: string;
+    created_at: number;
+    endpoint: string;
+    error_file_id?: string | null;
+    errors?: BatchErrorsInput | null;
+    expired_at?: number | null;
+    expires_at?: number | null;
+    failed_at?: number | null;
+    finalizing_at?: number | null;
+    id: string;
+    in_progress_at?: number | null;
+    input_file_id: string;
+    metadata?: ({} & Record<string, string>) | null;
+    object: "batch";
+    output_file_id?: string | null;
+    request_counts: BatchRequestCountsInput;
+    status: "validating" | "in_progress" | "finalizing" | "completed" | "expired" | "cancelling" | "cancelled" | "failed";
+    usage: BatchUsageInput;
+};
+export type BatchOutput = {
+    cancelled_at?: number | null;
+    cancelling_at?: number | null;
+    completed_at?: number | null;
+    completion_window: string;
+    created_at: number;
+    endpoint: string;
+    error_file_id?: string | null;
+    errors?: BatchErrorsOutput | null;
+    expired_at?: number | null;
+    expires_at?: number | null;
+    failed_at?: number | null;
+    finalizing_at?: number | null;
+    id: string;
+    in_progress_at?: number | null;
+    input_file_id: string;
+    metadata?: ({} & Record<string, string>) | null;
+    object: "batch";
+    output_file_id?: string | null;
+    request_counts: BatchRequestCountsOutput;
+    status: "validating" | "in_progress" | "finalizing" | "completed" | "expired" | "cancelling" | "cancelled" | "failed";
+    usage: BatchUsageOutput;
+};
+export type BatchCreateRequestInput = {
+    completion_window?: "24h";
+    endpoint: "/v1/responses";
+    input_file_id: string;
+    metadata?: ({} & Record<string, string>) | null;
+};
+export type BatchCreateRequestOutput = {
+    completion_window?: "24h";
+    endpoint: "/v1/responses";
+    input_file_id: string;
+    metadata?: ({} & Record<string, string>) | null;
+};
+export type BatchErrorInput = {
+    code: string;
+    line?: number | null;
+    message: string;
+};
+export type BatchErrorOutput = {
+    code: string;
+    line?: number | null;
+    message: string;
+};
+export type BatchErrorsInput = {
+    data: BatchErrorInput[];
+    object: "list";
+};
+export type BatchErrorsOutput = {
+    data: BatchErrorOutput[];
+    object: "list";
+};
+export type BatchListInput = {
+    data: BatchInput[];
+    first_id?: string | null;
+    has_more: boolean;
+    last_id?: string | null;
+    object: "list";
+};
+export type BatchListOutput = {
+    data: BatchOutput[];
+    first_id?: string | null;
+    has_more: boolean;
+    last_id?: string | null;
+    object: "list";
+};
+export type BatchRequestCountsInput = {
+    completed: number;
+    failed: number;
+    total: number;
+};
+export type BatchRequestCountsOutput = {
+    completed: number;
+    failed: number;
+    total: number;
+};
+export type BatchUsageInput = {
+    input_tokens: number;
+    input_tokens_details: {
+        cached_tokens: number;
+    };
+    output_tokens: number;
+    output_tokens_details: {
+        reasoning_tokens: number;
+    };
+    total_tokens: number;
+};
+export type BatchUsageOutput = {
+    input_tokens: number;
+    input_tokens_details: {
+        cached_tokens: number;
+    };
+    output_tokens: number;
+    output_tokens_details: {
+        reasoning_tokens: number;
+    };
+    total_tokens: number;
+};
 export type BrowserSessionResponseInput = {
     session_id?: string;
     status?: "running" | "stopped";
@@ -760,6 +862,58 @@ export type FetchUrlToolInput = {
 export type FetchUrlToolOutput = {
     max_urls?: number;
     type: "fetch_url";
+};
+export type FileDeletedInput = {
+    deleted: boolean;
+    id: string;
+    object: "file";
+};
+export type FileDeletedOutput = {
+    deleted: boolean;
+    id: string;
+    object: "file";
+};
+export type FileObjectInput = {
+    bytes: number;
+    created_at: number;
+    expires_at?: number | null;
+    filename: string;
+    id: string;
+    object: "file";
+    purpose: FilePurposeInput;
+};
+export type FileObjectOutput = {
+    bytes: number;
+    created_at: number;
+    expires_at?: number | null;
+    filename: string;
+    id: string;
+    object: "file";
+    purpose: FilePurposeOutput;
+};
+export type FileObjectListInput = {
+    data: FileObjectInput[];
+    first_id?: string | null;
+    has_more: boolean;
+    last_id?: string | null;
+    object: "list";
+};
+export type FileObjectListOutput = {
+    data: FileObjectOutput[];
+    first_id?: string | null;
+    has_more: boolean;
+    last_id?: string | null;
+    object: "list";
+};
+export type FilePurposeInput = "batch" | "batch_output";
+export type FilePurposeOutput = "batch" | "batch_output";
+export type FileUploadInput = {
+    file: Blob;
+    purpose: "batch";
+};
+export type FileUploadOutput = {
+    file: string;
+    purpose: "batch";
 };
 export type FinanceSearchToolInput = {
     type: "finance_search";
@@ -1265,8 +1419,8 @@ export type NamespaceToolDefOutput = {
     parameters?: {} & Record<string, unknown>;
     type: "function";
 };
-export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | ImageSearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | McpApprovalRequestOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | AdvisorResultOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
-export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | ImageSearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | McpApprovalRequestOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | AdvisorResultOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
+export type OutputItemInput = MessageOutputItemInput | SearchResultsOutputItemInput | ImageSearchResultsOutputItemInput | FetchUrlResultsOutputItemInput | FunctionCallOutputItemInput | McpListToolsOutputItemInput | McpCallOutputItemInput | McpApprovalRequestOutputItemInput | ToolSearchOutputItemInput | SkillLoadedOutputItemInput | SandboxResultsOutputItemInput | SandboxWriteFileOutputItemInput | SandboxReadFileOutputItemInput | SandboxEditFileOutputItemInput | SandboxGrepOutputItemInput | SandboxGlobOutputItemInput | SandboxApplyPatchOutputItemInput | ShareFileOutputItemInput | UnknownOutputItemInput;
+export type OutputItemOutput = MessageOutputItemOutput | SearchResultsOutputItemOutput | ImageSearchResultsOutputItemOutput | FetchUrlResultsOutputItemOutput | FunctionCallOutputItemOutput | McpListToolsOutputItemOutput | McpCallOutputItemOutput | McpApprovalRequestOutputItemOutput | ToolSearchOutputItemOutput | SkillLoadedOutputItemOutput | SandboxResultsOutputItemOutput | SandboxWriteFileOutputItemOutput | SandboxReadFileOutputItemOutput | SandboxEditFileOutputItemOutput | SandboxGrepOutputItemOutput | SandboxGlobOutputItemOutput | SandboxApplyPatchOutputItemOutput | ShareFileOutputItemOutput | UnknownOutputItemOutput;
 export type OutputItemAddedEventInput = {
     item: OutputItemInput;
     output_index: number;
@@ -2311,6 +2465,47 @@ export class AsyncResource {
         this.chat = new AsyncChatResource(client);
     }
 }
+export class BatchesResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    cancel(batchID: string, options?: RequestOptions): APIPromise<BatchOutput> {
+        return this._client.post<BatchOutput>(`/v1/batches/${pathSegment(batchID)}/cancel`, {
+            ...options
+        });
+    }
+    create(body: BatchCreateRequestInput, params?: {
+        "Idempotency-Key"?: string;
+    }, options?: RequestOptions): APIPromise<BatchOutput> {
+        return this._client.post<BatchOutput>("/v1/batches", {
+            ...options,
+            body: body,
+            headers: {
+                "Idempotency-Key": params?.["Idempotency-Key"],
+                ...normalizeHeaders(options?.headers)
+            }
+        });
+    }
+    list(params?: {
+        after?: string;
+        limit?: number;
+    }, options?: RequestOptions): APIPromise<BatchListOutput> {
+        return this._client.get<BatchListOutput>("/v1/batches", {
+            ...options,
+            query: {
+                after: params?.after,
+                limit: params?.limit,
+                ...options?.query
+            }
+        });
+    }
+    retrieve(batchID: string, options?: RequestOptions): APIPromise<BatchOutput> {
+        return this._client.get<BatchOutput>(`/v1/batches/${pathSegment(batchID)}`, {
+            ...options
+        });
+    }
+}
 export class BrowserResource {
     readonly sessions: BrowserSessionsResource;
     constructor(client: SdkTransport) {
@@ -2356,6 +2551,55 @@ export class EmbeddingsResource {
         return this._client.post<EmbeddingsResponseOutput>("/v1/embeddings", {
             ...options,
             body: body
+        });
+    }
+}
+export class FilesResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    content(fileID: string, options?: RequestOptions): APIPromise<Response> {
+        return this._client.get<Response>(`/v1/files/${pathSegment(fileID)}/content`, {
+            ...options,
+            headers: {
+                "Accept": "application/octet-stream",
+                ...normalizeHeaders(options?.headers)
+            },
+            __binaryResponse: true
+        });
+    }
+    create(body: FileUploadInput, options?: RequestOptions): APIPromise<FileObjectOutput> {
+        return this._client.post<FileObjectOutput>("/v1/files", {
+            ...options,
+            body: multipartBody(body, ["file"], ["purpose"])
+        });
+    }
+    delete(fileID: string, options?: RequestOptions): APIPromise<FileDeletedOutput> {
+        return this._client.delete<FileDeletedOutput>(`/v1/files/${pathSegment(fileID)}`, {
+            ...options
+        });
+    }
+    list(params?: {
+        after?: string;
+        limit?: number;
+        order?: "asc" | "desc";
+        purpose?: FilePurposeInput;
+    }, options?: RequestOptions): APIPromise<FileObjectListOutput> {
+        return this._client.get<FileObjectListOutput>("/v1/files", {
+            ...options,
+            query: {
+                after: params?.after,
+                limit: params?.limit,
+                order: params?.order,
+                purpose: params?.purpose,
+                ...options?.query
+            }
+        });
+    }
+    retrieve(fileID: string, options?: RequestOptions): APIPromise<FileObjectOutput> {
+        return this._client.get<FileObjectOutput>(`/v1/files/${pathSegment(fileID)}`, {
+            ...options
         });
     }
 }
@@ -2577,22 +2821,26 @@ export class SkillsResource {
 }
 export class PerplexitySdk {
     readonly async: AsyncResource;
+    readonly batches: BatchesResource;
     readonly browser: BrowserResource;
     readonly chat: ChatResource;
     readonly contextualizedEmbeddings: ContextualizedEmbeddingsResource;
     readonly decisions: DecisionsResource;
     readonly embeddings: EmbeddingsResource;
+    readonly files: FilesResource;
     readonly models: ModelsResource;
     readonly responses: ResponsesResource;
     readonly search: SearchResource;
     readonly skills: SkillsResource;
     constructor(client: SdkTransport) {
         this.async = new AsyncResource(client);
+        this.batches = new BatchesResource(client);
         this.browser = new BrowserResource(client);
         this.chat = new ChatResource(client);
         this.contextualizedEmbeddings = new ContextualizedEmbeddingsResource(client);
         this.decisions = new DecisionsResource(client);
         this.embeddings = new EmbeddingsResource(client);
+        this.files = new FilesResource(client);
         this.models = new ModelsResource(client);
         this.responses = new ResponsesResource(client);
         this.search = new SearchResource(client);
@@ -2600,6 +2848,8 @@ export class PerplexitySdk {
     }
 }
 export class Async extends AsyncResource {
+}
+export class Batches extends BatchesResource {
 }
 export class Browser extends BrowserResource {
 }
@@ -2611,6 +2861,8 @@ export class Decisions extends DecisionsResource {
 }
 export class Embeddings extends EmbeddingsResource {
 }
+export class Files extends FilesResource {
+}
 export class Models extends ModelsResource {
 }
 export class Responses extends ResponsesResource {
@@ -2621,6 +2873,9 @@ export class Skills extends SkillsResource {
 }
 export type Annotation = AnnotationOutput;
 export type APIPublicSearchResult = ApiPublicSearchResultOutput;
+export type Batch = BatchOutput;
+export type BatchCreateParams = BatchCreateRequestInput;
+export type BatchListResponse = BatchListOutput;
 export type BrowserSessionResponse = BrowserSessionResponseOutput;
 export type ChatMessageInput = ChatMessageInputInput;
 export type ChatMessageOutput = ChatMessageOutputOutput;
@@ -2638,6 +2893,10 @@ export type EmbeddingCreateResponse = EmbeddingsResponseOutput;
 export type EmbeddingObject = EmbeddingObjectOutput;
 export type EmbeddingsUsage = EmbeddingsUsageOutput;
 export type ErrorInfo = ErrorInfoOutput;
+export type FileCreateParams = FileUploadInput;
+export type FileDeleted = FileDeletedOutput;
+export type FileListResponse = FileObjectListOutput;
+export type FileObject = FileObjectOutput;
 export type FunctionCallOutputItem = FunctionCallOutputItemOutput;
 export type FunctionTool = FunctionToolInput;
 export type ImageResult = ImageResultOutput;
@@ -2695,6 +2954,11 @@ export namespace Async {
         }
     }
 }
+export namespace Batches {
+    export type Batch = BatchOutput;
+    export type BatchCreateParams = BatchCreateRequestInput;
+    export type BatchListResponse = BatchListOutput;
+}
 export namespace Browser {
     export class Sessions extends BrowserSessionsResource {
     }
@@ -2737,6 +3001,12 @@ export namespace Decisions {
 export namespace Embeddings {
     export type EmbeddingCreateParams = EmbeddingsRequestInput;
     export type EmbeddingCreateResponse = EmbeddingsResponseOutput;
+}
+export namespace Files {
+    export type FileCreateParams = FileUploadInput;
+    export type FileDeleted = FileDeletedOutput;
+    export type FileListResponse = FileObjectListOutput;
+    export type FileObject = FileObjectOutput;
 }
 export namespace Models {
     export type Model = ModelOutput;

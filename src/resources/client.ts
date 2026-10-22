@@ -2,11 +2,13 @@ import * as API from '../generated/api.js';
 import type { SdkTransport } from '../generated/api.js';
 export interface ClientResources {
     readonly async: API.Async;
+    readonly batches: API.Batches;
     readonly browser: API.Browser;
     readonly chat: API.Chat;
     readonly contextualizedEmbeddings: API.ContextualizedEmbeddings;
     readonly decisions: API.Decisions;
     readonly embeddings: API.Embeddings;
+    readonly files: API.Files;
     readonly models: API.Models;
     readonly responses: API.Responses;
     readonly search: API.Search;
@@ -14,11 +16,13 @@ export interface ClientResources {
 }
 export const clientResourceClasses = {
     Async: API.Async,
+    Batches: API.Batches,
     Browser: API.Browser,
     Chat: API.Chat,
     ContextualizedEmbeddings: API.ContextualizedEmbeddings,
     Decisions: API.Decisions,
     Embeddings: API.Embeddings,
+    Files: API.Files,
     Models: API.Models,
     Responses: API.Responses,
     Search: API.Search,
@@ -27,11 +31,13 @@ export const clientResourceClasses = {
 export function createClientResources(client: SdkTransport): ClientResources {
     return {
         async: new API.Async(client),
+        batches: new API.Batches(client),
         browser: new API.Browser(client),
         chat: new API.Chat(client),
         contextualizedEmbeddings: new API.ContextualizedEmbeddings(client),
         decisions: new API.Decisions(client),
         embeddings: new API.Embeddings(client),
+        files: new API.Files(client),
         models: new API.Models(client),
         responses: new API.Responses(client),
         search: new API.Search(client),
@@ -43,6 +49,10 @@ declare module '../client.js' {
     }
     namespace Perplexity {
         export import Async = API.Async;
+        export import Batches = API.Batches;
+        export type Batch = API.Batches.Batch;
+        export type BatchCreateParams = API.Batches.BatchCreateParams;
+        export type BatchListResponse = API.Batches.BatchListResponse;
         export import Browser = API.Browser;
         export type SessionCreateParams = API.Browser.SessionCreateParams;
         export import Chat = API.Chat;
@@ -61,6 +71,11 @@ declare module '../client.js' {
         export import Embeddings = API.Embeddings;
         export type EmbeddingCreateParams = API.Embeddings.EmbeddingCreateParams;
         export type EmbeddingCreateResponse = API.Embeddings.EmbeddingCreateResponse;
+        export import Files = API.Files;
+        export type FileCreateParams = API.Files.FileCreateParams;
+        export type FileDeleted = API.Files.FileDeleted;
+        export type FileListResponse = API.Files.FileListResponse;
+        export type FileObject = API.Files.FileObject;
         export import Models = API.Models;
         export type Model = API.Models.Model;
         export type ModelListResponse = API.Models.ModelListResponse;
