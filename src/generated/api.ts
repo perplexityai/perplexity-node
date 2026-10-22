@@ -1703,6 +1703,7 @@ export type ResponsesObjectTypeInput = "response";
 export type ResponsesObjectTypeOutput = "response";
 export type ResponsesRequestInput = {
     background?: boolean | null;
+    effort?: string;
     input: InputInput;
     instructions?: string;
     language_preference?: string;
@@ -1710,6 +1711,7 @@ export type ResponsesRequestInput = {
     max_steps?: number;
     model?: string;
     models?: string[];
+    /** @deprecated Use effort instead. If both are supplied, effort takes precedence when non-null. */
     preset?: string;
     previous_response_id?: string;
     profile?: ProfileReferenceInput;
@@ -1728,6 +1730,7 @@ export type ResponsesRequestInput = {
 };
 export type ResponsesRequestOutput = {
     background?: boolean | null;
+    effort?: string;
     input: InputOutput;
     instructions?: string;
     language_preference?: string;
@@ -1735,6 +1738,7 @@ export type ResponsesRequestOutput = {
     max_steps?: number;
     model?: string;
     models?: string[];
+    /** @deprecated Use effort instead. If both are supplied, effort takes precedence when non-null. */
     preset?: string;
     previous_response_id?: string;
     profile?: ProfileReferenceOutput;
@@ -1754,11 +1758,13 @@ export type ResponsesRequestOutput = {
 export type ResponsesResponseInput = {
     background?: boolean;
     created_at: number;
+    effort?: string;
     error?: ErrorInfoInput;
     id: string;
     model: string;
     object: ResponsesObjectTypeInput;
     output: OutputItemInput[];
+    /** @deprecated Use effort instead. Contains the same configuration and version. */
     preset?: string;
     previous_response_id?: string | null;
     prompt_cache_key?: string | null;
@@ -1770,11 +1776,13 @@ export type ResponsesResponseInput = {
 export type ResponsesResponseOutput = {
     background?: boolean;
     created_at: number;
+    effort?: string;
     error?: ErrorInfoOutput;
     id: string;
     model: string;
     object: ResponsesObjectTypeOutput;
     output: OutputItemOutput[];
+    /** @deprecated Use effort instead. Contains the same configuration and version. */
     preset?: string;
     previous_response_id?: string | null;
     prompt_cache_key?: string | null;
