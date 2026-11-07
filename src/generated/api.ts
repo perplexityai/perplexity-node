@@ -737,13 +737,21 @@ export type DecisionsResponseOutput = {
     model: string;
     usage: DecisionUsageOutput;
 };
+export type DecisionToolCallDetailsInput = {
+    invocation: number;
+};
+export type DecisionToolCallDetailsOutput = {
+    invocation: number;
+};
 export type DecisionUsageInput = {
     input_tokens: number;
     output_tokens: number;
+    tool_calls_details?: {} & Record<string, DecisionToolCallDetailsInput>;
 };
 export type DecisionUsageOutput = {
     input_tokens: number;
     output_tokens: number;
+    tool_calls_details?: {} & Record<string, DecisionToolCallDetailsOutput>;
 };
 export type EmbeddingObjectInput = {
     embedding?: string;
