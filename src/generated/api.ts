@@ -737,20 +737,30 @@ export type DecisionsResponseOutput = {
     model: string;
     usage: DecisionUsageOutput;
 };
+export type DecisionToolCallDetailsInput = {
+    invocation: number;
+};
+export type DecisionToolCallDetailsOutput = {
+    invocation: number;
+};
 export type DecisionUsageInput = {
     input_tokens: number;
     output_tokens: number;
+    tool_calls_details?: {} & Record<string, DecisionToolCallDetailsInput>;
 };
 export type DecisionUsageOutput = {
     input_tokens: number;
     output_tokens: number;
+    tool_calls_details?: {} & Record<string, DecisionToolCallDetailsOutput>;
 };
 export type EmbeddingObjectInput = {
+    data?: EmbeddingObjectInput[];
     embedding?: string;
     index?: number;
     object?: string;
 };
 export type EmbeddingObjectOutput = {
+    data?: EmbeddingObjectOutput[];
     embedding?: string;
     index?: number;
     object?: string;
@@ -758,14 +768,24 @@ export type EmbeddingObjectOutput = {
 export type EmbeddingsRequestInput = {
     dimensions?: number;
     encoding_format?: "base64_int8" | "base64_binary";
-    input: string | string[];
-    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b";
+    input: string | string[] | string[][] | {
+        image: string;
+        type: "image";
+    }[];
+    input_type?: "query" | "document";
+    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b" | "pplx-embed-v2-context-9b" | "pplx-embed-v2-context-0.6b";
+    num_chunks?: 1 | 2 | 4 | 8 | 16 | 32;
 };
 export type EmbeddingsRequestOutput = {
     dimensions?: number;
     encoding_format?: "base64_int8" | "base64_binary";
-    input: string | string[];
-    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b";
+    input: string | string[] | string[][] | {
+        image: string;
+        type: "image";
+    }[];
+    input_type?: "query" | "document";
+    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b" | "pplx-embed-v2-context-9b" | "pplx-embed-v2-context-0.6b";
+    num_chunks?: 1 | 2 | 4 | 8 | 16 | 32;
 };
 export type EmbeddingsResponseInput = {
     data?: EmbeddingObjectInput[];
