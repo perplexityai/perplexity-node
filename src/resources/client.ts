@@ -10,6 +10,7 @@ export interface ClientResources {
     readonly embeddings: API.Embeddings;
     readonly files: API.Files;
     readonly models: API.Models;
+    readonly monitors: API.Monitors;
     readonly responses: API.Responses;
     readonly search: API.Search;
     readonly skills: API.Skills;
@@ -24,6 +25,7 @@ export const clientResourceClasses = {
     Embeddings: API.Embeddings,
     Files: API.Files,
     Models: API.Models,
+    Monitors: API.Monitors,
     Responses: API.Responses,
     Search: API.Search,
     Skills: API.Skills
@@ -39,6 +41,7 @@ export function createClientResources(client: SdkTransport): ClientResources {
         embeddings: new API.Embeddings(client),
         files: new API.Files(client),
         models: new API.Models(client),
+        monitors: new API.Monitors(client),
         responses: new API.Responses(client),
         search: new API.Search(client),
         skills: new API.Skills(client)
@@ -79,6 +82,20 @@ declare module '../client.js' {
         export import Models = API.Models;
         export type Model = API.Models.Model;
         export type ModelListResponse = API.Models.ModelListResponse;
+        export import Monitors = API.Monitors;
+        export type Monitor = API.Monitors.Monitor;
+        export type MonitorChangesDetectedEvent = API.Monitors.MonitorChangesDetectedEvent;
+        export type MonitorCreateParams = API.Monitors.MonitorCreateParams;
+        export type MonitorDeleteResponse = API.Monitors.MonitorDeleteResponse;
+        export type MonitorEvent = API.Monitors.MonitorEvent;
+        export type MonitorListResponse = API.Monitors.MonitorListResponse;
+        export type MonitorPausedEvent = API.Monitors.MonitorPausedEvent;
+        export type MonitorRun = API.Monitors.MonitorRun;
+        export type MonitorRunCompletedEvent = API.Monitors.MonitorRunCompletedEvent;
+        export type MonitorRunListResponse = API.Monitors.MonitorRunListResponse;
+        export type MonitorUpdateParams = API.Monitors.MonitorUpdateParams;
+        export type MonitorWebhookTestEvent = API.Monitors.MonitorWebhookTestEvent;
+        export type MonitorWebhookTestResponse = API.Monitors.MonitorWebhookTestResponse;
         export import Responses = API.Responses;
         export type Annotation = API.Responses.Annotation;
         export type ContentPart = API.Responses.ContentPart;
