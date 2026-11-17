@@ -613,6 +613,22 @@ export type CostOutput = {
 };
 export type CreateBrowserSessionRequestInput = {};
 export type CreateBrowserSessionRequestOutput = {};
+export type CreateMonitorRequestInput = {
+    goal?: string;
+    metadata?: MonitorMetadataInput;
+    name: string;
+    schedule: MonitorScheduleRequestInput;
+    targets: MonitorTargetsInput;
+    webhook?: (Record<string, unknown> & (MonitorWebhookRequestInput)) | null;
+};
+export type CreateMonitorRequestOutput = {
+    goal?: string;
+    metadata?: MonitorMetadataOutput;
+    name: string;
+    schedule: MonitorScheduleRequestOutput;
+    targets: MonitorTargetsOutput;
+    webhook?: (Record<string, unknown> & (MonitorWebhookRequestOutput)) | null;
+};
 export type CurrencyInput = "USD";
 export type CurrencyOutput = "USD";
 export type CustomSkillInput = {
@@ -737,20 +753,40 @@ export type DecisionsResponseOutput = {
     model: string;
     usage: DecisionUsageOutput;
 };
+export type DecisionToolCallDetailsInput = {
+    invocation: number;
+};
+export type DecisionToolCallDetailsOutput = {
+    invocation: number;
+};
 export type DecisionUsageInput = {
     input_tokens: number;
     output_tokens: number;
+    tool_calls_details?: {} & Record<string, DecisionToolCallDetailsInput>;
 };
 export type DecisionUsageOutput = {
     input_tokens: number;
     output_tokens: number;
+    tool_calls_details?: {} & Record<string, DecisionToolCallDetailsOutput>;
+};
+export type DeleteMonitorResponseInput = {
+    deleted: boolean;
+    id: string;
+    object: "monitor";
+};
+export type DeleteMonitorResponseOutput = {
+    deleted: boolean;
+    id: string;
+    object: "monitor";
 };
 export type EmbeddingObjectInput = {
+    data?: EmbeddingObjectInput[];
     embedding?: string;
     index?: number;
     object?: string;
 };
 export type EmbeddingObjectOutput = {
+    data?: EmbeddingObjectOutput[];
     embedding?: string;
     index?: number;
     object?: string;
@@ -758,14 +794,24 @@ export type EmbeddingObjectOutput = {
 export type EmbeddingsRequestInput = {
     dimensions?: number;
     encoding_format?: "base64_int8" | "base64_binary";
-    input: string | string[];
-    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b";
+    input: string | string[] | string[][] | {
+        image: string;
+        type: "image";
+    }[];
+    input_type?: "query" | "document";
+    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b" | "pplx-embed-v2-context-9b" | "pplx-embed-v2-context-0.6b";
+    num_chunks?: 1 | 2 | 4 | 8 | 16 | 32;
 };
 export type EmbeddingsRequestOutput = {
     dimensions?: number;
     encoding_format?: "base64_int8" | "base64_binary";
-    input: string | string[];
-    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b";
+    input: string | string[] | string[][] | {
+        image: string;
+        type: "image";
+    }[];
+    input_type?: "query" | "document";
+    model: "pplx-embed-v1-0.6b" | "pplx-embed-v1-4b" | "pplx-embed-v2-context-9b" | "pplx-embed-v2-context-0.6b";
+    num_chunks?: 1 | 2 | 4 | 8 | 16 | 32;
 };
 export type EmbeddingsResponseInput = {
     data?: EmbeddingObjectInput[];
@@ -806,6 +852,20 @@ export type ErrorInfoOutput = {
     code?: string;
     message: string;
     type?: string;
+};
+export type EventMonitorInput = {
+    id: string;
+    metadata: {} & Record<string, string>;
+    name: string;
+    pause_reason?: MonitorPauseReasonInput;
+    status: MonitorStatusInput;
+};
+export type EventMonitorOutput = {
+    id: string;
+    metadata: {} & Record<string, string>;
+    name: string;
+    pause_reason?: MonitorPauseReasonOutput;
+    status: MonitorStatusOutput;
 };
 export type EventTypeInput = "response.created" | "response.in_progress" | "response.completed" | "response.failed" | "response.output_item.added" | "response.output_item.done" | "response.output_text.delta" | "response.output_text.done" | "response.reasoning.started" | "response.reasoning.search_queries" | "response.reasoning.search_results" | "response.reasoning.image_search_queries" | "response.reasoning.image_search_results" | "response.reasoning.fetch_url_queries" | "response.reasoning.fetch_url_results" | "response.reasoning.stopped" | "response.skill.loaded";
 export type EventTypeOutput = "response.created" | "response.in_progress" | "response.completed" | "response.failed" | "response.output_item.added" | "response.output_item.done" | "response.output_text.delta" | "response.output_text.done" | "response.reasoning.started" | "response.reasoning.search_queries" | "response.reasoning.search_results" | "response.reasoning.image_search_queries" | "response.reasoning.image_search_results" | "response.reasoning.fetch_url_queries" | "response.reasoning.fetch_url_results" | "response.reasoning.stopped" | "response.skill.loaded";
@@ -1395,6 +1455,472 @@ export type ModelListOutput = {
     data: ModelOutput[];
     object: "list";
 };
+export type MonitorInput = {
+    created_at: MonitorTimestampInput;
+    current_run_id?: string;
+    goal: string;
+    id: string;
+    last_run?: MonitorLastRunInput;
+    metadata: MonitorMetadataInput;
+    name: string;
+    next_run_at?: MonitorTimestampInput;
+    object: "monitor";
+    pause_reason?: MonitorPauseReasonInput;
+    schedule: MonitorScheduleInput;
+    status: MonitorStatusInput;
+    targets: MonitorTargetInput[];
+    updated_at: MonitorTimestampInput;
+    webhook?: MonitorWebhookInput;
+};
+export type MonitorOutput = {
+    created_at: MonitorTimestampOutput;
+    current_run_id?: string;
+    goal: string;
+    id: string;
+    last_run?: MonitorLastRunOutput;
+    metadata: MonitorMetadataOutput;
+    name: string;
+    next_run_at?: MonitorTimestampOutput;
+    object: "monitor";
+    pause_reason?: MonitorPauseReasonOutput;
+    schedule: MonitorScheduleOutput;
+    status: MonitorStatusOutput;
+    targets: MonitorTargetOutput[];
+    updated_at: MonitorTimestampOutput;
+    webhook?: MonitorWebhookOutput;
+};
+export type MonitorChangeInput = MonitorSearchResultChangeInput | MonitorPageChangeInput;
+export type MonitorChangeOutput = MonitorSearchResultChangeOutput | MonitorPageChangeOutput;
+export type MonitorChangeIdInput = string;
+export type MonitorChangeIdOutput = string;
+export type MonitorChangesDetectedEventInput = {
+    data: MonitorRunEventDataInput;
+    id: MonitorEventIdInput;
+    object: MonitorEventObjectInput;
+    timestamp: MonitorTimestampInput;
+    type: "monitor.changes.detected";
+};
+export type MonitorChangesDetectedEventOutput = {
+    data: MonitorRunEventDataOutput;
+    id: MonitorEventIdOutput;
+    object: MonitorEventObjectOutput;
+    timestamp: MonitorTimestampOutput;
+    type: "monitor.changes.detected";
+};
+export type MonitorCronScheduleInput = {
+    cron: string;
+    timezone: string;
+    type: "cron";
+};
+export type MonitorCronScheduleOutput = {
+    cron: string;
+    timezone: string;
+    type: "cron";
+};
+export type MonitorCronScheduleRequestInput = {
+    cron: string;
+    timezone?: string;
+    type: "cron";
+};
+export type MonitorCronScheduleRequestOutput = {
+    cron: string;
+    timezone?: string;
+    type: "cron";
+};
+export type MonitorCurrencyInput = "USD";
+export type MonitorCurrencyOutput = "USD";
+export type MonitorDiffInput = {
+    added_lines: number;
+    removed_lines: number;
+    truncated: boolean;
+    unified: string;
+};
+export type MonitorDiffOutput = {
+    added_lines: number;
+    removed_lines: number;
+    truncated: boolean;
+    unified: string;
+};
+export type MonitorDomainInput = string;
+export type MonitorDomainOutput = string;
+export type MonitorEventInput = MonitorChangesDetectedEventInput | MonitorRunCompletedEventInput | MonitorPausedEventInput | MonitorWebhookTestEventInput;
+export type MonitorEventOutput = MonitorChangesDetectedEventOutput | MonitorRunCompletedEventOutput | MonitorPausedEventOutput | MonitorWebhookTestEventOutput;
+export type MonitorEventIdInput = string;
+export type MonitorEventIdOutput = string;
+export type MonitorEventObjectInput = "event";
+export type MonitorEventObjectOutput = "event";
+export type MonitorEventTypeInput = "monitor.changes.detected" | "monitor.run.completed" | "monitor.paused";
+export type MonitorEventTypeOutput = "monitor.changes.detected" | "monitor.run.completed" | "monitor.paused";
+export type MonitorFreshnessInput = "published" | "updated";
+export type MonitorFreshnessOutput = "published" | "updated";
+export type MonitorIntervalScheduleInput = {
+    interval: string;
+    type: "interval";
+};
+export type MonitorIntervalScheduleOutput = {
+    interval: string;
+    type: "interval";
+};
+export type MonitorIntervalScheduleRequestInput = {
+    interval: string;
+    type: "interval";
+};
+export type MonitorIntervalScheduleRequestOutput = {
+    interval: string;
+    type: "interval";
+};
+export type MonitorLastRunInput = {
+    change_count: number;
+    finished_at: MonitorTimestampInput;
+    id: string;
+    status: MonitorRunStatusInput;
+};
+export type MonitorLastRunOutput = {
+    change_count: number;
+    finished_at: MonitorTimestampOutput;
+    id: string;
+    status: MonitorRunStatusOutput;
+};
+export type MonitorListInput = {
+    data: MonitorInput[];
+    has_more: boolean;
+    object: "list";
+};
+export type MonitorListOutput = {
+    data: MonitorOutput[];
+    has_more: boolean;
+    object: "list";
+};
+export type MonitorMetadataInput = {} & Record<string, string>;
+export type MonitorMetadataOutput = {} & Record<string, string>;
+export type MonitorPageChangeInput = {
+    confidence: number;
+    diff: MonitorDiffInput;
+    fetched_at: MonitorTimestampInput;
+    id: MonitorChangeIdInput;
+    previous_fetched_at: MonitorTimestampInput;
+    title?: string;
+    type: "page_change";
+    url: string;
+};
+export type MonitorPageChangeOutput = {
+    confidence: number;
+    diff: MonitorDiffOutput;
+    fetched_at: MonitorTimestampOutput;
+    id: MonitorChangeIdOutput;
+    previous_fetched_at: MonitorTimestampOutput;
+    title?: string;
+    type: "page_change";
+    url: string;
+};
+export type MonitorPageTargetInput = {
+    type: "page";
+    url: string;
+};
+export type MonitorPageTargetOutput = {
+    type: "page";
+    url: string;
+};
+export type MonitorPageTargetErrorInput = {
+    code: MonitorTargetErrorCodeInput;
+    message: string;
+    status_code?: number;
+    type: "page";
+    url: string;
+};
+export type MonitorPageTargetErrorOutput = {
+    code: MonitorTargetErrorCodeOutput;
+    message: string;
+    status_code?: number;
+    type: "page";
+    url: string;
+};
+export type MonitorPageTargetRequestInput = {
+    type: "page";
+    url: string;
+};
+export type MonitorPageTargetRequestOutput = {
+    type: "page";
+    url: string;
+};
+export type MonitorPausedEventInput = {
+    data: MonitorPausedEventDataInput;
+    id: MonitorEventIdInput;
+    object: MonitorEventObjectInput;
+    timestamp: MonitorTimestampInput;
+    type: "monitor.paused";
+};
+export type MonitorPausedEventOutput = {
+    data: MonitorPausedEventDataOutput;
+    id: MonitorEventIdOutput;
+    object: MonitorEventObjectOutput;
+    timestamp: MonitorTimestampOutput;
+    type: "monitor.paused";
+};
+export type MonitorPausedEventDataInput = {
+    monitor: PausedEventMonitorInput;
+    run?: MonitorRunInput;
+};
+export type MonitorPausedEventDataOutput = {
+    monitor: PausedEventMonitorOutput;
+    run?: MonitorRunOutput;
+};
+export type MonitorPauseReasonInput = "user" | "insufficient_credits" | "org_policy" | "webhook_failing" | "source_failing";
+export type MonitorPauseReasonOutput = "user" | "insufficient_credits" | "org_policy" | "webhook_failing" | "source_failing";
+export type MonitorRunInput = {
+    changes: MonitorChangeInput[];
+    counts: MonitorRunCountsInput;
+    created_at: MonitorTimestampInput;
+    error?: MonitorRunErrorInput;
+    finished_at?: MonitorTimestampInput;
+    id: string;
+    monitor_id: string;
+    object: "monitor.run";
+    status: MonitorRunStatusInput;
+    target_errors: MonitorTargetErrorInput[];
+    trigger: MonitorRunTriggerInput;
+    usage: MonitorRunUsageInput;
+    window?: MonitorRunWindowInput;
+};
+export type MonitorRunOutput = {
+    changes: MonitorChangeOutput[];
+    counts: MonitorRunCountsOutput;
+    created_at: MonitorTimestampOutput;
+    error?: MonitorRunErrorOutput;
+    finished_at?: MonitorTimestampOutput;
+    id: string;
+    monitor_id: string;
+    object: "monitor.run";
+    status: MonitorRunStatusOutput;
+    target_errors: MonitorTargetErrorOutput[];
+    trigger: MonitorRunTriggerOutput;
+    usage: MonitorRunUsageOutput;
+    window?: MonitorRunWindowOutput;
+};
+export type MonitorRunCompletedEventInput = {
+    data: MonitorRunEventDataInput;
+    id: MonitorEventIdInput;
+    object: MonitorEventObjectInput;
+    timestamp: MonitorTimestampInput;
+    type: "monitor.run.completed";
+};
+export type MonitorRunCompletedEventOutput = {
+    data: MonitorRunEventDataOutput;
+    id: MonitorEventIdOutput;
+    object: MonitorEventObjectOutput;
+    timestamp: MonitorTimestampOutput;
+    type: "monitor.run.completed";
+};
+export type MonitorRunCostInput = {
+    currency: MonitorCurrencyInput;
+    total_cost: number;
+};
+export type MonitorRunCostOutput = {
+    currency: MonitorCurrencyOutput;
+    total_cost: number;
+};
+export type MonitorRunCountsInput = {
+    candidates: number;
+    changes: number;
+    errors: number;
+};
+export type MonitorRunCountsOutput = {
+    candidates: number;
+    changes: number;
+    errors: number;
+};
+export type MonitorRunErrorInput = {
+    code?: MonitorRunFailureCodeInput;
+    message: string;
+    skip_reason?: MonitorPauseReasonInput;
+};
+export type MonitorRunErrorOutput = {
+    code?: MonitorRunFailureCodeOutput;
+    message: string;
+    skip_reason?: MonitorPauseReasonOutput;
+};
+export type MonitorRunEventDataInput = {
+    monitor: EventMonitorInput;
+    run: MonitorRunInput;
+};
+export type MonitorRunEventDataOutput = {
+    monitor: EventMonitorOutput;
+    run: MonitorRunOutput;
+};
+export type MonitorRunFailureCodeInput = "gate_unavailable" | "detect_failed" | "judge_failed" | "source_failed" | "notify_failed" | "timed_out";
+export type MonitorRunFailureCodeOutput = "gate_unavailable" | "detect_failed" | "judge_failed" | "source_failed" | "notify_failed" | "timed_out";
+export type MonitorRunListInput = {
+    data: MonitorRunInput[];
+    has_more: boolean;
+    object: "list";
+};
+export type MonitorRunListOutput = {
+    data: MonitorRunOutput[];
+    has_more: boolean;
+    object: "list";
+};
+export type MonitorRunStatusInput = "queued" | "running" | "succeeded" | "failed" | "skipped";
+export type MonitorRunStatusOutput = "queued" | "running" | "succeeded" | "failed" | "skipped";
+export type MonitorRunTriggerInput = "schedule" | "manual";
+export type MonitorRunTriggerOutput = "schedule" | "manual";
+export type MonitorRunUsageInput = {
+    cost: MonitorRunCostInput;
+    fetched_urls: number;
+};
+export type MonitorRunUsageOutput = {
+    cost: MonitorRunCostOutput;
+    fetched_urls: number;
+};
+export type MonitorRunWindowInput = {
+    from: MonitorTimestampInput;
+    to: MonitorTimestampInput;
+};
+export type MonitorRunWindowOutput = {
+    from: MonitorTimestampOutput;
+    to: MonitorTimestampOutput;
+};
+export type MonitorScheduleInput = MonitorIntervalScheduleInput | MonitorCronScheduleInput;
+export type MonitorScheduleOutput = MonitorIntervalScheduleOutput | MonitorCronScheduleOutput;
+export type MonitorScheduleRequestInput = MonitorIntervalScheduleRequestInput | MonitorCronScheduleRequestInput;
+export type MonitorScheduleRequestOutput = MonitorIntervalScheduleRequestOutput | MonitorCronScheduleRequestOutput;
+export type MonitorSearchFiltersInput = {
+    exclude_domains: MonitorDomainInput[];
+    freshness: MonitorFreshnessInput[];
+    include_domains: MonitorDomainInput[];
+};
+export type MonitorSearchFiltersOutput = {
+    exclude_domains: MonitorDomainOutput[];
+    freshness: MonitorFreshnessOutput[];
+    include_domains: MonitorDomainOutput[];
+};
+export type MonitorSearchFiltersRequestInput = {
+    exclude_domains?: string[];
+    freshness?: MonitorFreshnessInput[];
+    include_domains?: string[];
+};
+export type MonitorSearchFiltersRequestOutput = {
+    exclude_domains?: string[];
+    freshness?: MonitorFreshnessOutput[];
+    include_domains?: string[];
+};
+export type MonitorSearchResultChangeInput = {
+    confidence: number;
+    id: MonitorChangeIdInput;
+    last_updated_at?: MonitorTimestampInput;
+    published_at?: MonitorTimestampInput;
+    snippet?: string;
+    title?: string;
+    type: "search_result";
+    url: string;
+};
+export type MonitorSearchResultChangeOutput = {
+    confidence: number;
+    id: MonitorChangeIdOutput;
+    last_updated_at?: MonitorTimestampOutput;
+    published_at?: MonitorTimestampOutput;
+    snippet?: string;
+    title?: string;
+    type: "search_result";
+    url: string;
+};
+export type MonitorSearchTargetInput = {
+    filters: MonitorSearchFiltersInput;
+    max_results: number;
+    query: string;
+    type: "search";
+};
+export type MonitorSearchTargetOutput = {
+    filters: MonitorSearchFiltersOutput;
+    max_results: number;
+    query: string;
+    type: "search";
+};
+export type MonitorSearchTargetRequestInput = {
+    filters?: MonitorSearchFiltersRequestInput;
+    max_results?: number;
+    query: string;
+    type: "search";
+};
+export type MonitorSearchTargetRequestOutput = {
+    filters?: MonitorSearchFiltersRequestOutput;
+    max_results?: number;
+    query: string;
+    type: "search";
+};
+export type MonitorStatusInput = "active" | "paused";
+export type MonitorStatusOutput = "active" | "paused";
+export type MonitorTargetInput = MonitorSearchTargetInput | MonitorPageTargetInput;
+export type MonitorTargetOutput = MonitorSearchTargetOutput | MonitorPageTargetOutput;
+export type MonitorTargetErrorInput = MonitorPageTargetErrorInput;
+export type MonitorTargetErrorOutput = MonitorPageTargetErrorOutput;
+export type MonitorTargetErrorCodeInput = "invalid_url" | "blocked" | "no_content" | "load_failed" | "timeout" | "fetch_unavailable" | "http_status";
+export type MonitorTargetErrorCodeOutput = "invalid_url" | "blocked" | "no_content" | "load_failed" | "timeout" | "fetch_unavailable" | "http_status";
+export type MonitorTargetRequestInput = MonitorSearchTargetRequestInput | MonitorPageTargetRequestInput;
+export type MonitorTargetRequestOutput = MonitorSearchTargetRequestOutput | MonitorPageTargetRequestOutput;
+export type MonitorTargetsInput = MonitorTargetRequestInput[];
+export type MonitorTargetsOutput = MonitorTargetRequestOutput[];
+export type MonitorTimestampInput = string;
+export type MonitorTimestampOutput = string;
+export type MonitorWebhookInput = {
+    events: MonitorEventTypeInput[];
+    secret?: MonitorWebhookSecretInput;
+    url: string;
+};
+export type MonitorWebhookOutput = {
+    events: MonitorEventTypeOutput[];
+    secret?: MonitorWebhookSecretOutput;
+    url: string;
+};
+export type MonitorWebhookRequestInput = {
+    events?: MonitorEventTypeInput[];
+    secret?: MonitorWebhookSecretInput;
+    url: string;
+} | null;
+export type MonitorWebhookRequestOutput = {
+    events?: MonitorEventTypeOutput[];
+    secret?: MonitorWebhookSecretOutput;
+    url: string;
+} | null;
+export type MonitorWebhookSecretInput = string;
+export type MonitorWebhookSecretOutput = string;
+export type MonitorWebhookTestInput = {
+    delivered: boolean;
+    duration_ms: number;
+    error?: MonitorWebhookTestErrorInput;
+    event_id: string;
+    object: "monitor.webhook_test";
+    status_code?: number;
+};
+export type MonitorWebhookTestOutput = {
+    delivered: boolean;
+    duration_ms: number;
+    error?: MonitorWebhookTestErrorOutput;
+    event_id: string;
+    object: "monitor.webhook_test";
+    status_code?: number;
+};
+export type MonitorWebhookTestErrorInput = "http_status" | "timeout" | "network_error" | "tls_certificate" | "blocked_address" | "invalid_url" | "send_failed";
+export type MonitorWebhookTestErrorOutput = "http_status" | "timeout" | "network_error" | "tls_certificate" | "blocked_address" | "invalid_url" | "send_failed";
+export type MonitorWebhookTestEventInput = {
+    data: MonitorWebhookTestEventDataInput;
+    id: MonitorEventIdInput;
+    object: MonitorEventObjectInput;
+    timestamp: MonitorTimestampInput;
+    type: "monitor.webhook.test";
+};
+export type MonitorWebhookTestEventOutput = {
+    data: MonitorWebhookTestEventDataOutput;
+    id: MonitorEventIdOutput;
+    object: MonitorEventObjectOutput;
+    timestamp: MonitorTimestampOutput;
+    type: "monitor.webhook.test";
+};
+export type MonitorWebhookTestEventDataInput = {
+    monitor: EventMonitorInput;
+};
+export type MonitorWebhookTestEventDataOutput = {
+    monitor: EventMonitorOutput;
+};
 export type NamespaceToolInput = {
     description: string;
     name: string;
@@ -1462,6 +1988,20 @@ export type ParameterSpecOutput = {
     properties: {} & Record<string, unknown>;
     required?: string[] | null;
     type: string;
+};
+export type PausedEventMonitorInput = {
+    id: string;
+    metadata: {} & Record<string, string>;
+    name: string;
+    pause_reason: MonitorPauseReasonInput;
+    status: "paused";
+};
+export type PausedEventMonitorOutput = {
+    id: string;
+    metadata: {} & Record<string, string>;
+    name: string;
+    pause_reason: MonitorPauseReasonOutput;
+    status: "paused";
 };
 export type PeopleSearchToolInput = {
     type: "people_search";
@@ -2227,6 +2767,22 @@ export type UnknownOutputItemOutput = {
     payload: {} & Record<string, unknown>;
     type: "unknown";
 };
+export type UpdateMonitorRequestInput = {
+    goal?: string | null;
+    metadata?: ({} & Record<string, string>) | null;
+    name?: string;
+    schedule?: MonitorScheduleRequestInput;
+    targets?: MonitorTargetsInput;
+    webhook?: (Record<string, unknown> & (MonitorWebhookRequestInput)) | null;
+};
+export type UpdateMonitorRequestOutput = {
+    goal?: string | null;
+    metadata?: ({} & Record<string, string>) | null;
+    name?: string;
+    schedule?: MonitorScheduleRequestOutput;
+    targets?: MonitorTargetsOutput;
+    webhook?: (Record<string, unknown> & (MonitorWebhookRequestOutput)) | null;
+};
 export type URLInput = {
     url: string;
 };
@@ -2425,6 +2981,43 @@ export class ChatCompletionsResource {
         });
     }
 }
+export class MonitorsRunsResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    list(monitorID: string, params?: {
+        after?: string;
+        limit?: number;
+    }, options?: RequestOptions): APIPromise<MonitorRunListOutput> {
+        return this._client.get<MonitorRunListOutput>(`/v1/monitors/${pathSegment(monitorID)}/runs`, {
+            ...options,
+            query: {
+                after: params?.after,
+                limit: params?.limit,
+                ...options?.query
+            }
+        });
+    }
+    retrieve(runID: string, params: {
+        monitor_id: string;
+    }, options?: RequestOptions): APIPromise<MonitorRunOutput> {
+        return this._client.get<MonitorRunOutput>(`/v1/monitors/${pathSegment(params.monitor_id)}/runs/${pathSegment(runID)}`, {
+            ...options
+        });
+    }
+}
+export class MonitorsWebhookResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    test(monitorID: string, options?: RequestOptions): APIPromise<MonitorWebhookTestOutput> {
+        return this._client.post<MonitorWebhookTestOutput>(`/v1/monitors/${pathSegment(monitorID)}/webhook/test`, {
+            ...options
+        });
+    }
+}
 export class ResponsesFilesResource {
     private readonly _client: SdkTransport;
     constructor(client: SdkTransport) {
@@ -2619,6 +3212,72 @@ export class ModelsResource {
     list(options?: RequestOptions): APIPromise<ModelListOutput> {
         return this._client.get<ModelListOutput>("/v1/models", {
             ...options
+        });
+    }
+}
+export class MonitorsResource {
+    private readonly _client: SdkTransport;
+    readonly runs: MonitorsRunsResource;
+    readonly webhook: MonitorsWebhookResource;
+    constructor(client: SdkTransport) {
+        this._client = client;
+        this.runs = new MonitorsRunsResource(client);
+        this.webhook = new MonitorsWebhookResource(client);
+    }
+    create(body: CreateMonitorRequestInput, params?: {
+        "Idempotency-Key"?: string;
+    }, options?: RequestOptions): APIPromise<MonitorOutput> {
+        return this._client.post<MonitorOutput>("/v1/monitors", {
+            ...options,
+            body: body,
+            headers: {
+                "Idempotency-Key": params?.["Idempotency-Key"],
+                ...normalizeHeaders(options?.headers)
+            }
+        });
+    }
+    delete(monitorID: string, options?: RequestOptions): APIPromise<DeleteMonitorResponseOutput> {
+        return this._client.delete<DeleteMonitorResponseOutput>(`/v1/monitors/${pathSegment(monitorID)}`, {
+            ...options
+        });
+    }
+    list(params?: {
+        after?: string;
+        limit?: number;
+    }, options?: RequestOptions): APIPromise<MonitorListOutput> {
+        return this._client.get<MonitorListOutput>("/v1/monitors", {
+            ...options,
+            query: {
+                after: params?.after,
+                limit: params?.limit,
+                ...options?.query
+            }
+        });
+    }
+    pause(monitorID: string, options?: RequestOptions): APIPromise<MonitorOutput> {
+        return this._client.post<MonitorOutput>(`/v1/monitors/${pathSegment(monitorID)}/pause`, {
+            ...options
+        });
+    }
+    resume(monitorID: string, options?: RequestOptions): APIPromise<MonitorOutput> {
+        return this._client.post<MonitorOutput>(`/v1/monitors/${pathSegment(monitorID)}/resume`, {
+            ...options
+        });
+    }
+    retrieve(monitorID: string, options?: RequestOptions): APIPromise<MonitorOutput> {
+        return this._client.get<MonitorOutput>(`/v1/monitors/${pathSegment(monitorID)}`, {
+            ...options
+        });
+    }
+    run(monitorID: string, options?: RequestOptions): APIPromise<MonitorRunOutput> {
+        return this._client.post<MonitorRunOutput>(`/v1/monitors/${pathSegment(monitorID)}/run`, {
+            ...options
+        });
+    }
+    update(monitorID: string, body: UpdateMonitorRequestInput, options?: RequestOptions): APIPromise<MonitorOutput> {
+        return this._client.patch<MonitorOutput>(`/v1/monitors/${pathSegment(monitorID)}`, {
+            ...options,
+            body: body
         });
     }
 }
@@ -2837,6 +3496,7 @@ export class PerplexitySdk {
     readonly embeddings: EmbeddingsResource;
     readonly files: FilesResource;
     readonly models: ModelsResource;
+    readonly monitors: MonitorsResource;
     readonly responses: ResponsesResource;
     readonly search: SearchResource;
     readonly skills: SkillsResource;
@@ -2850,6 +3510,7 @@ export class PerplexitySdk {
         this.embeddings = new EmbeddingsResource(client);
         this.files = new FilesResource(client);
         this.models = new ModelsResource(client);
+        this.monitors = new MonitorsResource(client);
         this.responses = new ResponsesResource(client);
         this.search = new SearchResource(client);
         this.skills = new SkillsResource(client);
@@ -2872,6 +3533,8 @@ export class Embeddings extends EmbeddingsResource {
 export class Files extends FilesResource {
 }
 export class Models extends ModelsResource {
+}
+export class Monitors extends MonitorsResource {
 }
 export class Responses extends ResponsesResource {
 }
@@ -2915,6 +3578,19 @@ export type JsonSchemaFormat = JSONSchemaFormatInput;
 export type ManagedSkill = ManagedSkillOutput;
 export type Model = ModelOutput;
 export type ModelListResponse = Awaited<ReturnType<ModelsResource["list"]>>;
+export type Monitor = MonitorOutput;
+export type MonitorChangesDetectedEvent = MonitorChangesDetectedEventOutput;
+export type MonitorCreateParams = CreateMonitorRequestInput;
+export type MonitorDeleteResponse = DeleteMonitorResponseOutput;
+export type MonitorEvent = MonitorEventOutput;
+export type MonitorListResponse = MonitorListOutput;
+export type MonitorPausedEvent = MonitorPausedEventOutput;
+export type MonitorRun = MonitorRunOutput;
+export type MonitorRunCompletedEvent = MonitorRunCompletedEventOutput;
+export type MonitorRunListResponse = MonitorRunListOutput;
+export type MonitorUpdateParams = UpdateMonitorRequestInput;
+export type MonitorWebhookTestEvent = MonitorWebhookTestEventOutput;
+export type MonitorWebhookTestResponse = MonitorWebhookTestOutput;
 export type OutputItem = OutputItemOutput;
 export type ResponseCancelResponse = Awaited<ReturnType<ResponsesResource["cancel"]>>;
 export type ResponseCreateParams = ResponsesRequestInput;
@@ -3019,6 +3695,32 @@ export namespace Files {
 export namespace Models {
     export type Model = ModelOutput;
     export type ModelListResponse = Awaited<ReturnType<ModelsResource["list"]>>;
+}
+export namespace Monitors {
+    export class Runs extends MonitorsRunsResource {
+    }
+    export class Webhook extends MonitorsWebhookResource {
+    }
+    export type Monitor = MonitorOutput;
+    export type MonitorChangesDetectedEvent = MonitorChangesDetectedEventOutput;
+    export type MonitorCreateParams = CreateMonitorRequestInput;
+    export type MonitorDeleteResponse = DeleteMonitorResponseOutput;
+    export type MonitorEvent = MonitorEventOutput;
+    export type MonitorListResponse = MonitorListOutput;
+    export type MonitorPausedEvent = MonitorPausedEventOutput;
+    export type MonitorRun = MonitorRunOutput;
+    export type MonitorRunCompletedEvent = MonitorRunCompletedEventOutput;
+    export type MonitorRunListResponse = MonitorRunListOutput;
+    export type MonitorUpdateParams = UpdateMonitorRequestInput;
+    export type MonitorWebhookTestEvent = MonitorWebhookTestEventOutput;
+    export type MonitorWebhookTestResponse = MonitorWebhookTestOutput;
+    export namespace Runs {
+        export type MonitorRun = MonitorRunOutput;
+        export type MonitorRunListResponse = MonitorRunListOutput;
+    }
+    export namespace Webhook {
+        export type MonitorWebhookTestResponse = MonitorWebhookTestOutput;
+    }
 }
 export namespace Responses {
     export class Files extends ResponsesFilesResource {
