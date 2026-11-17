@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.0](https://github.com/perplexityai/perplexity-node/compare/v0.41.0...v0.42.0) (2026-11-17)
+
+
+### Features
+
+* add monitors resource ([b2f6fee](https://github.com/perplexityai/perplexity-node/commit/b2f6fee55bcbf3314294ddd21289a5e52be01317))
+
 ## [0.41.0](https://github.com/perplexityai/perplexity-node/compare/v0.40.0...v0.41.0) (2026-10-22)
 
 
