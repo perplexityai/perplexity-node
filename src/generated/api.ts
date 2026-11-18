@@ -559,6 +559,104 @@ export type ContentPartOutput = {
 };
 export type ContentPartTypeInput = "output_text";
 export type ContentPartTypeOutput = "output_text";
+export type ContextCostInput = {
+    currency: ContextCurrencyInput;
+    total_cost: number;
+};
+export type ContextCostOutput = {
+    currency: ContextCurrencyOutput;
+    total_cost: number;
+};
+export type ContextCurrencyInput = "USD";
+export type ContextCurrencyOutput = "USD";
+export type ContextDocumentInput = {
+    highlights?: string;
+    html?: string;
+    links?: string[];
+    markdown?: string;
+    metadata?: ContextMetadataInput;
+    status: ContextStatusInput;
+    url: string;
+};
+export type ContextDocumentOutput = {
+    highlights?: string;
+    html?: string;
+    links?: string[];
+    markdown?: string;
+    metadata?: ContextMetadataOutput;
+    status: ContextStatusOutput;
+    url: string;
+};
+export type ContextHighlightsInput = {
+    max_tokens_per_url?: number;
+    query: string;
+};
+export type ContextHighlightsOutput = {
+    max_tokens_per_url?: number;
+    query: string;
+};
+export type ContextMetadataInput = {
+    author?: string;
+    content_type?: string;
+    description?: string;
+    fetched_at?: string;
+    language?: string;
+    last_modified?: string;
+    origin?: "cached" | "live";
+    published_date?: string;
+    source_url: string;
+    title?: string;
+} & Record<string, (string | string[]) | string | string | string | string | string | string | ("cached" | "live") | string | string | string>;
+export type ContextMetadataOutput = {
+    author?: string;
+    content_type?: string;
+    description?: string;
+    fetched_at?: string;
+    language?: string;
+    last_modified?: string;
+    origin?: "cached" | "live";
+    published_date?: string;
+    source_url: string;
+    title?: string;
+} & Record<string, (string | string[]) | string | string | string | string | string | string | ("cached" | "live") | string | string | string>;
+export type ContextRequestInput = {
+    cache_only?: boolean;
+    formats?: ("markdown" | "html" | "links" | "highlights")[];
+    highlights?: ContextHighlightsInput;
+    if_modified_since?: string;
+    max_age_seconds?: number;
+    timeout_ms?: number;
+    urls: string[];
+};
+export type ContextRequestOutput = {
+    cache_only?: boolean;
+    formats?: ("markdown" | "html" | "links" | "highlights")[];
+    highlights?: ContextHighlightsOutput;
+    if_modified_since?: string;
+    max_age_seconds?: number;
+    timeout_ms?: number;
+    urls: string[];
+};
+export type ContextResponseInput = {
+    request_id: string;
+    results: ContextDocumentInput[];
+    usage: ContextUsageInput;
+};
+export type ContextResponseOutput = {
+    request_id: string;
+    results: ContextDocumentOutput[];
+    usage: ContextUsageOutput;
+};
+export type ContextStatusInput = {
+    message?: string;
+    status_code?: number;
+    type: "ok" | "not_modified" | "invalid_url" | "blocked" | "bot_challenge" | "crawl_failed" | "crawl_timeout" | "no_text" | "no_content" | "internal_error";
+};
+export type ContextStatusOutput = {
+    message?: string;
+    status_code?: number;
+    type: "ok" | "not_modified" | "invalid_url" | "blocked" | "bot_challenge" | "crawl_failed" | "crawl_timeout" | "no_text" | "no_content" | "internal_error";
+};
 export type ContextualizedEmbeddingObjectInput = {
     data?: EmbeddingObjectInput[];
     index?: number;
@@ -592,6 +690,14 @@ export type ContextualizedEmbeddingsResponseOutput = {
     model?: string;
     object?: string;
     usage?: EmbeddingsUsageOutput;
+};
+export type ContextUsageInput = {
+    cost: ContextCostInput;
+    fetched_urls: number;
+};
+export type ContextUsageOutput = {
+    cost: ContextCostOutput;
+    fetched_urls: number;
 };
 export type CostInput = {
     citation_tokens_cost?: number | null;
@@ -2243,6 +2349,7 @@ export type ResponsesObjectTypeInput = "response";
 export type ResponsesObjectTypeOutput = "response";
 export type ResponsesRequestInput = {
     background?: boolean | null;
+    code_mode?: boolean;
     effort?: string;
     input: InputInput;
     instructions?: string;
@@ -2270,6 +2377,7 @@ export type ResponsesRequestInput = {
 };
 export type ResponsesRequestOutput = {
     background?: boolean | null;
+    code_mode?: boolean;
     effort?: string;
     input: InputOutput;
     instructions?: string;
@@ -3119,6 +3227,18 @@ export class ChatResource {
         this.completions = new ChatCompletionsResource(client);
     }
 }
+export class ContextResource {
+    private readonly _client: SdkTransport;
+    constructor(client: SdkTransport) {
+        this._client = client;
+    }
+    create(body: ContextRequestInput, options?: RequestOptions): APIPromise<ContextResponseOutput> {
+        return this._client.post<ContextResponseOutput>("/v1/context", {
+            ...options,
+            body: body
+        });
+    }
+}
 export class ContextualizedEmbeddingsResource {
     private readonly _client: SdkTransport;
     constructor(client: SdkTransport) {
@@ -3491,6 +3611,7 @@ export class PerplexitySdk {
     readonly batches: BatchesResource;
     readonly browser: BrowserResource;
     readonly chat: ChatResource;
+    readonly context: ContextResource;
     readonly contextualizedEmbeddings: ContextualizedEmbeddingsResource;
     readonly decisions: DecisionsResource;
     readonly embeddings: EmbeddingsResource;
@@ -3505,6 +3626,7 @@ export class PerplexitySdk {
         this.batches = new BatchesResource(client);
         this.browser = new BrowserResource(client);
         this.chat = new ChatResource(client);
+        this.context = new ContextResource(client);
         this.contextualizedEmbeddings = new ContextualizedEmbeddingsResource(client);
         this.decisions = new DecisionsResource(client);
         this.embeddings = new EmbeddingsResource(client);
@@ -3523,6 +3645,8 @@ export class Batches extends BatchesResource {
 export class Browser extends BrowserResource {
 }
 export class Chat extends ChatResource {
+}
+export class Context extends ContextResource {
 }
 export class ContextualizedEmbeddings extends ContextualizedEmbeddingsResource {
 }
@@ -3552,6 +3676,11 @@ export type ChatMessageInput = ChatMessageInputInput;
 export type ChatMessageOutput = ChatMessageOutputOutput;
 export type Choice = ChoiceOutput;
 export type ContentPart = ContentPartOutput;
+export type ContextCreateParams = ContextRequestInput;
+export type ContextCreateResponse = Awaited<ReturnType<ContextResource["create"]>>;
+export type ContextDocument = ContextDocumentOutput;
+export type ContextMetadata = ContextMetadataOutput;
+export type ContextStatus = ContextStatusOutput;
 export type ContextualizedEmbeddingCreateParams = ContextualizedEmbeddingsRequestInput;
 export type ContextualizedEmbeddingCreateResponse = ContextualizedEmbeddingsResponseOutput;
 export type ContextualizedEmbeddingObject = ContextualizedEmbeddingObjectOutput;
@@ -3671,6 +3800,13 @@ export namespace Chat {
             stream: true;
         };
     }
+}
+export namespace Context {
+    export type ContextCreateParams = ContextRequestInput;
+    export type ContextCreateResponse = Awaited<ReturnType<ContextResource["create"]>>;
+    export type ContextDocument = ContextDocumentOutput;
+    export type ContextMetadata = ContextMetadataOutput;
+    export type ContextStatus = ContextStatusOutput;
 }
 export namespace ContextualizedEmbeddings {
     export type ContextualizedEmbeddingCreateParams = ContextualizedEmbeddingsRequestInput;

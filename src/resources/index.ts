@@ -3,6 +3,7 @@ export { Async } from './async/async.js';
 export { Batches, type Batch, type BatchCreateParams, type BatchListResponse } from './batches.js';
 export { Browser, type SessionCreateParams } from './browser/browser.js';
 export { Chat, type CompletionCreateParams, type CompletionCreateParamsBase, type CompletionCreateParamsNonStreaming, type CompletionCreateParamsStreaming, type StreamChunk } from './chat/chat.js';
+export { Context, type ContextCreateParams, type ContextCreateResponse, type ContextDocument, type ContextMetadata, type ContextStatus } from './context.js';
 export { ContextualizedEmbeddings, type ContextualizedEmbeddingCreateParams, type ContextualizedEmbeddingCreateResponse } from './contextualized-embeddings.js';
 export { Decisions, type DecisionAnswer, type DecisionCreateParams, type DecisionCreateResponse, type DecisionQuestion } from './decisions.js';
 export { Embeddings, type EmbeddingCreateParams, type EmbeddingCreateResponse } from './embeddings.js';
