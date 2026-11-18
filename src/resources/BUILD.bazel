@@ -8,6 +8,7 @@ ts_library(
         "browser.ts",
         "chat.ts",
         "client.ts",
+        "context.ts",
         "contextualized-embeddings.ts",
         "decisions.ts",
         "embeddings.ts",
