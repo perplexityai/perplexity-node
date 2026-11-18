@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.43.0](https://github.com/perplexityai/perplexity-node/compare/v0.42.0...v0.43.0) (2026-11-18)
+
+
+### Features
+
+* **api:** add context resource ([aa66ec6](https://github.com/perplexityai/perplexity-node/commit/aa66ec6cc8b473d3b73b4ff1889c632c00b10e4d))
+
 ## [0.42.0](https://github.com/perplexityai/perplexity-node/compare/v0.41.0...v0.42.0) (2026-11-17)
 
 
