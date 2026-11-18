@@ -5,6 +5,7 @@ export interface ClientResources {
     readonly batches: API.Batches;
     readonly browser: API.Browser;
     readonly chat: API.Chat;
+    readonly context: API.Context;
     readonly contextualizedEmbeddings: API.ContextualizedEmbeddings;
     readonly decisions: API.Decisions;
     readonly embeddings: API.Embeddings;
@@ -20,6 +21,7 @@ export const clientResourceClasses = {
     Batches: API.Batches,
     Browser: API.Browser,
     Chat: API.Chat,
+    Context: API.Context,
     ContextualizedEmbeddings: API.ContextualizedEmbeddings,
     Decisions: API.Decisions,
     Embeddings: API.Embeddings,
@@ -36,6 +38,7 @@ export function createClientResources(client: SdkTransport): ClientResources {
         batches: new API.Batches(client),
         browser: new API.Browser(client),
         chat: new API.Chat(client),
+        context: new API.Context(client),
         contextualizedEmbeddings: new API.ContextualizedEmbeddings(client),
         decisions: new API.Decisions(client),
         embeddings: new API.Embeddings(client),
@@ -63,6 +66,12 @@ declare module '../client.js' {
         export type CompletionCreateParamsNonStreaming = API.Chat.CompletionCreateParamsNonStreaming;
         export type CompletionCreateParamsStreaming = API.Chat.CompletionCreateParamsStreaming;
         export type StreamChunk = API.Chat.StreamChunk;
+        export import Context = API.Context;
+        export type ContextCreateParams = API.Context.ContextCreateParams;
+        export type ContextCreateResponse = API.Context.ContextCreateResponse;
+        export type ContextDocument = API.Context.ContextDocument;
+        export type ContextMetadata = API.Context.ContextMetadata;
+        export type ContextStatus = API.Context.ContextStatus;
         export import ContextualizedEmbeddings = API.ContextualizedEmbeddings;
         export type ContextualizedEmbeddingCreateParams = API.ContextualizedEmbeddings.ContextualizedEmbeddingCreateParams;
         export type ContextualizedEmbeddingCreateResponse = API.ContextualizedEmbeddings.ContextualizedEmbeddingCreateResponse;
