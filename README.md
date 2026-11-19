@@ -57,6 +57,49 @@ const streamChunk = await client.chat.completions.create({
 console.log(streamChunk.choices[0].message.content);
 ```
 
+### Embeddings
+
+Use the `pplx-embed-v2-context-9b` or `pplx-embed-v2-context-0.6b` model for new
+integrations. `pplx-embed-v2-context-9b` gives the highest quality, and
+`pplx-embed-v2-context-0.6b` gives lower latency and cost. The `pplx-embed-v1-*`
+models remain supported, and `client.contextualizedEmbeddings` keeps serving the
+`pplx-embed-context-v1-*` models.
+
+v2 models require `input_type`. Embed search queries with `'query'`. Embed the
+content you search over with `'document'`, passing each document as an array of
+chunks. Each chunk is embedded in the context of its whole document, and the
+response returns one embedding per chunk.
+
+```js
+import Perplexity from '@perplexity-ai/perplexity_ai';
+
+const client = new Perplexity();
+
+const query = await client.embeddings.create({
+  input: ['How do contextual embeddings work?'],
+  input_type: 'query',
+  model: 'pplx-embed-v2-context-9b',
+});
+const queryEmbedding = query.data?.[0]?.embedding;
+
+const documents = await client.embeddings.create({
+  input: [['First chunk of document A.', 'Second chunk of document A.'], ['Only chunk of document B.']],
+  input_type: 'document',
+  model: 'pplx-embed-v2-context-9b',
+});
+for (const document of documents.data ?? []) {
+  for (const chunk of document.data ?? []) {
+    console.log(document.index, chunk.index, chunk.embedding);
+  }
+}
+```
+
+Embeddings are base64-encoded signed int8 values by default. Decode one with
+`new Int8Array(Buffer.from(embedding, 'base64'))`. To embed images, pass
+`input_type: 'document'` and items such as
+`{ type: 'image', image: 'data:image/png;base64,...' }`; `num_chunks` sets the
+number of embeddings per image.
+
 ### Advanced Search Features
 
 #### Multi-Query Search

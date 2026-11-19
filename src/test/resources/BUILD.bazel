@@ -5,6 +5,7 @@ ts_test(
     srcs = [
         "contextualized-embeddings.test.ts",
         "decisions.test.ts",
+        "embeddings-v2.test.ts",
         "embeddings.test.ts",
         "models.test.ts",
         "search.test.ts",
