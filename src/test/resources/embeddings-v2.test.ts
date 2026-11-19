@@ -108,6 +108,38 @@ describe('embeddings', () => {
     });
   }
 
+  it('returns one v2 embedding per whole document', async () => {
+    const sent: unknown[] = [];
+    const body: EmbeddingCreateParams = {
+      model: 'pplx-embed-v2-context-0.6b',
+      input_type: 'document',
+      input: ['First document.', 'Second document.'],
+    };
+    const response = await mockClient(denseResponse(body.model, 2), sent).embeddings.create(body);
+
+    assert.deepEqual(sent, [body]);
+    assert.deepEqual(
+      response.data?.map((item) => [item.index, item.embedding, item.data]),
+      [
+        [0, 'AAE=', undefined],
+        [1, 'AAE=', undefined],
+      ],
+    );
+  });
+
+  it('returns one v2 embedding per image without num_chunks', async () => {
+    const sent: unknown[] = [];
+    const body: EmbeddingCreateParams = {
+      model: 'pplx-embed-v2-context-0.6b',
+      input_type: 'document',
+      input: [image],
+    };
+    const response = await mockClient(denseResponse(body.model), sent).embeddings.create(body);
+
+    assert.deepEqual(sent, [body]);
+    assert.equal(response.data?.[0]?.embedding, 'AAE=');
+  });
+
   it('embeds v2 images with num_chunks', async () => {
     const sent: unknown[] = [];
     const body: EmbeddingCreateParams = {
