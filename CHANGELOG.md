@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.43.1](https://github.com/perplexityai/perplexity-node/compare/v0.43.0...v0.43.1) (2026-11-19)
+
+
+### Documentation
+
+* **embeddings:** recommend pplx-embed-v2 models and add v2 tests ([#126](https://github.com/perplexityai/perplexity-node/issues/126)) ([d45ed77](https://github.com/perplexityai/perplexity-node/commit/d45ed7775667f9ef76d75598c2b17669f9784b91))
+
 ## [0.43.0](https://github.com/perplexityai/perplexity-node/compare/v0.42.0...v0.43.0) (2026-11-18)
 
 
