@@ -2349,7 +2349,6 @@ export type ResponsesObjectTypeInput = "response";
 export type ResponsesObjectTypeOutput = "response";
 export type ResponsesRequestInput = {
     background?: boolean | null;
-    code_mode?: boolean;
     effort?: string;
     input: InputInput;
     instructions?: string;
@@ -2377,7 +2376,6 @@ export type ResponsesRequestInput = {
 };
 export type ResponsesRequestOutput = {
     background?: boolean | null;
-    code_mode?: boolean;
     effort?: string;
     input: InputOutput;
     instructions?: string;
