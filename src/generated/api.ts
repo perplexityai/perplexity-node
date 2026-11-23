@@ -186,6 +186,7 @@ export type ApiSearchRequestInput = {
     search_mode?: ("web" | "academic" | "sec") | null;
     search_recency_filter?: ("hour" | "day" | "week" | "month" | "year") | null;
     search_type?: ("web" | "fast" | "people") | null;
+    snapshot_as_of?: string;
 };
 export type ApiSearchRequestOutput = {
     country?: string | null;
@@ -204,6 +205,7 @@ export type ApiSearchRequestOutput = {
     search_mode?: ("web" | "academic" | "sec") | null;
     search_recency_filter?: ("hour" | "day" | "week" | "month" | "year") | null;
     search_type?: ("web" | "fast" | "people") | null;
+    snapshot_as_of?: string;
 };
 export type ApiSearchResponseInput = {
     id: string;
@@ -625,6 +627,7 @@ export type ContextRequestInput = {
     highlights?: ContextHighlightsInput;
     if_modified_since?: string;
     max_age_seconds?: number;
+    snapshot_as_of?: string;
     timeout_ms?: number;
     urls: string[];
 };
@@ -634,6 +637,7 @@ export type ContextRequestOutput = {
     highlights?: ContextHighlightsOutput;
     if_modified_since?: string;
     max_age_seconds?: number;
+    snapshot_as_of?: string;
     timeout_ms?: number;
     urls: string[];
 };
@@ -2349,7 +2353,6 @@ export type ResponsesObjectTypeInput = "response";
 export type ResponsesObjectTypeOutput = "response";
 export type ResponsesRequestInput = {
     background?: boolean | null;
-    code_mode?: boolean;
     effort?: string;
     input: InputInput;
     instructions?: string;
@@ -2377,7 +2380,6 @@ export type ResponsesRequestInput = {
 };
 export type ResponsesRequestOutput = {
     background?: boolean | null;
-    code_mode?: boolean;
     effort?: string;
     input: InputOutput;
     instructions?: string;
