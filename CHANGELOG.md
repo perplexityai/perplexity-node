@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.44.0](https://github.com/perplexityai/perplexity-node/compare/v0.43.1...v0.44.0) (2026-11-23)
+
+
+### Features
+
+* add snapshot_as_of to Search and Context, remove code_mode from Responses ([#125](https://github.com/perplexityai/perplexity-node/issues/125)) ([e856030](https://github.com/perplexityai/perplexity-node/commit/e856030b457c6223cd38186a7e606495d30f4095))
+
 ## [0.43.1](https://github.com/perplexityai/perplexity-node/compare/v0.43.0...v0.43.1) (2026-11-19)
 
 
