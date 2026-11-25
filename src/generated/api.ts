@@ -186,7 +186,7 @@ export type ApiSearchRequestInput = {
     search_mode?: ("web" | "academic" | "sec") | null;
     search_recency_filter?: ("hour" | "day" | "week" | "month" | "year") | null;
     search_type?: ("web" | "fast" | "people") | null;
-    snapshot_as_of?: string;
+    snapshot_as_of?: Date;
 };
 export type ApiSearchRequestOutput = {
     country?: string | null;
@@ -414,11 +414,11 @@ export type BrowserSessionResponseOutput = {
     status?: "running" | "stopped";
 };
 export type BuiltinSkillInput = {
-    name: "office" | "office/docx" | "office/pdf" | "office/pptx" | "office/xlsx";
+    name: "search" | "office" | "office/docx" | "office/pdf" | "office/pptx" | "office/xlsx";
     type: "builtin";
 };
 export type BuiltinSkillOutput = {
-    name: "office" | "office/docx" | "office/pdf" | "office/pptx" | "office/xlsx";
+    name: "search" | "office" | "office/docx" | "office/pdf" | "office/pptx" | "office/xlsx";
     type: "builtin";
 };
 export type ChatMessageInputInput = {
@@ -601,14 +601,14 @@ export type ContextMetadataInput = {
     author?: string;
     content_type?: string;
     description?: string;
-    fetched_at?: string;
+    fetched_at?: Date;
     language?: string;
     last_modified?: string;
     origin?: "cached" | "live";
     published_date?: string;
     source_url: string;
     title?: string;
-} & Record<string, (string | string[]) | string | string | string | string | string | string | ("cached" | "live") | string | string | string>;
+} & Record<string, (string | string[]) | string | string | string | Date | string | string | ("cached" | "live") | string | string | string>;
 export type ContextMetadataOutput = {
     author?: string;
     content_type?: string;
@@ -627,7 +627,7 @@ export type ContextRequestInput = {
     highlights?: ContextHighlightsInput;
     if_modified_since?: string;
     max_age_seconds?: number;
-    snapshot_as_of?: string;
+    snapshot_as_of?: Date;
     timeout_ms?: number;
     urls: string[];
 };
@@ -1354,13 +1354,13 @@ export type ListAsyncApiChatCompletionsResponseOutput = {
     requests: AsyncApiChatCompletionsResponseSummaryOutput[];
 };
 export type ManagedSkillInput = {
-    created_at?: string;
+    created_at?: Date;
     description?: string;
     latest_revision?: string;
     name?: string;
     revision?: string;
     skill_id: string;
-    updated_at?: string;
+    updated_at?: Date;
 };
 export type ManagedSkillOutput = {
     created_at?: string;
@@ -1969,7 +1969,7 @@ export type MonitorTargetRequestInput = MonitorSearchTargetRequestInput | Monito
 export type MonitorTargetRequestOutput = MonitorSearchTargetRequestOutput | MonitorPageTargetRequestOutput;
 export type MonitorTargetsInput = MonitorTargetRequestInput[];
 export type MonitorTargetsOutput = MonitorTargetRequestOutput[];
-export type MonitorTimestampInput = string;
+export type MonitorTimestampInput = Date;
 export type MonitorTimestampOutput = string;
 export type MonitorWebhookInput = {
     events: MonitorEventTypeInput[];
@@ -2716,7 +2716,7 @@ export type SkillLoadedOutputItemOutput = {
     type: "skill_loaded";
 };
 export type SkillRevisionInput = {
-    created_at?: string;
+    created_at?: Date;
     name?: string;
     revision: string;
 };
@@ -2734,11 +2734,11 @@ export type SkillRevisionListOutput = {
     revisions: SkillRevisionOutput[];
 };
 export type SkillSummaryInput = {
-    created_at?: string;
+    created_at?: Date;
     name?: string;
     revision?: string;
     skill_id: string;
-    updated_at?: string;
+    updated_at?: Date;
 };
 export type SkillSummaryOutput = {
     created_at?: string;
