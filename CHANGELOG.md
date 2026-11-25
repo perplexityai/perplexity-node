@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.45.0](https://github.com/perplexityai/perplexity-node/compare/v0.44.0...v0.45.0) (2026-11-25)
+
+
+### Features
+
+* type snapshot_as_of as Date, add the search builtin skill ([#129](https://github.com/perplexityai/perplexity-node/issues/129)) ([e838cb4](https://github.com/perplexityai/perplexity-node/commit/e838cb49d8a975b898e46ba6e1f5e6339815fd22))
+
 ## [0.44.0](https://github.com/perplexityai/perplexity-node/compare/v0.43.1...v0.44.0) (2026-11-23)
 
 
